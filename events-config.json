@@ -1,0 +1,49 @@
+{
+  "events": [
+    {
+      "name": "Group Dance Competition",
+      "slug": "group-dance",
+      "description": "Inter-school group dance performance.",
+      "judges": [
+        "Dance Judge 1",
+        "Dance Judge 2"
+      ],
+      "rubric": [
+        { "id": "choreography", "name": "Choreography & Synchronization", "max_points": 20 },
+        { "id": "expressions", "name": "Expressions & Energy", "max_points": 15 },
+        { "id": "costumes", "name": "Costumes & Props", "max_points": 10 },
+        { "id": "overall", "name": "Overall Impact", "max_points": 5 }
+      ]
+    },
+    {
+      "name": "Debate Championship",
+      "slug": "debate",
+      "description": "Parliamentary style debate on current affairs.",
+      "judges": [
+        "Debate Judge 1",
+        "Debate Judge 2"
+      ],
+      "rubric": [
+        { "id": "arguments", "name": "Strength of Arguments", "max_points": 20 },
+        { "id": "rebuttal", "name": "Rebuttal & Quick Thinking", "max_points": 15 },
+        { "id": "delivery", "name": "Voice & Delivery", "max_points": 10 },
+        { "id": "time", "name": "Time Management", "max_points": 5 }
+      ]
+    },
+    {
+      "name": "Solo Singing",
+      "slug": "solo-singing",
+      "description": "Classical and semi-classical solo singing.",
+      "judges": [
+        "Music Judge 1",
+        "Music Judge 2"
+      ],
+      "rubric": [
+        { "id": "pitch", "name": "Pitch & Rhythm (Sur/Taal)", "max_points": 20 },
+        { "id": "voice", "name": "Voice Quality", "max_points": 15 },
+        { "id": "selection", "name": "Song Selection", "max_points": 5 },
+        { "id": "confidence", "name": "Stage Confidence", "max_points": 10 }
+      ]
+    }
+  ]
+}
