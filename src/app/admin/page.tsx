@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Users, Building2, UserCheck, Printer } from "lucide-react";
+import { Users, Building2, UserCheck, Printer, Trophy } from "lucide-react";
 
 export const revalidate = 0; // Always fetch fresh stats
 
@@ -28,14 +28,22 @@ export default async function AdminDashboard() {
           <h1 className="text-3xl md:text-4xl font-semibold text-onyx tracking-tight">Admin Dashboard</h1>
           <p className="text-taupe mt-2">Live event statistics and management.</p>
         </div>
-        
-        <Link 
-          href="/admin/print"
-          className="inline-flex items-center gap-2 bg-onyx text-white font-medium px-6 py-3 rounded-lg hover:bg-black transition-colors shadow-sm w-fit"
-        >
-          <Printer size={18} />
-          Print QR Codes
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link 
+            href="/admin/print"
+            className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:border-gold hover:text-gold transition-colors shadow-sm"
+          >
+            <Printer size={18} />
+            Print QRs
+          </Link>
+          <Link 
+            href="/admin/leaderboard"
+            className="inline-flex items-center gap-2 bg-onyx text-white font-medium px-5 py-2.5 rounded-lg hover:bg-black transition-colors shadow-sm"
+          >
+            <Trophy size={18} />
+            Leaderboard
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
