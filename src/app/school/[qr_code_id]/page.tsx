@@ -31,7 +31,7 @@ export default async function SchoolPage({ params }: { params: Promise<{ qr_code
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
       {/* Left sidebar — school info, fixed on desktop */}
       <div className="lg:w-80 xl:w-96 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 px-6 lg:px-8 py-6 lg:py-10 flex flex-col shrink-0">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors w-fit mb-6 lg:mb-10">
+        <Link href="/attendance" className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors w-fit mb-6 lg:mb-10">
           <ArrowLeft size={14} />
           Back
         </Link>

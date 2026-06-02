@@ -1,49 +1,787 @@
 {
   "events": [
     {
-      "name": "Group Dance Competition",
-      "slug": "group-dance",
-      "description": "Inter-school group dance performance.",
+      "name": "Fashionista",
+      "slug": "fashionista",
+      "description": "Fashionista event.",
       "judges": [
-        "Dance Judge 1",
-        "Dance Judge 2"
+        "Judge 1",
+        "Judge 2"
       ],
       "rubric": [
-        { "id": "choreography", "name": "Choreography & Synchronization", "max_points": 20 },
-        { "id": "expressions", "name": "Expressions & Energy", "max_points": 15 },
-        { "id": "costumes", "name": "Costumes & Props", "max_points": 10 },
-        { "id": "overall", "name": "Overall Impact", "max_points": 5 }
-      ]
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 2,
+      "max_size": 2,
+      "max_teams": 5
     },
     {
-      "name": "Debate Championship",
-      "slug": "debate",
-      "description": "Parliamentary style debate on current affairs.",
+      "name": "Groove It Up",
+      "slug": "groove-it-up",
+      "description": "Groove It Up event.",
       "judges": [
-        "Debate Judge 1",
-        "Debate Judge 2"
+        "Judge 1",
+        "Judge 2"
       ],
       "rubric": [
-        { "id": "arguments", "name": "Strength of Arguments", "max_points": 20 },
-        { "id": "rebuttal", "name": "Rebuttal & Quick Thinking", "max_points": 15 },
-        { "id": "delivery", "name": "Voice & Delivery", "max_points": 10 },
-        { "id": "time", "name": "Time Management", "max_points": 5 }
-      ]
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Art to Heart",
+      "slug": "art-to-heart",
+      "description": "Art to Heart event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Upcycle Challenge",
+      "slug": "upcycle-challenge",
+      "description": "Upcycle Challenge event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Rangoli",
+      "slug": "rangoli",
+      "description": "Rangoli event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Spectacular Science",
+      "slug": "spectacular-science",
+      "description": "Spectacular Science event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Brainy Duo",
+      "slug": "brainy-duo",
+      "description": "Brainy Duo event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Creative Writing",
+      "slug": "creative-writing",
+      "description": "Creative Writing event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Dumb Charades",
+      "slug": "dumb-charades",
+      "description": "Dumb Charades event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Spell Bee",
+      "slug": "spell-bee",
+      "description": "Spell Bee event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Guru Shisya",
+      "slug": "guru-shisya",
+      "description": "Guru Shisya event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Coding Champion",
+      "slug": "coding-champion",
+      "description": "Coding Champion event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Commerce IPL",
+      "slug": "commerce-ipl",
+      "description": "Commerce IPL event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Quizzipedia",
+      "slug": "quizzipedia",
+      "description": "Quizzipedia event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Academic Marathon",
+      "slug": "academic-marathon",
+      "description": "Academic Marathon event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Debate",
+      "slug": "debate",
+      "description": "Debate event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
     },
     {
       "name": "Solo Singing",
       "slug": "solo-singing",
-      "description": "Classical and semi-classical solo singing.",
+      "description": "Solo Singing event.",
       "judges": [
-        "Music Judge 1",
-        "Music Judge 2"
+        "Judge 1",
+        "Judge 2"
       ],
       "rubric": [
-        { "id": "pitch", "name": "Pitch & Rhythm (Sur/Taal)", "max_points": 20 },
-        { "id": "voice", "name": "Voice Quality", "max_points": 15 },
-        { "id": "selection", "name": "Song Selection", "max_points": 5 },
-        { "id": "confidence", "name": "Stage Confidence", "max_points": 10 }
-      ]
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Duo Singing",
+      "slug": "duo-singing",
+      "description": "Duo Singing event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Instrumental",
+      "slug": "instrumental",
+      "description": "Instrumental event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Battle of Bands",
+      "slug": "battle-of-bands",
+      "description": "Battle of Bands event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Short Film",
+      "slug": "short-film",
+      "description": "Short Film event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Photography",
+      "slug": "photography",
+      "description": "Photography event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Ad-Zap",
+      "slug": "ad-zap",
+      "description": "Ad-Zap event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Reel Making",
+      "slug": "reel-making",
+      "description": "Reel Making event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Corporate Walk",
+      "slug": "corporate-walk",
+      "description": "Corporate Walk event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Talent Showcase",
+      "slug": "talent-showcase",
+      "description": "Talent Showcase event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Teacher's Quiz",
+      "slug": "teacher-s-quiz",
+      "description": "Teacher's Quiz event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 20
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 20
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 10
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
     }
   ]
 }

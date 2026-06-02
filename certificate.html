@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Merit - Imperial Art Deco</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
+
+        :root {
+            /* Imperial Palette */
+            --royal-blue: #021842;
+            --royal-blue-light: #0d2f7a;
+            
+            --gold-primary: #D4AF37;
+            --gold-dark: #997A15;
+            --gold-light: #F9E596;
+            
+            --ivory: #FDFBF5;
+            --ink: #1a1a1a;
+
+            --gold-foil: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 25%, var(--gold-light) 50%, var(--gold-primary) 75%, var(--gold-dark) 100%);
+        }
+
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #0b0b0b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Cormorant Garamond', serif;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @media print {
+            body { padding: 0; background: none; }
+            .certificate-wrapper { box-shadow: none !important; transform: scale(1) !important; }
+        }
+
+        /* The Outer Edge */
+        .certificate-wrapper {
+            width: 297mm;
+            height: 210mm;
+            background-color: var(--royal-blue);
+            padding: 12mm;
+            box-sizing: border-box;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        /* 
+           The Masterpiece Canvas
+           Features an incredibly complex overlapping geometric SVG pattern for a true 'banknote/certificate' level of detail
+        */
+        .certificate-canvas {
+            background-color: var(--ivory);
+            height: 100%;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15mm 20mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            /* Stunning SVG Geometric Art-Deco Pattern */
+            background-image: 
+                linear-gradient(rgba(253, 251, 245, 0.92), rgba(253, 251, 245, 0.92)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0ZM30 4L4 30L30 56L56 30L30 4Z' fill='%23D4AF37' fill-opacity='0.25' fill-rule='evenodd'/%3E%3Cpath d='M30 15L45 30L30 45L15 30L30 15ZM30 19L19 30L30 41L41 30L30 19Z' fill='%23021842' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            
+            /* Ultra-premium 5-layer border using box-shadow */
+            box-shadow: 
+                inset 0 0 0 2px var(--gold-primary),
+                inset 0 0 0 8px var(--ivory),
+                inset 0 0 0 11px var(--royal-blue),
+                inset 0 0 0 13px var(--gold-primary),
+                inset 0 0 0 19px var(--ivory),
+                inset 0 0 0 20px var(--gold-primary);
+        }
+
+        /* Art Deco Geometric Corner Pieces */
+        .corner-piece {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--royal-blue);
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .corner-piece::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--gold-primary);
+            transform: rotate(45deg);
+        }
+        /* Precisely positioned on the corners of the box-shadow borders */
+        .cp-tl { top: 11px; left: 11px; }
+        .cp-tr { top: 11px; right: 11px; }
+        .cp-bl { bottom: 11px; left: 11px; }
+        .cp-br { bottom: 11px; right: 11px; }
+
+        /* Top Logo & Title Sponsor Section */
+        .header-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .emblem {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--ivory);
+            border: 2px solid var(--royal-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--royal-blue);
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 11px;
+            text-align: center;
+            box-shadow: 0 0 0 4px var(--ivory), 0 0 0 6px var(--gold-primary);
+        }
+
+        .title-sponsor-wrapper {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .presented-by {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--royal-blue);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .sponsor-name {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--royal-blue);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--gold-primary);
+        }
+
+        /* Certificate Title - Extremely Elegant */
+        .title-container {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title-main {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 72px;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 22px;
+            line-height: 1.1;
+            color: var(--royal-blue);
+            /* Gives a subtle etched letterpress effect */
+            text-shadow: 1px 1px 0px rgba(255,255,255,1), -1px -1px 0px rgba(0,0,0,0.1);
+            text-indent: 22px; 
+        }
+
+        .title-sub {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold-dark);
+            letter-spacing: 16px;
+            text-transform: uppercase;
+            text-indent: 16px;
+        }
+
+        /* Content / Body */
+        .body-content {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .calligraphy-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 26px;
+            color: var(--ink);
+            margin-bottom: 10px;
+        }
+
+        .recipient-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 64px;
+            color: var(--royal-blue);
+            line-height: 1;
+            margin: 15px 0 25px 0;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+        }
+
+        /* Clean data layout */
+        .data-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            font-size: 22px;
+        }
+
+        .data-field {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .data-value {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--royal-blue);
+            border-bottom: 1px solid var(--gold-dark);
+            min-width: 200px;
+            text-align: center;
+            padding-bottom: 3px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .data-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold-dark);
+            margin-top: 5px;
+        }
+
+        /* Footer: Signatures & Minimal Seal */
+        .footer-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 20px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .signature {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sig-line {
+            width: 100%;
+            height: 1px;
+            background-color: var(--royal-blue);
+            margin-bottom: 8px;
+        }
+
+        .sig-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--royal-blue);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Ultra-Clean Embossed Seal */
+        .embossed-seal {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--ivory);
+            border: 1px solid var(--gold-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                inset 0 0 20px rgba(212, 175, 55, 0.4),
+                0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            color: var(--gold-dark);
+            font-family: 'Cinzel Decorative', serif;
+        }
+        .embossed-seal::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border-radius: 50%;
+            border: 1px dashed var(--gold-primary);
+        }
+        .seal-logo {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .seal-text {
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Elegant Sponsors row */
+        .sponsors-row {
+            margin-top: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sponsor-logo-text {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--royal-blue);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.9;
+        }
+
+        .sponsor-tier {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 7px;
+            color: var(--gold-dark);
+            letter-spacing: 2px;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="certificate-wrapper">
+        <div class="certificate-canvas">
+            
+            <!-- Art Deco Corners -->
+            <div class="corner-piece cp-tl"></div>
+            <div class="corner-piece cp-tr"></div>
+            <div class="corner-piece cp-bl"></div>
+            <div class="corner-piece cp-br"></div>
+
+            <!-- Top Header -->
+            <div class="header-layout">
+                <div class="emblem">HOST</div>
+                
+                <div class="title-sponsor-wrapper">
+                    <div class="presented-by">Proudly Presented By</div>
+                    <div class="sponsor-name">TITLE SPONSOR</div>
+                </div>
+
+                <div class="emblem">EVENT</div>
+            </div>
+
+            <!-- Main Title -->
+            <div class="title-container">
+                <h1 class="title-main">CERTIFICATE</h1>
+                <div class="title-sub">Of Outstanding Merit</div>
+            </div>
+
+            <!-- Body Content -->
+            <div class="body-content">
+                <div class="calligraphy-text">This is to certify that the honor is bestowed upon</div>
+                
+                <div class="recipient-name">Student Full Name</div>
+                
+                <div class="data-grid">
+                    <div class="data-field">
+                        <span class="data-value">Class Name</span>
+                        <span class="data-label">Class</span>
+                    </div>
+                    <div class="calligraphy-text" style="margin: 0 10px; font-size: 22px;">representing</div>
+                    <div class="data-field">
+                        <span class="data-value" style="min-width: 300px;">School Name</span>
+                        <span class="data-label">Institution</span>
+                    </div>
+                </div>
+
+                <div class="data-grid" style="margin-top: 25px;">
+                    <div class="calligraphy-text" style="margin: 0 10px; font-size: 22px;">for securing</div>
+                    <div class="data-field">
+                        <span class="data-value" style="min-width: 150px;">1st Prize</span>
+                        <span class="data-label">Achievement</span>
+                    </div>
+                    <div class="calligraphy-text" style="margin: 0 10px; font-size: 22px;">in</div>
+                    <div class="data-field">
+                        <span class="data-value" style="min-width: 250px;">Event Name</span>
+                        <span class="data-label">Competition</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer: Signatures & Seal -->
+            <div class="footer-layout">
+                <div class="signature">
+                    <div class="sig-line"></div>
+                    <div class="sig-name">Principal / Head</div>
+                </div>
+
+                <div class="embossed-seal">
+                    <div class="seal-logo">2025</div>
+                    <div class="seal-text">Official Seal</div>
+                </div>
+
+                <div class="signature">
+                    <div class="sig-line"></div>
+                    <div class="sig-name">Event Coordinator</div>
+                </div>
+            </div>
+
+            <!-- Elegant Sponsors Footer -->
+            <div class="sponsors-row">
+                <div class="sponsor-logo-text">
+                    CO-SPONSOR 1
+                    <span class="sponsor-tier">Platinum Partner</span>
+                </div>
+                <div class="sponsor-logo-text">
+                    CO-SPONSOR 2
+                    <span class="sponsor-tier">Platinum Partner</span>
+                </div>
+                <div class="sponsor-logo-text">
+                    PARTNER 1
+                    <span class="sponsor-tier">Gold Partner</span>
+                </div>
+                <div class="sponsor-logo-text">
+                    PARTNER 2
+                    <span class="sponsor-tier">Gold Partner</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
