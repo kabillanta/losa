@@ -115,64 +115,89 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
             )}
           </div>
 
-          <div className="space-y-6">
+          {/* Desktop Column Headers */}
+          <div className="hidden md:grid grid-cols-12 gap-4 mb-3 px-3 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-3 text-center">
+            <div className="col-span-1">#</div>
+            <div className="col-span-4 text-left">Student Name</div>
+            <div className="col-span-3 text-left">Class / Section</div>
+            <div className="col-span-3 text-left">Admission No.</div>
+            <div className="col-span-1">Status</div>
+          </div>
+
+          <div className="space-y-5 md:space-y-0 md:flex md:flex-col">
             {team.map((student, index) => {
               const isRequired = index < minSize;
               
               return (
-                <div key={index} className={`flex flex-col gap-4 p-5 md:p-6 bg-white border rounded-xl shadow-sm transition-all ${isRequired ? 'border-blue-100 ring-1 ring-blue-50' : 'border-gray-100'}`}>
+                <div key={index} className="flex flex-col md:grid md:grid-cols-12 gap-4 md:items-center py-5 md:py-3.5 border-b border-gray-100 last:border-b-0 px-2 group hover:bg-gray-50/50 rounded-lg transition-colors -mx-2">
                   
-                  <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  {/* Mobile Header & Desktop Participant # */}
+                  <div className="col-span-1 flex items-center justify-between md:justify-center gap-3">
                     <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${isRequired ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-500'}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${isRequired ? 'bg-onyx text-white shadow-sm' : 'bg-gray-100 text-gray-500'}`}>
                         {index + 1}
                       </div>
-                      <span className="font-semibold text-onyx">Participant {index + 1}</span>
+                      <span className="md:hidden font-bold text-onyx">Participant {index + 1}</span>
                     </div>
+                    {/* Badge for MOBILE only */}
+                    <div className="md:hidden">
+                      {isRequired ? (
+                        <span className="text-[10px] font-bold text-red-600 uppercase tracking-wider bg-red-50 px-2.5 py-1 rounded-md border border-red-100 shrink-0">
+                          Required
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-white px-2.5 py-1 rounded-md border border-gray-200 shrink-0">
+                          Optional
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Inputs */}
+                  <div className="col-span-4 flex flex-col gap-1.5">
+                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Student Name</label>
+                    <input
+                      type="text"
+                      value={student.name}
+                      onChange={(e) => handleFieldChange(teamIndex, index, 'name', e.target.value)}
+                      placeholder="e.g. John Doe"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div className="col-span-3 flex flex-col gap-1.5">
+                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
+                    <input
+                      type="text"
+                      value={student.classDetails}
+                      onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
+                      placeholder="e.g. 10th A"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div className="col-span-3 flex flex-col gap-1.5">
+                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
+                    <input
+                      type="text"
+                      value={student.admissionNumber}
+                      onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
+                      placeholder="ID Card No."
+                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                    />
+                  </div>
+
+                  {/* Desktop Badge */}
+                  <div className="hidden md:flex col-span-1 justify-center">
                     {isRequired ? (
-                      <span className="text-xs font-bold text-red-600 uppercase tracking-wider bg-red-50 px-3 py-1.5 rounded-full border border-red-100">
+                      <span className="text-[10px] font-bold text-red-600 uppercase tracking-wider bg-red-50 px-2.5 py-1 rounded-md border border-red-100 shrink-0">
                         Required
                       </span>
                     ) : (
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-white px-2.5 py-1 rounded-md border border-gray-200 shrink-0">
                         Optional
                       </span>
                     )}
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full pt-1">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Student Name</label>
-                      <input
-                        type="text"
-                        value={student.name}
-                        onChange={(e) => handleFieldChange(teamIndex, index, 'name', e.target.value)}
-                        placeholder="e.g. John Doe"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
-                      />
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
-                      <input
-                        type="text"
-                        value={student.classDetails}
-                        onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
-                        placeholder="e.g. 10th A"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
-                      />
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
-                      <input
-                        type="text"
-                        value={student.admissionNumber}
-                        onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
-                        placeholder="ID Card No."
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
-                      />
-                    </div>
                   </div>
                 </div>
               );

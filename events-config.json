@@ -1,9 +1,10 @@
 {
   "events": [
     {
-      "name": "Fashionista",
-      "slug": "fashionista",
-      "description": "Fashionista event.",
+      "name": "தமிழ் அறநெறி கதைகள்",
+      "slug": "tamil-araneri-kathaigal",
+      "category": "Tiny Tots (Pre-KG, LKG, UKG)",
+      "description": "Registration for தமிழ் அறநெறி கதைகள் event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -12,27 +13,28 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
-      "min_size": 2,
-      "max_size": 2,
-      "max_teams": 5
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
     },
     {
-      "name": "Groove It Up",
-      "slug": "groove-it-up",
-      "description": "Groove It Up event.",
+      "name": "Be Heroic: Heroes of Our Heritage",
+      "slug": "be-heroic",
+      "category": "Tiny Tots (Pre-KG, LKG, UKG)",
+      "description": "Registration for Be Heroic: Heroes of Our Heritage event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -41,17 +43,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -60,8 +62,9 @@
     },
     {
       "name": "Art to Heart",
-      "slug": "art-to-heart",
-      "description": "Art to Heart event.",
+      "slug": "art-to-heart-tiny",
+      "category": "Tiny Tots (Pre-KG, LKG, UKG)",
+      "description": "Registration for Art to Heart event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -70,27 +73,28 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
       "max_size": 5,
-      "max_teams": 1
+      "max_teams": 2
     },
     {
-      "name": "Upcycle Challenge",
-      "slug": "upcycle-challenge",
-      "description": "Upcycle Challenge event.",
+      "name": "Art to Heart",
+      "slug": "art-to-heart-energetic",
+      "category": "Energetic Kids (Classes I-III)",
+      "description": "Registration for Art to Heart event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -99,17 +103,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -117,9 +121,10 @@
       "max_teams": 1
     },
     {
-      "name": "Rangoli",
-      "slug": "rangoli",
-      "description": "Rangoli event.",
+      "name": "Green Guardians: I am Off to Save Our Planet Earth",
+      "slug": "green-guardians",
+      "category": "Energetic Kids (Classes I-III)",
+      "description": "Registration for Green Guardians: I am Off to Save Our Planet Earth event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -128,17 +133,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -146,38 +151,10 @@
       "max_teams": 1
     },
     {
-      "name": "Spectacular Science",
-      "slug": "spectacular-science",
-      "description": "Spectacular Science event.",
-      "judges": [
-        "Judge 1",
-        "Judge 2"
-      ],
-      "rubric": [
-        {
-          "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 20
-        },
-        {
-          "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 20
-        },
-        {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 10
-        }
-      ],
-      "min_size": 1,
-      "max_size": 5,
-      "max_teams": 1
-    },
-    {
-      "name": "Brainy Duo",
+      "name": "Brainy Duo: The Young Scientist's Discovery",
       "slug": "brainy-duo",
-      "description": "Brainy Duo event.",
+      "category": "Energetic Kids (Classes I-III)",
+      "description": "Registration for Brainy Duo: The Young Scientist's Discovery event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -186,17 +163,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -204,9 +181,10 @@
       "max_teams": 1
     },
     {
-      "name": "Creative Writing",
-      "slug": "creative-writing",
-      "description": "Creative Writing event.",
+      "name": "தமிழ் பேச்சு",
+      "slug": "tamil-pechu",
+      "category": "Young Visionaries (Classes IV-VI)",
+      "description": "Registration for தமிழ் பேச்சு event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -215,17 +193,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -233,9 +211,10 @@
       "max_teams": 1
     },
     {
-      "name": "Dumb Charades",
-      "slug": "dumb-charades",
-      "description": "Dumb Charades event.",
+      "name": "Spectacular Science - The Young Visionaries Expo",
+      "slug": "spectacular-science",
+      "category": "Young Visionaries (Classes IV-VI)",
+      "description": "Registration for Spectacular Science - The Young Visionaries Expo event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -244,17 +223,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -264,7 +243,8 @@
     {
       "name": "Spell Bee",
       "slug": "spell-bee",
-      "description": "Spell Bee event.",
+      "category": "Young Visionaries (Classes IV-VI)",
+      "description": "Registration for Spell Bee event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -273,17 +253,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -291,9 +271,10 @@
       "max_teams": 1
     },
     {
-      "name": "Guru Shisya",
-      "slug": "guru-shisya",
-      "description": "Guru Shisya event.",
+      "name": "Quiz-Whiz India",
+      "slug": "quiz-whiz-india",
+      "category": "Young Visionaries (Classes IV-VI)",
+      "description": "Registration for Quiz-Whiz India event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -302,17 +283,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -320,9 +301,10 @@
       "max_teams": 1
     },
     {
-      "name": "Coding Champion",
-      "slug": "coding-champion",
-      "description": "Coding Champion event.",
+      "name": "Creative Writing (English)",
+      "slug": "creative-writing",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Creative Writing (English) event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -331,17 +313,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -349,9 +331,10 @@
       "max_teams": 1
     },
     {
-      "name": "Commerce IPL",
-      "slug": "commerce-ipl",
-      "description": "Commerce IPL event.",
+      "name": "UpCycle - Trash into Treasure",
+      "slug": "upcycle",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for UpCycle - Trash into Treasure event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -360,17 +343,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -378,9 +361,10 @@
       "max_teams": 1
     },
     {
-      "name": "Quizzipedia",
-      "slug": "quizzipedia",
-      "description": "Quizzipedia event.",
+      "name": "Dumb Charades",
+      "slug": "dumb-charades-emerging",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Dumb Charades event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -389,17 +373,137 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Quizzable Stars",
+      "slug": "quizzable-stars",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Quizzable Stars event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 50
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 30
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 20
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Beat Breeze (Group Dance)",
+      "slug": "beat-breeze",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Beat Breeze (Group Dance) event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 50
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 30
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 20
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "தமிழோடு விளையாடு",
+      "slug": "tamilodu-vilaiyadu",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for தமிழோடு விளையாடு event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 50
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 30
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 20
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Rangoli",
+      "slug": "rangoli",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Rangoli event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 50
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 30
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -409,7 +513,8 @@
     {
       "name": "Academic Marathon",
       "slug": "academic-marathon",
-      "description": "Academic Marathon event.",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Academic Marathon event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -418,17 +523,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -436,9 +541,10 @@
       "max_teams": 1
     },
     {
-      "name": "Debate",
-      "slug": "debate",
-      "description": "Debate event.",
+      "name": "Nutrichef (Flameless Cooking)",
+      "slug": "nutrichef",
+      "category": "Emerging Stars (Classes VII-IX)",
+      "description": "Registration for Nutrichef (Flameless Cooking) event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -447,17 +553,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -465,9 +571,10 @@
       "max_teams": 1
     },
     {
-      "name": "Solo Singing",
-      "slug": "solo-singing",
-      "description": "Solo Singing event.",
+      "name": "Business Tycoon",
+      "slug": "business-tycoon",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Business Tycoon event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -476,17 +583,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -494,9 +601,10 @@
       "max_teams": 1
     },
     {
-      "name": "Duo Singing",
-      "slug": "duo-singing",
-      "description": "Duo Singing event.",
+      "name": "Sway & Sizzle (Group Dance)",
+      "slug": "sway-and-sizzle",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Sway & Sizzle (Group Dance) event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -505,17 +613,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -523,9 +631,10 @@
       "max_teams": 1
     },
     {
-      "name": "Instrumental",
-      "slug": "instrumental",
-      "description": "Instrumental event.",
+      "name": "Quizzipedia",
+      "slug": "quizzipedia",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Quizzipedia event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -534,17 +643,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -552,9 +661,10 @@
       "max_teams": 1
     },
     {
-      "name": "Battle of Bands",
-      "slug": "battle-of-bands",
-      "description": "Battle of Bands event.",
+      "name": "Harmony Unplugged",
+      "slug": "harmony-unplugged",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Harmony Unplugged event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -563,17 +673,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -581,9 +691,10 @@
       "max_teams": 1
     },
     {
-      "name": "Short Film",
-      "slug": "short-film",
-      "description": "Short Film event.",
+      "name": "Quad Squad - Sync to the Beat",
+      "slug": "quad-squad",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Quad Squad - Sync to the Beat event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -592,17 +703,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -610,9 +721,10 @@
       "max_teams": 1
     },
     {
-      "name": "Photography",
-      "slug": "photography",
-      "description": "Photography event.",
+      "name": "Commerce - Ideas Premier League (CIPL)",
+      "slug": "cipl",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Commerce - Ideas Premier League (CIPL) event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -621,17 +733,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -639,9 +751,10 @@
       "max_teams": 1
     },
     {
-      "name": "Ad-Zap",
-      "slug": "ad-zap",
-      "description": "Ad-Zap event.",
+      "name": "Coding Champion",
+      "slug": "coding-champion",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Coding Champion event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -650,17 +763,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -668,9 +781,10 @@
       "max_teams": 1
     },
     {
-      "name": "Reel Making",
-      "slug": "reel-making",
-      "description": "Reel Making event.",
+      "name": "Rolling Camera - Action",
+      "slug": "rolling-camera",
+      "category": "Teen Trailblazers (Classes X-XII)",
+      "description": "Registration for Rolling Camera - Action event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -679,17 +793,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -697,9 +811,10 @@
       "max_teams": 1
     },
     {
-      "name": "Corporate Walk",
-      "slug": "corporate-walk",
-      "description": "Corporate Walk event.",
+      "name": "Teachers on Beat",
+      "slug": "teachers-on-beat",
+      "category": "Guru Dhakshina (Teachers)",
+      "description": "Registration for Teachers on Beat event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -708,17 +823,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -726,9 +841,10 @@
       "max_teams": 1
     },
     {
-      "name": "Talent Showcase",
-      "slug": "talent-showcase",
-      "description": "Talent Showcase event.",
+      "name": "Quizmas Tree",
+      "slug": "quizmas-tree",
+      "category": "Guru Dhakshina (Teachers)",
+      "description": "Registration for Quizmas Tree event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -737,17 +853,17 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
         }
       ],
       "min_size": 1,
@@ -755,9 +871,10 @@
       "max_teams": 1
     },
     {
-      "name": "Teacher's Quiz",
-      "slug": "teacher-s-quiz",
-      "description": "Teacher's Quiz event.",
+      "name": "Guru Shishya",
+      "slug": "guru-shishya",
+      "category": "Guru Dhakshina (Teachers)",
+      "description": "Registration for Guru Shishya event.",
       "judges": [
         "Judge 1",
         "Judge 2"
@@ -766,17 +883,47 @@
         {
           "id": "criteria1",
           "name": "Criteria 1",
-          "max_points": 20
+          "max_points": 50
         },
         {
           "id": "criteria2",
           "name": "Criteria 2",
-          "max_points": 20
+          "max_points": 30
         },
         {
           "id": "overall",
           "name": "Overall Impact",
-          "max_points": 10
+          "max_points": 20
+        }
+      ],
+      "min_size": 1,
+      "max_size": 5,
+      "max_teams": 1
+    },
+    {
+      "name": "Dumb Charades",
+      "slug": "dumb-charades-teachers",
+      "category": "Guru Dhakshina (Teachers)",
+      "description": "Registration for Dumb Charades event.",
+      "judges": [
+        "Judge 1",
+        "Judge 2"
+      ],
+      "rubric": [
+        {
+          "id": "criteria1",
+          "name": "Criteria 1",
+          "max_points": 50
+        },
+        {
+          "id": "criteria2",
+          "name": "Criteria 2",
+          "max_points": 30
+        },
+        {
+          "id": "overall",
+          "name": "Overall Impact",
+          "max_points": 20
         }
       ],
       "min_size": 1,
