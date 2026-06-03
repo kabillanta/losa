@@ -20,9 +20,18 @@ async function seedEvents() {
   
   console.log("Seeding events to database...\n");
 
+  const sanitizedEvents = config.events.map((e: any) => {
+    return {
+      name: e.name,
+      slug: e.slug,
+      description: e.description,
+      rubric: e.rubric
+    };
+  });
+
   const { data, error } = await supabase
     .from("events")
-    .upsert(config.events, { onConflict: "slug" })
+    .upsert(sanitizedEvents, { onConflict: "slug" })
     .select();
 
   if (error) {

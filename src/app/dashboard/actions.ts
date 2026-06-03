@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export type StudentInfo = {
   name: string;
@@ -117,6 +118,11 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
       .insert(enrollmentsToInsert);
     if (enrollError) return { error: "Failed to save enrollments: " + enrollError.message };
   }
+
+  // Clear Next.js cache so the scoring page and leaderboard update instantly
+  revalidatePath(`/events/${eventSlug}`);
+  revalidatePath("/admin/leaderboard");
+  revalidatePath(`/events/${eventSlug}/score/${school.id}`);
 
   return { success: true };
 }

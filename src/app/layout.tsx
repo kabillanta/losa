@@ -34,21 +34,26 @@ export default function RootLayout({
                 className="h-9 w-auto object-contain hover:scale-105 transition-transform"
               />
               <div className="h-6 w-px bg-gray-200 hidden sm:block"></div>
-              <h1 className={`${space.className} hidden sm:block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-onyx to-gray-500 tracking-wider uppercase`}>
+              <h1
+                className={`${space.className} hidden sm:block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-onyx to-gray-500 tracking-wider uppercase`}
+              >
                 LOSA <span className="text-gold">2K26</span>
               </h1>
             </div>
             <OfflineSync />
           </div>
         </header>
-        <main className="w-full flex-1">
-          {children}
-        </main>
-        
+        <main className="w-full flex-1">{children}</main>
+
         <footer className="w-full text-center py-6 text-xs text-gray-400 border-t border-gray-200 mt-auto bg-gray-50">
           <div className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10">
             <span>&copy; {new Date().getFullYear()} LOSA Attendance</span>
-            <a href="/admin" className="hover:text-onyx transition-colors font-medium">Admin Dashboard</a>
+            <a
+              href="/admin"
+              className="hover:text-onyx transition-colors font-medium"
+            >
+              Admin Dashboard
+            </a>
           </div>
         </footer>
       </body>
