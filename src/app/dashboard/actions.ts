@@ -3,7 +3,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 
-export async function saveEventEnrollments(eventSlug: string, teams: string[][]) {
+export type StudentInfo = {
+  name: string;
+  classDetails: string;
+  admissionNumber: string;
+};
+
+export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo[][]) {
   const cookieStore = await cookies();
   const firebaseUid = cookieStore.get("firebase_uid")?.value;
 
@@ -24,7 +30,6 @@ export async function saveEventEnrollments(eventSlug: string, teams: string[][])
   }
 
   // Generate a short school prefix from name (e.g., "St. Joseph's" -> "SJH")
-  // Just taking first letter of each word to make it clean
   const prefix = school.name
     .split(" ")
     .map((w: string) => w[0])
@@ -51,32 +56,49 @@ export async function saveEventEnrollments(eventSlug: string, teams: string[][])
   const enrollmentsToInsert = [];
 
   for (let teamIndex = 0; teamIndex < teams.length; teamIndex++) {
-    const studentNames = teams[teamIndex];
-    const validNames = studentNames.map(n => n.trim()).filter(n => n.length > 0);
+    const students = teams[teamIndex];
+    const validStudents = students.filter(
+      s => s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+    );
     
-    if (validNames.length === 0) continue;
+    if (validStudents.length === 0) continue;
 
     // e.g. SJH-FASHIONISTA-T1
     const teamId = `${prefix}-${eventSlug.toUpperCase()}-T${teamIndex + 1}`;
 
-    for (const name of validNames) {
-      // Find or create the student
+    for (const student of validStudents) {
+      // Find the student by admission number
       let { data: existingStudent } = await supabase
         .from("students")
         .select("id")
         .eq("school_id", school.id)
-        .ilike("name", name)
+        .eq("admission_number", student.admissionNumber.trim())
         .maybeSingle();
 
       if (!existingStudent) {
         const { data: newStudent, error: createError } = await supabase
           .from("students")
-          .insert({ school_id: school.id, name: name, is_present: false })
+          .insert({ 
+            school_id: school.id, 
+            name: student.name.trim(), 
+            class_details: student.classDetails.trim(),
+            admission_number: student.admissionNumber.trim(),
+            is_present: false 
+          })
           .select("id")
           .single();
         
         if (createError) return { error: "Failed to create student: " + createError.message };
         existingStudent = newStudent;
+      } else {
+        // Update name and class details just in case they were corrected
+        await supabase
+          .from("students")
+          .update({ 
+            name: student.name.trim(),
+            class_details: student.classDetails.trim()
+          })
+          .eq("id", existingStudent.id);
       }
 
       if (existingStudent) {

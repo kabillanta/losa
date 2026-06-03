@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { saveEventEnrollments } from "../actions";
+import { saveEventEnrollments, StudentInfo } from "../actions";
 import { Loader2, CheckCircle2, AlertCircle, Plus, Trash2 } from "lucide-react";
 
 interface EventFormProps {
@@ -9,38 +9,41 @@ interface EventFormProps {
   minSize: number;
   maxSize: number;
   maxTeams: number;
-  initialTeams: string[][];
+  initialTeams: StudentInfo[][];
 }
 
+const emptyStudent = { name: "", classDetails: "", admissionNumber: "" };
+
 export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initialTeams }: EventFormProps) {
-  // If they have no teams yet, give them 1 empty team
   const startingTeams = initialTeams.length > 0 ? initialTeams : [[]];
 
-  // Pad teams to maxSize
-  const paddedTeams = startingTeams.map(teamNames => {
-    const padded = Array(maxSize).fill("");
-    teamNames.forEach((name, i) => {
-      if (i < maxSize) padded[i] = name;
+  const paddedTeams = startingTeams.map(teamStudents => {
+    const padded = Array(maxSize).fill(emptyStudent);
+    teamStudents.forEach((student, i) => {
+      if (i < maxSize) padded[i] = student;
     });
     return padded;
   });
 
-  const [teams, setTeams] = useState<string[][]>(paddedTeams);
+  const [teams, setTeams] = useState<StudentInfo[][]>(paddedTeams);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleNameChange = (teamIndex: number, studentIndex: number, value: string) => {
+  const handleFieldChange = (teamIndex: number, studentIndex: number, field: keyof StudentInfo, value: string) => {
     const newTeams = [...teams];
     newTeams[teamIndex] = [...newTeams[teamIndex]];
-    newTeams[teamIndex][studentIndex] = value;
+    newTeams[teamIndex][studentIndex] = {
+      ...newTeams[teamIndex][studentIndex],
+      [field]: value
+    };
     setTeams(newTeams);
     setSuccess(false);
   };
 
   const addTeam = () => {
     if (teams.length < maxTeams) {
-      setTeams([...teams, Array(maxSize).fill("")]);
+      setTeams([...teams, Array(maxSize).fill(emptyStudent)]);
       setSuccess(false);
     }
   };
@@ -59,9 +62,25 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
 
     // Validate teams
     for (let i = 0; i < teams.length; i++) {
-      const filledNamesCount = teams[i].filter(n => n.trim().length > 0).length;
-      if (filledNamesCount > 0 && filledNamesCount < minSize) {
-        setError(`Team ${i + 1} must have at least ${minSize} participant(s).`);
+      const validStudents = teams[i].filter(s => 
+        s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+      );
+
+      // Check for partial filling
+      const partialStudents = teams[i].filter(s => {
+        const hasSome = s.name.trim().length > 0 || s.classDetails.trim().length > 0 || s.admissionNumber.trim().length > 0;
+        const hasAll = s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0;
+        return hasSome && !hasAll;
+      });
+
+      if (partialStudents.length > 0) {
+        setError(`Team ${i + 1} has incomplete student details. All 3 fields are mandatory for a participant.`);
+        setLoading(false);
+        return;
+      }
+
+      if (validStudents.length > 0 && validStudents.length < minSize) {
+        setError(`Team ${i + 1} must have at least ${minSize} fully registered participant(s).`);
         setLoading(false);
         return;
       }
@@ -83,7 +102,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       {teams.map((team, teamIndex) => (
         <div key={teamIndex} className="p-6 bg-gray-50 border border-gray-200 rounded-2xl relative">
           
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-bold text-onyx">Team {teamIndex + 1}</h3>
             {teams.length > 1 && (
               <button
@@ -96,29 +115,65 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
             )}
           </div>
 
-          <div className="space-y-4">
-            {team.map((name, index) => {
+          <div className="space-y-6">
+            {team.map((student, index) => {
               const isRequired = index < minSize;
               
               return (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-sm font-bold text-taupe shrink-0 shadow-sm">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => handleNameChange(teamIndex, index, e.target.value)}
-                      placeholder={isRequired ? "Student Name (Required)" : "Student Name (Optional)"}
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all shadow-sm"
-                    />
-                  </div>
-                  {isRequired && (
-                    <div className="text-xs font-semibold text-red-500 uppercase tracking-wider shrink-0 w-16">
-                      Required
+                <div key={index} className={`flex flex-col gap-4 p-5 md:p-6 bg-white border rounded-xl shadow-sm transition-all ${isRequired ? 'border-blue-100 ring-1 ring-blue-50' : 'border-gray-100'}`}>
+                  
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${isRequired ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-500'}`}>
+                        {index + 1}
+                      </div>
+                      <span className="font-semibold text-onyx">Participant {index + 1}</span>
                     </div>
-                  )}
+                    {isRequired ? (
+                      <span className="text-xs font-bold text-red-600 uppercase tracking-wider bg-red-50 px-3 py-1.5 rounded-full border border-red-100">
+                        Required
+                      </span>
+                    ) : (
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                        Optional
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full pt-1">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Student Name</label>
+                      <input
+                        type="text"
+                        value={student.name}
+                        onChange={(e) => handleFieldChange(teamIndex, index, 'name', e.target.value)}
+                        placeholder="e.g. John Doe"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
+                      <input
+                        type="text"
+                        value={student.classDetails}
+                        onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
+                        placeholder="e.g. 10th A"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
+                      <input
+                        type="text"
+                        value={student.admissionNumber}
+                        onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
+                        placeholder="ID Card No."
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                      />
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -147,13 +202,13 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
         {success && (
           <div className="p-4 bg-green-50 text-green-700 border border-green-200 rounded-xl flex items-start gap-3">
             <CheckCircle2 size={20} className="shrink-0 mt-0.5" />
-            <p className="text-sm font-medium">Successfully saved participants for this event!</p>
+            <p className="text-sm font-medium">Successfully saved participants and their details!</p>
           </div>
         )}
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-taupe text-center sm:text-left">
-            You can return and edit these teams at any time until the registration deadline.
+            You can return and edit these details at any time until the registration deadline.
           </p>
           <button
             type="submit"

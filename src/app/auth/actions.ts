@@ -64,5 +64,5 @@ export async function completeProfile(formData: FormData) {
 export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete("firebase_uid");
-  redirect("/");
+  redirect("/auth/login");
 }

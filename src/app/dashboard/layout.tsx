@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import config from "../../../events-config.json";
 import Link from "next/link";
 import { LogOut } from "lucide-react";
+import { logout } from "@/app/auth/actions";
 
 export default async function DashboardLayout({
   children,
@@ -48,7 +49,7 @@ export default async function DashboardLayout({
         </div>
 
         <div className="p-4 border-t border-gray-200 shrink-0">
-          <form action="/auth/logout" method="POST">
+          <form action={logout}>
             <button className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 w-full px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
               <LogOut size={16} />
               Log Out

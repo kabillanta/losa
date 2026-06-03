@@ -20,7 +20,7 @@ export default async function EventPage({
   const cookieStore = await cookies();
   const firebaseUid = cookieStore.get("firebase_uid")?.value;
 
-  let currentTeams: string[][] = [];
+  let currentTeams: { name: string; classDetails: string; admissionNumber: string }[][] = [];
   const supabase = await createClient();
 
   if (firebaseUid) {
@@ -36,7 +36,7 @@ export default async function EventPage({
         .from("event_enrollments")
         .select(`
           team_id,
-          students!inner(id, name, school_id)
+          students!inner(id, name, class_details, admission_number, school_id)
         `)
         .eq("event_slug", event_slug)
         .eq("students.school_id", school.id)
@@ -44,15 +44,21 @@ export default async function EventPage({
 
       if (enrollments && enrollments.length > 0) {
         // Group by team_id
-        const teamsMap: Record<string, string[]> = {};
-        const unassignedTeam: string[] = []; // for old data without team_id
+        const teamsMap: Record<string, { name: string; classDetails: string; admissionNumber: string }[]> = {};
+        const unassignedTeam: { name: string; classDetails: string; admissionNumber: string }[] = []; // for old data
 
         enrollments.forEach((e: any) => {
+          const studentObj = {
+            name: e.students.name || "",
+            classDetails: e.students.class_details || "",
+            admissionNumber: e.students.admission_number || ""
+          };
+
           if (e.team_id) {
             if (!teamsMap[e.team_id]) teamsMap[e.team_id] = [];
-            teamsMap[e.team_id].push(e.students.name);
+            teamsMap[e.team_id].push(studentObj);
           } else {
-            unassignedTeam.push(e.students.name);
+            unassignedTeam.push(studentObj);
           }
         });
 
@@ -68,7 +74,7 @@ export default async function EventPage({
   const maxTeams = (event as any).max_teams || 1;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-onyx mb-2">{event.name}</h1>
         <p className="text-taupe">{event.description}</p>
