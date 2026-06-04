@@ -18,12 +18,29 @@ export default async function EventSchoolSelection({ params }: { params: Promise
     notFound();
   }
 
-  // Assuming all schools are participating in every event for this implementation.
-  // In a more complex app, we would join with `event_enrollments`.
-  const { data: schools } = await supabase
-    .from("schools")
-    .select("*")
-    .order("name");
+  // Fetch schools, enrollments, and students to determine which schools are participating
+  const [schoolsRes, enrollmentsRes, studentsRes] = await Promise.all([
+    supabase.from("schools").select("*").order("name"),
+    supabase.from("event_enrollments").select("student_id").eq("event_slug", slug),
+    supabase.from("students").select("id, school_id")
+  ]);
+
+  const allSchools = schoolsRes.data || [];
+  const enrollments = enrollmentsRes.data || [];
+  const students = studentsRes.data || [];
+
+  // Map student_id -> school_id
+  const studentToSchool = new Map(students.map(s => [s.id, s.school_id]));
+
+  // Determine which schools have at least one student enrolled in this event
+  const participatingSchoolIds = new Set<string>();
+  enrollments.forEach(e => {
+    const schoolId = studentToSchool.get(e.student_id);
+    if (schoolId) participatingSchoolIds.add(schoolId);
+  });
+
+  // Filter schools to only those participating
+  const schools = allSchools.filter(school => participatingSchoolIds.has(school.id));
 
   // Fetch existing scores to see who has been judged
   const { data: scores } = await supabase

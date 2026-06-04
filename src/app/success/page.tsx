@@ -23,9 +23,9 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
           </p>
         </div>
 
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 bg-onyx text-white font-medium py-3.5 px-8 rounded-lg hover:bg-black transition-colors"
+        <Link 
+          href="/attendance"
+          className="inline-block bg-onyx text-white font-medium py-3 px-8 rounded-lg hover:bg-black transition-colors shadow-sm"
         >
           Scan next group
           <ArrowRight size={16} />
