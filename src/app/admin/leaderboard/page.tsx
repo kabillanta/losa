@@ -28,13 +28,13 @@ export default async function LeaderboardPage() {
     studentsBySchool[student.school_id].push(student);
   });
 
-  // Map event_slug to Set of student IDs for fast filtering
-  const eventStudentsMap: Record<string, Set<string>> = {};
+  // Map event_slug -> student_id -> team_id for fast filtering and grouping
+  const studentTeamMap: Record<string, Record<string, string>> = {};
   enrollments.forEach((enroll) => {
-    if (!eventStudentsMap[enroll.event_slug]) {
-      eventStudentsMap[enroll.event_slug] = new Set();
+    if (!studentTeamMap[enroll.event_slug]) {
+      studentTeamMap[enroll.event_slug] = {};
     }
-    eventStudentsMap[enroll.event_slug].add(enroll.student_id);
+    studentTeamMap[enroll.event_slug][enroll.student_id] = enroll.team_id || "Team 1";
   });
 
   // Map school IDs to School Objects for easy lookup
@@ -237,18 +237,37 @@ export default async function LeaderboardPage() {
                         <div className="flex flex-wrap gap-1.5">
                           {(() => {
                             const eventStudents = studentsBySchool[entry.school.id]?.filter(
-                              s => eventStudentsMap[event.id]?.has(s.id)
+                              s => studentTeamMap[event.slug]?.[s.id]
                             ) || [];
 
                             if (eventStudents.length === 0) {
                               return <span className="text-xs text-gray-400 italic">No students registered for this event.</span>;
                             }
 
-                            return eventStudents.map((student) => (
-                              <span key={student.id} className="inline-flex items-center px-2 py-1 rounded bg-white border border-gray-200 text-taupe text-xs font-medium shadow-sm hover:border-gray-300 transition-colors">
-                                {student.name}
-                              </span>
-                            ));
+                            // Group by team
+                            const studentsByTeam: Record<string, typeof eventStudents> = {};
+                            eventStudents.forEach(student => {
+                              const teamId = studentTeamMap[event.slug]?.[student.id] || 'Team 1';
+                              if (!studentsByTeam[teamId]) studentsByTeam[teamId] = [];
+                              studentsByTeam[teamId].push(student);
+                            });
+
+                            return (
+                              <div className="flex flex-col gap-4 w-full mt-1">
+                                {Object.entries(studentsByTeam).map(([teamId, students]) => (
+                                  <div key={teamId} className="flex flex-col gap-2">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider pl-1">{teamId}</div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {students.map(student => (
+                                        <span key={student.id} className="inline-flex items-center px-2 py-1 rounded bg-white border border-gray-200 text-taupe text-xs font-medium shadow-sm hover:border-gray-300 transition-colors">
+                                          {student.name}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
                           })()}
                         </div>
                       </div>
