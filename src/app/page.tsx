@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { UserPlus } from "lucide-react";
-import LiquidEther from "@/components/LiquidEther";
+// import LiquidEther from "@/components/LiquidEther";
 
 export default function HomePage() {
   return (
     <div className="min-h-[calc(100vh-64px)] w-full overflow-hidden bg-gray-50 relative pb-20">
       {/* LiquidEther Interactive Background */}
-      <div className="absolute inset-0 z-0 opacity-40">
+      {/* <div className="absolute inset-0 z-0 opacity-40">
         <LiquidEther
           colors={["#D4B018", "#B59410", "#8D7666"]}
           mouseForce={20}
@@ -26,7 +26,7 @@ export default function HomePage() {
           autoResumeDelay={3000}
           autoRampDuration={0.6}
         />
-      </div>
+      </div> */}
 
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-10 pt-12 md:pt-24 relative z-10">
         {/* Split Hero Section */}
