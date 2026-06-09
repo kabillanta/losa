@@ -25,8 +25,8 @@ export async function GET() {
     // Map school id to school name and teacher
     const schoolMap = new Map(schools.map((s) => [s.id, s]));
 
-    // Columns: School Name, Teacher Name, Student Name, Class/Section, Admission No, Present Status
-    const headers = ["School Name", "Teacher Name", "Student Name", "Class/Section", "Admission No", "Present Status"];
+    // Columns: School Name, Teacher Name, Phone Number, Email, Student Name, Class/Section, Admission No, Present Status
+    const headers = ["School Name", "Teacher Name", "Phone Number", "Email", "Student Name", "Class/Section", "Admission No", "Present Status"];
     
     // Sort students by school name, then student name
     const rowsData = students.map((student) => {
@@ -34,21 +34,18 @@ export async function GET() {
       return {
         schoolName: school?.name || "Unknown School",
         teacherName: school?.teacher_name || "N/A",
+        phoneNumber: school?.phone_number || "N/A",
+        email: school?.email || "N/A",
         studentName: student.name,
         classDetails: student.class_details,
         admissionNo: student.admission_number,
         present: student.is_present ? "Present" : "Absent",
       };
-    }).sort((a, b) => {
-      if (a.schoolName === b.schoolName) {
-        return a.studentName.localeCompare(b.studentName);
-      }
-      return a.schoolName.localeCompare(b.schoolName);
-    });
+    }).sort((a, b) => a.schoolName.localeCompare(b.schoolName) || a.studentName.localeCompare(b.studentName));
 
     const csvRows = [
       headers.map(escapeCSV).join(","),
-      ...rowsData.map(r => [r.schoolName, r.teacherName, r.studentName, r.classDetails, r.admissionNo, r.present].map(escapeCSV).join(","))
+      ...rowsData.map(r => [r.schoolName, r.teacherName, r.phoneNumber, r.email, r.studentName, r.classDetails, r.admissionNo, r.present].map(escapeCSV).join(","))
     ];
 
     const csvContent = "\uFEFF" + csvRows.join("\n"); // Adding BOM for Excel UTF-8 support

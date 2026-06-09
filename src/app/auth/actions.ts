@@ -38,9 +38,11 @@ export async function completeProfile(formData: FormData) {
 
   const schoolName = formData.get("schoolName") as string;
   const teacherName = formData.get("teacherName") as string;
+  const phoneNumber = formData.get("phoneNumber") as string;
+  const email = formData.get("email") as string;
 
-  if (!schoolName || !teacherName) {
-    return { error: "Both fields are required." };
+  if (!schoolName || !teacherName || !phoneNumber || !email) {
+    return { error: "All fields are required." };
   }
 
   const supabase = await createClient();
@@ -51,6 +53,8 @@ export async function completeProfile(formData: FormData) {
     firebase_uid: uid,
     name: schoolName,
     teacher_name: teacherName,
+    phone_number: phoneNumber,
+    email: email,
     qr_code_id: qrCodeId,
   });
 

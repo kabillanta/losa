@@ -11,17 +11,38 @@ interface EventFormProps {
   maxTeams: number;
   initialTeams: StudentInfo[][];
   isTeacherEvent?: boolean;
+  eventCategory?: string;
 }
 
-const emptyStudent = { name: "", classDetails: "", admissionNumber: "" };
+const emptyStudent: StudentInfo = { name: "", className: "", section: "", admissionNumber: "" };
 
-export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initialTeams, isTeacherEvent = false }: EventFormProps) {
+const getAllowedClasses = (category: string) => {
+  if (category.includes("Tiny Tots")) return ["Pre-KG", "LKG", "UKG"];
+  if (category.includes("Energetic Kids")) return ["I", "II", "III"];
+  if (category.includes("Young Visionaries")) return ["IV", "V", "VI"];
+  if (category.includes("Emerging Stars")) return ["VII", "VIII", "IX"];
+  if (category.includes("Teen Trailblazers")) return ["X", "XI", "XII"];
+  return ["Pre-KG", "LKG", "UKG", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+};
+
+export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initialTeams, isTeacherEvent = false, eventCategory = "" }: EventFormProps) {
+  const allowedClasses = getAllowedClasses(eventCategory);
+  
   const startingTeams = initialTeams.length > 0 ? initialTeams : [[]];
 
   const paddedTeams = startingTeams.map(teamStudents => {
     const padded = Array(maxSize).fill(emptyStudent);
     teamStudents.forEach((student, i) => {
-      if (i < maxSize) padded[i] = student;
+      if (i < maxSize) {
+        // If they had an old class but it's not in the allowed list, default to the first allowed class
+        const cls = allowedClasses.includes(student.className) ? student.className : allowedClasses[0];
+        padded[i] = { 
+          ...emptyStudent, 
+          ...student, 
+          className: cls,
+          section: student.section || "" 
+        };
+      }
     });
     return padded;
   });
@@ -38,13 +59,19 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       ...newTeams[teamIndex][studentIndex],
       [field]: value
     };
+    
+    // Automatically set class if not set and there's only one option
+    if (field === 'name' && allowedClasses.length === 1 && !newTeams[teamIndex][studentIndex].className) {
+      newTeams[teamIndex][studentIndex].className = allowedClasses[0];
+    }
+    
     setTeams(newTeams);
     setSuccess(false);
   };
 
   const addTeam = () => {
     if (teams.length < maxTeams) {
-      setTeams([...teams, Array(maxSize).fill(emptyStudent)]);
+      setTeams([...teams, Array(maxSize).fill({ ...emptyStudent, className: allowedClasses[0] })]);
       setSuccess(false);
     }
   };
@@ -66,19 +93,19 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       const validStudents = teams[i].filter(s => 
         isTeacherEvent 
           ? s.name.trim().length > 0
-          : s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+          : s.name.trim().length > 0 && s.className.trim().length > 0 && s.section.trim().length > 0 && s.admissionNumber.trim().length > 0
       );
 
       // Check for partial filling
       const partialStudents = teams[i].filter(s => {
         if (isTeacherEvent) return false;
-        const hasSome = s.name.trim().length > 0 || s.classDetails.trim().length > 0 || s.admissionNumber.trim().length > 0;
-        const hasAll = s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0;
+        const hasSome = s.name.trim().length > 0 || s.className.trim().length > 0 || s.section.trim().length > 0 || s.admissionNumber.trim().length > 0;
+        const hasAll = s.name.trim().length > 0 && s.className.trim().length > 0 && s.section.trim().length > 0 && s.admissionNumber.trim().length > 0;
         return hasSome && !hasAll;
       });
 
       if (partialStudents.length > 0) {
-        setError(`Team ${i + 1} has incomplete student details. All 3 fields are mandatory for a participant.`);
+        setError(`Team ${i + 1} has incomplete student details. Name, Class, Section, and ID are mandatory for a participant.`);
         setLoading(false);
         return;
       }
@@ -104,7 +131,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       {teams.map((team, teamIndex) => (
-        <div key={teamIndex} className="p-6 bg-gray-50 border border-gray-200 rounded-2xl relative">
+        <div key={teamIndex} className="p-4 md:p-6 bg-gray-50 border border-gray-200 rounded-2xl relative">
           
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-bold text-onyx">Team {teamIndex + 1}</h3>
@@ -122,8 +149,9 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
           <div className="hidden md:grid grid-cols-12 gap-4 mb-3 px-3 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-3 text-center">
             <div className="col-span-1">#</div>
             <div className={`text-left ${isTeacherEvent ? 'col-span-10' : 'col-span-4'}`}>{isTeacherEvent ? "Teacher Name" : "Student Name"}</div>
-            {!isTeacherEvent && <div className="col-span-3 text-left">Class / Section</div>}
-            {!isTeacherEvent && <div className="col-span-3 text-left">Admission No.</div>}
+            {!isTeacherEvent && <div className="col-span-2 text-left">Class</div>}
+            {!isTeacherEvent && <div className="col-span-2 text-left">Section</div>}
+            {!isTeacherEvent && <div className="col-span-2 text-left">Admission No.</div>}
             <div className="col-span-1">Status</div>
           </div>
 
@@ -170,18 +198,31 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
                   
                   {!isTeacherEvent && (
                     <>
-                      <div className="col-span-3 flex flex-col gap-1.5">
-                        <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
+                      <div className="col-span-2 flex flex-col gap-1.5">
+                        <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class</label>
+                        <select
+                          value={student.className || allowedClasses[0]}
+                          onChange={(e) => handleFieldChange(teamIndex, index, 'className', e.target.value)}
+                          className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-onyx shadow-sm"
+                        >
+                          {allowedClasses.map(cls => (
+                            <option key={cls} value={cls}>{cls}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="col-span-2 flex flex-col gap-1.5">
+                        <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Section</label>
                         <input
                           type="text"
-                          value={student.classDetails}
-                          onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
-                          placeholder="e.g. 10th A"
-                          className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                          value={student.section}
+                          onChange={(e) => handleFieldChange(teamIndex, index, 'section', e.target.value)}
+                          placeholder="e.g. A"
+                          className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm uppercase"
                         />
                       </div>
                       
-                      <div className="col-span-3 flex flex-col gap-1.5">
+                      <div className="col-span-2 flex flex-col gap-1.5">
                         <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
                         <input
                           type="text"
@@ -239,9 +280,15 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
         )}
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-taupe text-center sm:text-left">
-            You can return and edit these details at any time until the registration deadline.
-          </p>
+          <div className="text-sm text-center sm:text-left">
+            <p className="text-red-600 font-bold mb-1 flex items-center gap-1.5 justify-center sm:justify-start">
+              <AlertCircle size={14} />
+              Please make sure to click "Save Participants" below to confirm your registration.
+            </p>
+            <p className="text-taupe">
+              You can return and edit these details at any time until the registration deadline.
+            </p>
+          </div>
           <button
             type="submit"
             disabled={loading}

@@ -38,8 +38,8 @@ export async function GET() {
       studentEnrollmentsMap.get(e.student_id)!.push(e);
     });
 
-    // Columns: Student Name, Admission No, Class/Section, School Name, Teacher Name, Enrolled Events, Present Status
-    const headers = ["Student Name", "Admission No", "Class/Section", "School Name", "Teacher Name", "Enrolled Events", "Present Status"];
+    // Columns: Student Name, Admission No, Class/Section, School Name, Teacher Name, Phone Number, Email, Enrolled Events, Present Status
+    const headers = ["Student Name", "Admission No", "Class/Section", "School Name", "Teacher Name", "Phone Number", "Email", "Enrolled Events", "Present Status"];
     
     const rowsData = students.map((student) => {
       const school = schoolMap.get(student.school_id);
@@ -56,6 +56,8 @@ export async function GET() {
         classDetails: student.class_details,
         schoolName: school?.name || "Unknown School",
         teacherName: school?.teacher_name || "N/A",
+        phoneNumber: school?.phone_number || "N/A",
+        email: school?.email || "N/A",
         enrolledEvents: enrolledEventsStr || "None",
         present: student.is_present ? "Present" : "Absent",
       };
@@ -63,7 +65,7 @@ export async function GET() {
 
     const csvRows = [
       headers.map(escapeCSV).join(","),
-      ...rowsData.map(r => [r.studentName, r.admissionNo, r.classDetails, r.schoolName, r.teacherName, r.enrolledEvents, r.present].map(escapeCSV).join(","))
+      ...rowsData.map(r => [r.studentName, r.admissionNo, r.classDetails, r.schoolName, r.teacherName, r.phoneNumber, r.email, r.enrolledEvents, r.present].map(escapeCSV).join(","))
     ];
 
     const csvContent = "\uFEFF" + csvRows.join("\n"); // Adding BOM for Excel UTF-8 support

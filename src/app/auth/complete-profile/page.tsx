@@ -50,6 +50,28 @@ export default function CompleteProfilePage() {
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-semibold text-onyx mb-1.5">Mobile Number *</label>
+            <input 
+              type="tel" 
+              name="phoneNumber" 
+              required 
+              className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
+              placeholder="e.g. 9876543210"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-onyx mb-1.5">Email Address *</label>
+            <input 
+              type="email" 
+              name="email" 
+              required 
+              className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
+              placeholder="e.g. teacher@school.edu"
+            />
+          </div>
+
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm font-medium">
               {error}

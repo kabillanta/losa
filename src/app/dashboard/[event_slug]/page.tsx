@@ -22,7 +22,8 @@ export default async function EventPage({
 
   let currentTeams: {
     name: string;
-    classDetails: string;
+    className: string;
+    section: string;
     admissionNumber: string;
   }[][] = [];
   const supabase = await createClient();
@@ -52,18 +53,30 @@ export default async function EventPage({
         // Group by team_id
         const teamsMap: Record<
           string,
-          { name: string; classDetails: string; admissionNumber: string }[]
+          { name: string; className: string; section: string; admissionNumber: string }[]
         > = {};
         const unassignedTeam: {
           name: string;
-          classDetails: string;
+          className: string;
+          section: string;
           admissionNumber: string;
         }[] = []; // for old data
 
         enrollments.forEach((e: any) => {
+          const rawClassDetails = e.students.class_details || "";
+          let parsedClassName = rawClassDetails;
+          let parsedSection = "";
+          
+          if (rawClassDetails.includes(" - ")) {
+            const parts = rawClassDetails.split(" - ");
+            parsedClassName = parts[0];
+            parsedSection = parts.slice(1).join(" - ");
+          }
+
           const studentObj = {
             name: e.students.name || "",
-            classDetails: e.students.class_details || "",
+            className: parsedClassName,
+            section: parsedSection,
             admissionNumber: e.students.admission_number || "",
           };
 
@@ -87,6 +100,7 @@ export default async function EventPage({
   const maxTeams = (event as any).max_teams || 1;
   const isTeacherEvent =
     (event as any).category?.includes("Guru Dhakshina") || false;
+  const eventCategory = (event as any).category || "";
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
@@ -118,6 +132,7 @@ export default async function EventPage({
           maxTeams={maxTeams}
           initialTeams={currentTeams}
           isTeacherEvent={isTeacherEvent}
+          eventCategory={eventCategory}
         />
       </div>
     </div>
