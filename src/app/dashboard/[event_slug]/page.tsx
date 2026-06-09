@@ -20,7 +20,11 @@ export default async function EventPage({
   const cookieStore = await cookies();
   const firebaseUid = cookieStore.get("firebase_uid")?.value;
 
-  let currentTeams: { name: string; classDetails: string; admissionNumber: string }[][] = [];
+  let currentTeams: {
+    name: string;
+    classDetails: string;
+    admissionNumber: string;
+  }[][] = [];
   const supabase = await createClient();
 
   if (firebaseUid) {
@@ -34,24 +38,33 @@ export default async function EventPage({
       // Find students enrolled in this event from this school
       const { data: enrollments } = await supabase
         .from("event_enrollments")
-        .select(`
+        .select(
+          `
           team_id,
           students!inner(id, name, class_details, admission_number, school_id)
-        `)
+        `,
+        )
         .eq("event_slug", event_slug)
         .eq("students.school_id", school.id)
         .order("team_id");
 
       if (enrollments && enrollments.length > 0) {
         // Group by team_id
-        const teamsMap: Record<string, { name: string; classDetails: string; admissionNumber: string }[]> = {};
-        const unassignedTeam: { name: string; classDetails: string; admissionNumber: string }[] = []; // for old data
+        const teamsMap: Record<
+          string,
+          { name: string; classDetails: string; admissionNumber: string }[]
+        > = {};
+        const unassignedTeam: {
+          name: string;
+          classDetails: string;
+          admissionNumber: string;
+        }[] = []; // for old data
 
         enrollments.forEach((e: any) => {
           const studentObj = {
             name: e.students.name || "",
             classDetails: e.students.class_details || "",
-            admissionNumber: e.students.admission_number || ""
+            admissionNumber: e.students.admission_number || "",
           };
 
           if (e.team_id) {
@@ -72,6 +85,8 @@ export default async function EventPage({
 
   // Define max_teams fallback
   const maxTeams = (event as any).max_teams || 1;
+  const isTeacherEvent =
+    (event as any).category?.includes("Guru Dhakshina") || false;
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
@@ -81,11 +96,16 @@ export default async function EventPage({
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg border border-blue-100">
-            Team Size: {event.min_size} to {event.max_size}{" "}
-            {event.max_size === 1 ? "Participant" : "Participants"}
+            {event.min_size === 1 && event.max_size === 1
+              ? "Individual Event"
+              : event.min_size === event.max_size
+                ? `Team Size: ${event.min_size} members in the team`
+                : `Team Size: Min ${event.min_size} members and Max ${event.max_size} members`}
           </div>
           <div className="inline-flex items-center px-3 py-1.5 bg-purple-50 text-purple-700 text-sm font-medium rounded-lg border border-purple-100">
-            Max Entries: {maxTeams} {maxTeams === 1 ? "Team" : "Teams"} Allowed
+            {event.min_size === 1 && event.max_size === 1
+              ? `Only ${maxTeams} ${maxTeams === 1 ? "person" : "people"} allowed`
+              : `Max Entries: ${maxTeams} ${maxTeams === 1 ? "Team" : "Teams"} Allowed`}
           </div>
         </div>
       </div>
@@ -97,6 +117,7 @@ export default async function EventPage({
           maxSize={event.max_size}
           maxTeams={maxTeams}
           initialTeams={currentTeams}
+          isTeacherEvent={isTeacherEvent}
         />
       </div>
     </div>

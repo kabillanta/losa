@@ -10,7 +10,7 @@ export type StudentInfo = {
   admissionNumber: string;
 };
 
-export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo[][]) {
+export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo[][], isTeacherEvent: boolean = false) {
   const cookieStore = await cookies();
   const firebaseUid = cookieStore.get("firebase_uid")?.value;
 
@@ -59,7 +59,9 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
   for (let teamIndex = 0; teamIndex < teams.length; teamIndex++) {
     const students = teams[teamIndex];
     const validStudents = students.filter(
-      s => s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+      s => isTeacherEvent
+        ? s.name.trim().length > 0
+        : s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
     );
     
     if (validStudents.length === 0) continue;
@@ -68,12 +70,14 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
     const teamId = `${prefix}-${eventSlug.toUpperCase()}-T${teamIndex + 1}`;
 
     for (const student of validStudents) {
+      const admNo = isTeacherEvent ? `TCH-${student.name.trim()}` : student.admissionNumber.trim();
+      
       // Find the student by admission number
       let { data: existingStudent } = await supabase
         .from("students")
         .select("id")
         .eq("school_id", school.id)
-        .eq("admission_number", student.admissionNumber.trim())
+        .eq("admission_number", admNo)
         .maybeSingle();
 
       if (!existingStudent) {
@@ -82,8 +86,8 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
           .insert({ 
             school_id: school.id, 
             name: student.name.trim(), 
-            class_details: student.classDetails.trim(),
-            admission_number: student.admissionNumber.trim(),
+            class_details: isTeacherEvent ? "Teacher" : student.classDetails.trim(),
+            admission_number: admNo,
             is_present: false 
           })
           .select("id")

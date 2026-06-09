@@ -10,11 +10,12 @@ interface EventFormProps {
   maxSize: number;
   maxTeams: number;
   initialTeams: StudentInfo[][];
+  isTeacherEvent?: boolean;
 }
 
 const emptyStudent = { name: "", classDetails: "", admissionNumber: "" };
 
-export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initialTeams }: EventFormProps) {
+export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initialTeams, isTeacherEvent = false }: EventFormProps) {
   const startingTeams = initialTeams.length > 0 ? initialTeams : [[]];
 
   const paddedTeams = startingTeams.map(teamStudents => {
@@ -63,11 +64,14 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
     // Validate teams
     for (let i = 0; i < teams.length; i++) {
       const validStudents = teams[i].filter(s => 
-        s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+        isTeacherEvent 
+          ? s.name.trim().length > 0
+          : s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
       );
 
       // Check for partial filling
       const partialStudents = teams[i].filter(s => {
+        if (isTeacherEvent) return false;
         const hasSome = s.name.trim().length > 0 || s.classDetails.trim().length > 0 || s.admissionNumber.trim().length > 0;
         const hasAll = s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0;
         return hasSome && !hasAll;
@@ -86,7 +90,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       }
     }
 
-    const result = await saveEventEnrollments(eventSlug, teams);
+    const result = await saveEventEnrollments(eventSlug, teams, isTeacherEvent);
     
     if (result.error) {
       setError(result.error);
@@ -115,12 +119,11 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
             )}
           </div>
 
-          {/* Desktop Column Headers */}
           <div className="hidden md:grid grid-cols-12 gap-4 mb-3 px-3 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-3 text-center">
             <div className="col-span-1">#</div>
-            <div className="col-span-4 text-left">Student Name</div>
-            <div className="col-span-3 text-left">Class / Section</div>
-            <div className="col-span-3 text-left">Admission No.</div>
+            <div className={`text-left ${isTeacherEvent ? 'col-span-10' : 'col-span-4'}`}>{isTeacherEvent ? "Teacher Name" : "Student Name"}</div>
+            {!isTeacherEvent && <div className="col-span-3 text-left">Class / Section</div>}
+            {!isTeacherEvent && <div className="col-span-3 text-left">Admission No.</div>}
             <div className="col-span-1">Status</div>
           </div>
 
@@ -154,38 +157,42 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
                   </div>
                   
                   {/* Inputs */}
-                  <div className="col-span-4 flex flex-col gap-1.5">
-                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Student Name</label>
+                  <div className={`flex flex-col gap-1.5 ${isTeacherEvent ? 'col-span-10' : 'col-span-4'}`}>
+                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{isTeacherEvent ? "Teacher Name" : "Student Name"}</label>
                     <input
                       type="text"
                       value={student.name}
                       onChange={(e) => handleFieldChange(teamIndex, index, 'name', e.target.value)}
-                      placeholder="e.g. John Doe"
+                      placeholder={isTeacherEvent ? "e.g. Mrs. Smith" : "e.g. John Doe"}
                       className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
                     />
                   </div>
                   
-                  <div className="col-span-3 flex flex-col gap-1.5">
-                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
-                    <input
-                      type="text"
-                      value={student.classDetails}
-                      onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
-                      placeholder="e.g. 10th A"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
-                    />
-                  </div>
-                  
-                  <div className="col-span-3 flex flex-col gap-1.5">
-                    <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
-                    <input
-                      type="text"
-                      value={student.admissionNumber}
-                      onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
-                      placeholder="ID Card No."
-                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
-                    />
-                  </div>
+                  {!isTeacherEvent && (
+                    <>
+                      <div className="col-span-3 flex flex-col gap-1.5">
+                        <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Class / Section</label>
+                        <input
+                          type="text"
+                          value={student.classDetails}
+                          onChange={(e) => handleFieldChange(teamIndex, index, 'classDetails', e.target.value)}
+                          placeholder="e.g. 10th A"
+                          className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                        />
+                      </div>
+                      
+                      <div className="col-span-3 flex flex-col gap-1.5">
+                        <label className="md:hidden text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Admission No.</label>
+                        <input
+                          type="text"
+                          value={student.admissionNumber}
+                          onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
+                          placeholder="ID Card No."
+                          className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   {/* Desktop Badge */}
                   <div className="hidden md:flex col-span-1 justify-center">
