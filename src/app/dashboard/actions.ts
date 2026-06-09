@@ -6,7 +6,8 @@ import { revalidatePath } from "next/cache";
 
 export type StudentInfo = {
   name: string;
-  classDetails: string;
+  className: string;
+  section: string;
   admissionNumber: string;
 };
 
@@ -61,7 +62,7 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
     const validStudents = students.filter(
       s => isTeacherEvent
         ? s.name.trim().length > 0
-        : s.name.trim().length > 0 && s.classDetails.trim().length > 0 && s.admissionNumber.trim().length > 0
+        : s.name.trim().length > 0 && s.className.trim().length > 0 && s.section.trim().length > 0 && s.admissionNumber.trim().length > 0
     );
     
     if (validStudents.length === 0) continue;
@@ -71,6 +72,7 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
 
     for (const student of validStudents) {
       const admNo = isTeacherEvent ? `TCH-${student.name.trim()}` : student.admissionNumber.trim();
+      const combinedClassDetails = isTeacherEvent ? "Teacher" : `${student.className.trim()} - ${student.section.trim()}`;
       
       // Find the student by admission number
       let { data: existingStudent } = await supabase
@@ -86,7 +88,7 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
           .insert({ 
             school_id: school.id, 
             name: student.name.trim(), 
-            class_details: isTeacherEvent ? "Teacher" : student.classDetails.trim(),
+            class_details: combinedClassDetails,
             admission_number: admNo,
             is_present: false 
           })
@@ -101,7 +103,7 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
           .from("students")
           .update({ 
             name: student.name.trim(),
-            class_details: student.classDetails.trim()
+            class_details: combinedClassDetails
           })
           .eq("id", existingStudent.id);
       }
