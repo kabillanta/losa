@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { OfflineSync } from "@/components/OfflineSync";
+import { HelpButton } from "@/components/HelpButton";
 import Link from "next/link";
 import "./globals.css";
 
@@ -41,7 +42,10 @@ export default function RootLayout({
                 LOSA <span className="text-gold">2K26</span>
               </h1>
             </Link>
-            <OfflineSync />
+            <div className="flex items-center gap-4">
+              <HelpButton />
+              <OfflineSync />
+            </div>
           </div>
         </header>
         <main className="w-full flex-1">{children}</main>
