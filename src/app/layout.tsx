@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { OfflineSync } from "@/components/OfflineSync";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,19 +28,19 @@ export default function RootLayout({
       >
         <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-gray-200 shadow-sm">
           <div className="max-w-screen-2xl mx-auto flex items-center justify-between h-16 px-6 lg:px-10">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/logo.png"
                 alt="LOSA Logo"
-                className="h-9 w-auto object-contain hover:scale-105 transition-transform"
+                className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
               />
               <div className="h-6 w-px bg-gray-200 hidden sm:block"></div>
               <h1
-                className={`${space.className} hidden sm:block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-onyx to-gray-500 tracking-wider uppercase`}
+                className={`${space.className} hidden sm:block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-onyx to-gray-500 tracking-wider uppercase group-hover:opacity-80 transition-opacity`}
               >
                 LOSA <span className="text-gold">2K26</span>
               </h1>
-            </div>
+            </Link>
             <OfflineSync />
           </div>
         </header>
