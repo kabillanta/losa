@@ -142,8 +142,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-xl font-bold text-onyx mb-3">Get Your Pass</h3>
             <p className="text-taupe leading-relaxed">
-              Once finished, generate a custom QR Code for your school to skip
-              the registration lines on event day.
+              This will be sent via mail a few days before the event for an easy and seamless entry process.
             </p>
           </div>
         </div>

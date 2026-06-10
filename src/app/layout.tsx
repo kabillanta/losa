@@ -48,13 +48,7 @@ export default function RootLayout({
 
         <footer className="w-full text-center py-6 text-xs text-gray-400 border-t border-gray-200 mt-auto bg-gray-50">
           <div className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10">
-            <span>&copy; {new Date().getFullYear()} LOSA Attendance</span>
-            <a
-              href="/admin"
-              className="hover:text-onyx transition-colors font-medium"
-            >
-              Admin Dashboard
-            </a>
+            <span>&copy; {new Date().getFullYear()} LOSA 2K26 </span>
           </div>
         </footer>
       </body>
