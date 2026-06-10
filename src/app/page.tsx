@@ -72,7 +72,7 @@ export default function HomePage() {
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-56 md:h-72">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
                 <img
-                  src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800"
+                  src="/1.JPG"
                   alt="Students"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -80,7 +80,7 @@ export default function HomePage() {
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-48 md:h-64">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
                 <img
-                  src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800"
+                  src="/2.JPG"
                   alt="Science Expo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -92,7 +92,7 @@ export default function HomePage() {
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-64 md:h-80">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
                 <img
-                  src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=800"
+                  src="/3.JPG"
                   alt="Performance"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -100,7 +100,7 @@ export default function HomePage() {
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-56 md:h-72">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
                 <img
-                  src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800"
+                  src="/4.JPG"
                   alt="Audience"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
