@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { UserPlus } from "lucide-react";
 // import LiquidEther from "@/components/LiquidEther";
 
@@ -71,18 +72,22 @@ export default function HomePage() {
             <div className="flex flex-col gap-4 md:gap-6 pt-12">
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-56 md:h-72">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                <img
+                <Image
                   src="/1.JPG"
                   alt="Students"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-48 md:h-64">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                <img
+                <Image
                   src="/2.JPG"
                   alt="Science Expo"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
             </div>
@@ -91,18 +96,22 @@ export default function HomePage() {
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-64 md:h-80">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                <img
+                <Image
                   src="/3.JPG"
                   alt="Performance"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
               <div className="rounded-3xl overflow-hidden shadow-2xl relative group h-56 md:h-72">
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                <img
+                <Image
                   src="/4.JPG"
                   alt="Audience"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
             </div>
