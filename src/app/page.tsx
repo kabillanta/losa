@@ -34,9 +34,6 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
           {/* Left: Text Content */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left animate-slide-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 text-gold-dark font-semibold text-sm mb-6 border border-gold/20">
-              ✨ Registration Now Open
-            </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-onyx tracking-tight leading-[1.1] mb-6">
               Inter-School <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-taupe">
@@ -49,17 +46,29 @@ export default function HomePage() {
               to easily manage participating teams, assign students to events,
               and generate your entry passes.
             </p>
+            <div className="flex flex-col items-center lg:items-start gap-6">
+              <div className="relative inline-flex overflow-hidden rounded-full p-[2px] shadow-lg shadow-gold/20 group cursor-default transition-transform hover:scale-105">
+                <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#B59410_50%,transparent_100%)]" />
+                <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-white px-6 py-2.5 text-sm font-bold text-onyx gap-3 tracking-wide z-10 relative">
+                  <span className="text-taupe uppercase text-xs tracking-widest">
+                    Deadline
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+                  <span>July 13th</span>
+                </span>
+              </div>
 
-            <Link
-              href="/auth/login"
-              className="w-full sm:w-auto bg-onyx text-white font-semibold py-4 px-8 rounded-xl hover:bg-black hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-onyx/20 group"
-            >
-              <UserPlus
-                size={20}
-                className="group-hover:rotate-12 transition-transform"
-              />
-              Register / Login with Google
-            </Link>
+              <Link
+                href="/auth/login"
+                className="w-full sm:w-auto bg-onyx text-white font-semibold py-4 px-8 rounded-xl hover:bg-black hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-onyx/20 group"
+              >
+                <UserPlus
+                  size={20}
+                  className="group-hover:rotate-12 transition-transform"
+                />
+                Register / Login with Google
+              </Link>
+            </div>
           </div>
 
           {/* Right: Masonry Grid */}
