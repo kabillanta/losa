@@ -38,6 +38,10 @@ export default function HomePage() {
               ✨ Registration Now Open
             </div>
 
+            <p className="text-gold-dark/80 font-medium text-sm mb-6 -mt-4">
+              Registrations are open until 18th of July
+            </p>
+
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-onyx tracking-tight leading-[1.1] mb-6">
               Inter-School <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-taupe">
