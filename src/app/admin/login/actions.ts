@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function login(formData: FormData) {
   const password = formData.get("password");
+  const returnTo = formData.get("returnTo")?.toString() || "/admin";
   const expectedPassword = process.env.ADMIN_PASSWORD || "losa-admin-2026";
 
   if (password === expectedPassword) {
@@ -17,7 +18,7 @@ export async function login(formData: FormData) {
       path: "/",
     });
 
-    redirect("/admin");
+    redirect(returnTo);
   } else {
     return { error: "Incorrect password" };
   }

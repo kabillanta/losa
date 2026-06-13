@@ -34,8 +34,10 @@ export default function CompleteProfilePage() {
               type="text" 
               name="schoolName" 
               required 
+              pattern="[A-Za-z\s\-']+"
+              title="Only letters and spaces are allowed. No numbers."
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
-              placeholder="e.g. St. Joseph's High School"
+              placeholder="e.g. St Josephs High School"
             />
           </div>
 
@@ -45,6 +47,8 @@ export default function CompleteProfilePage() {
               type="text" 
               name="teacherName" 
               required 
+              pattern="[A-Za-z\s\-']+"
+              title="Only letters and spaces are allowed. No numbers."
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
               placeholder="e.g. John Doe"
             />
@@ -56,8 +60,16 @@ export default function CompleteProfilePage() {
               type="tel" 
               name="phoneNumber" 
               required 
+              pattern="[0-9]{10}"
+              maxLength={10}
+              minLength={10}
+              title="Please enter exactly 10 digits"
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
               placeholder="e.g. 9876543210"
+              onInput={(e) => {
+                // Ensure only numbers are typed
+                e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+              }}
             />
           </div>
 

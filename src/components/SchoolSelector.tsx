@@ -2,8 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { QrCode, List, Search, ChevronRight } from "lucide-react";
-import { QRScanner } from "./QRScanner";
+import { QrCode, List, Search, ChevronRight, Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const QRScanner = dynamic(
+  () => import("./QRScanner").then((mod) => mod.QRScanner),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-col items-center justify-center py-12 gap-3 text-taupe">
+        <Loader2 className="animate-spin" size={24} />
+        <span className="text-sm">Loading scanner...</span>
+      </div>
+    )
+  }
+);
 
 type School = {
   id: string;
