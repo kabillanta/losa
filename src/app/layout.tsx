@@ -27,6 +27,9 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased min-h-screen bg-gray-50 selection:bg-gold/20 selection:text-onyx flex flex-col`}
       >
+        <div className="bg-onyx text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide z-40 relative">
+          <span className="text-gold font-bold">Heads up:</span> Registrations end on <span className="font-bold">July 13th</span>. You can edit your entries until then!
+        </div>
         <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-gray-200 shadow-sm">
           <div className="max-w-screen-2xl mx-auto flex items-center justify-between h-16 px-6 lg:px-10">
             <Link href="/" className="flex items-center gap-3 group">

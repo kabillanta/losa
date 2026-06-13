@@ -37,11 +37,6 @@ export default function HomePage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 text-gold-dark font-semibold text-sm mb-6 border border-gold/20">
               ✨ Registration Now Open
             </div>
-
-            <p className="text-gold-dark/80 font-medium text-sm mb-6 -mt-4">
-              Registrations are open until 18th of July
-            </p>
-
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-onyx tracking-tight leading-[1.1] mb-6">
               Inter-School <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-taupe">
@@ -155,7 +150,8 @@ export default function HomePage() {
             </div>
             <h3 className="text-xl font-bold text-onyx mb-3">Get Your Pass</h3>
             <p className="text-taupe leading-relaxed">
-              This will be sent via mail a few days before the event for an easy and seamless entry process.
+              This will be sent via mail a few days before the event for an easy
+              and seamless entry process.
             </p>
           </div>
         </div>
