@@ -45,6 +45,19 @@ export async function completeProfile(formData: FormData) {
     return { error: "All fields are required." };
   }
 
+  const nameRegex = /^[A-Za-z\s\-']*[A-Za-z][A-Za-z\s\-']*$/;
+  if (!nameRegex.test(schoolName.trim())) {
+    return { error: "School name must contain at least one letter and can only contain letters, spaces, hyphens, and apostrophes." };
+  }
+  if (!nameRegex.test(teacherName.trim())) {
+    return { error: "Teacher name must contain at least one letter and can only contain letters, spaces, hyphens, and apostrophes." };
+  }
+
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(phoneNumber.trim())) {
+    return { error: "Mobile number must be exactly 10 digits." };
+  }
+
   const supabase = await createClient();
   const { v4: uuidv4 } = await import("uuid");
   const qrCodeId = `SCH-${uuidv4().substring(0, 8).toUpperCase()}`;

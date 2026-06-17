@@ -109,6 +109,11 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
       }
 
       if (existingStudent) {
+        // Prevent duplicate keys by checking if we already added this student
+        if (enrollmentsToInsert.some(e => e.student_id === existingStudent.id)) {
+          return { error: `Duplicate participant found. ${isTeacherEvent ? 'Teacher name' : 'Admission number'} '${isTeacherEvent ? student.name.trim() : student.admissionNumber.trim()}' is entered multiple times.` };
+        }
+
         enrollmentsToInsert.push({
           student_id: existingStudent.id,
           event_slug: eventSlug,
