@@ -55,7 +55,7 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
   }
 
   // 2. Iterate through each team
-  const enrollmentsToInsert = [];
+  const enrollmentsToInsert: { student_id: string; event_slug: string; team_id: string }[] = [];
 
   for (let teamIndex = 0; teamIndex < teams.length; teamIndex++) {
     const students = teams[teamIndex];
