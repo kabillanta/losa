@@ -31,7 +31,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
   const startingTeams = initialTeams.length > 0 ? initialTeams : [[]];
 
   const paddedTeams = startingTeams.map(teamStudents => {
-    const padded = Array(maxSize).fill(emptyStudent);
+    const padded = Array(maxSize).fill(null).map(() => ({ ...emptyStudent, className: allowedClasses[0] }));
     teamStudents.forEach((student, i) => {
       if (i < maxSize) {
         // If they had an old class but it's not in the allowed list, default to the first allowed class
@@ -71,7 +71,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
 
   const addTeam = () => {
     if (teams.length < maxTeams) {
-      setTeams([...teams, Array(maxSize).fill({ ...emptyStudent, className: allowedClasses[0] })]);
+      setTeams([...teams, Array(maxSize).fill(null).map(() => ({ ...emptyStudent, className: allowedClasses[0] }))]);
       setSuccess(false);
     }
   };
@@ -88,6 +88,10 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
     setError(null);
     setSuccess(false);
 
+    const nameRegex = /^[A-Za-z\s\-']*[A-Za-z][A-Za-z\s\-']*$/;
+    const sectionRegex = /^[A-Za-z0-9]{1,5}$/;
+    const admissionRegex = /^[A-Za-z0-9\-\/]{1,20}$/;
+
     // Validate teams
     for (let i = 0; i < teams.length; i++) {
       const validStudents = teams[i].filter(s => 
@@ -97,7 +101,7 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       );
 
       // Check for partial filling
-      const partialStudents = teams[i].filter(s => {
+      const partialStudents = teams[i].map((s, idx) => ({ s, idx })).filter(({ s }) => {
         if (isTeacherEvent) return false;
         const hasSome = s.name.trim().length > 0 || s.className.trim().length > 0 || s.section.trim().length > 0 || s.admissionNumber.trim().length > 0;
         const hasAll = s.name.trim().length > 0 && s.className.trim().length > 0 && s.section.trim().length > 0 && s.admissionNumber.trim().length > 0;
@@ -105,15 +109,58 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
       });
 
       if (partialStudents.length > 0) {
-        setError(`Team ${i + 1} has incomplete student details. Name, Class, Section, and ID are mandatory for a participant.`);
+        const { s, idx } = partialStudents[0];
+        const missing = [];
+        if (s.name.trim().length === 0) missing.push("Name");
+        if (s.className.trim().length === 0) missing.push("Class");
+        if (s.section.trim().length === 0) missing.push("Section");
+        if (s.admissionNumber.trim().length === 0) missing.push("Admission No");
+        
+        setError(`Team ${i + 1}, Participant ${idx + 1} is missing: ${missing.join(", ")}.`);
         setLoading(false);
         return;
       }
 
-      if (validStudents.length > 0 && validStudents.length < minSize) {
+      if (validStudents.length < minSize) {
         setError(`Team ${i + 1} must have at least ${minSize} fully registered participant(s).`);
         setLoading(false);
         return;
+      }
+
+      // Strict validation for valid students
+      const invalidStudents = validStudents.filter(s => {
+        if (!nameRegex.test(s.name.trim())) return true;
+        if (!isTeacherEvent) {
+          if (!sectionRegex.test(s.section.trim())) return true;
+          if (!admissionRegex.test(s.admissionNumber.trim())) return true;
+        }
+        return false;
+      });
+
+      if (invalidStudents.length > 0) {
+        setError(`Team ${i + 1} contains invalid characters. Names must contain at least one letter and no numbers. Sections must be 1-5 letters/numbers. IDs can only contain letters, numbers, hyphens, and slashes.`);
+        setLoading(false);
+        return;
+      }
+    }
+
+    // Check for duplicate participants across all teams
+    const allAdmissions = new Set<string>();
+    for (let i = 0; i < teams.length; i++) {
+      const validStudents = teams[i].filter(s => 
+        isTeacherEvent 
+          ? s.name.trim().length > 0
+          : s.name.trim().length > 0 && s.className.trim().length > 0 && s.section.trim().length > 0 && s.admissionNumber.trim().length > 0
+      );
+      
+      for (const student of validStudents) {
+        const identifier = isTeacherEvent ? student.name.trim().toLowerCase() : student.admissionNumber.trim().toLowerCase();
+        if (allAdmissions.has(identifier)) {
+          setError(`Duplicate participant found in Team ${i + 1}: ${isTeacherEvent ? student.name : student.admissionNumber}. A participant can only be registered once per event.`);
+          setLoading(false);
+          return;
+        }
+        allAdmissions.add(identifier);
       }
     }
 
@@ -192,6 +239,9 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
                       value={student.name}
                       onChange={(e) => handleFieldChange(teamIndex, index, 'name', e.target.value)}
                       placeholder={isTeacherEvent ? "e.g. Mrs. Smith" : "e.g. John Doe"}
+                      pattern="[A-Za-z\s\-']*[A-Za-z][A-Za-z\s\-']*"
+                      title="Must contain at least one letter. Only letters, spaces, hyphens, and apostrophes are allowed. No numbers."
+                      maxLength={100}
                       className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
                     />
                   </div>
@@ -216,8 +266,11 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
                         <input
                           type="text"
                           value={student.section}
-                          onChange={(e) => handleFieldChange(teamIndex, index, 'section', e.target.value)}
+                          onChange={(e) => handleFieldChange(teamIndex, index, 'section', e.target.value.toUpperCase())}
                           placeholder="e.g. A"
+                          pattern="[A-Za-z0-9]{1,5}"
+                          title="1 to 5 letters or numbers only."
+                          maxLength={5}
                           className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm uppercase"
                         />
                       </div>
@@ -229,6 +282,9 @@ export default function EventForm({ eventSlug, minSize, maxSize, maxTeams, initi
                           value={student.admissionNumber}
                           onChange={(e) => handleFieldChange(teamIndex, index, 'admissionNumber', e.target.value)}
                           placeholder="ID Card No."
+                          pattern="[A-Za-z0-9\-\/]+"
+                          title="Only letters, numbers, hyphens, and slashes are allowed."
+                          maxLength={20}
                           className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-gray-400 shadow-sm"
                         />
                       </div>

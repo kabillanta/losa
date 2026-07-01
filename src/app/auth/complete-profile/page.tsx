@@ -34,8 +34,8 @@ export default function CompleteProfilePage() {
               type="text" 
               name="schoolName" 
               required 
-              pattern="[A-Za-z\s\-']+"
-              title="Only letters and spaces are allowed. No numbers."
+              pattern="[A-Za-z\s\-']*[A-Za-z][A-Za-z\s\-']*"
+              title="Must contain at least one letter. Only letters, spaces, hyphens, and apostrophes are allowed. No numbers."
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
               placeholder="e.g. St Josephs High School"
             />
@@ -47,8 +47,8 @@ export default function CompleteProfilePage() {
               type="text" 
               name="teacherName" 
               required 
-              pattern="[A-Za-z\s\-']+"
-              title="Only letters and spaces are allowed. No numbers."
+              pattern="[A-Za-z\s\-']*[A-Za-z][A-Za-z\s\-']*"
+              title="Must contain at least one letter. Only letters, spaces, hyphens, and apostrophes are allowed. No numbers."
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-onyx/20 focus:border-onyx transition-all text-sm"
               placeholder="e.g. John Doe"
             />
