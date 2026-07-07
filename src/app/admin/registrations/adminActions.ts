@@ -12,9 +12,9 @@ export interface StudentInfo {
 
 export async function adminAddTeam(schoolId: string, eventSlug: string, students: StudentInfo[], isTeacherEvent: boolean) {
   const cookieStore = await cookies();
-  const adminSession = cookieStore.get("admin_session")?.value;
+  const adminSession = cookieStore.get("losa_admin_session")?.value;
 
-  if (adminSession !== "true") {
+  if (adminSession !== "authenticated") {
     return { error: "Unauthorized. Admin session required." };
   }
 
