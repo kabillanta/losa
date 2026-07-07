@@ -47,11 +47,20 @@ export async function saveEventEnrollments(eventSlug: string, teams: StudentInfo
   
   const allSchoolStudentIds = schoolStudents?.map(s => s.id) || [];
   if (allSchoolStudentIds.length > 0) {
-    await supabase
-      .from("event_enrollments")
-      .delete()
-      .eq("event_slug", eventSlug)
-      .in("student_id", allSchoolStudentIds);
+    // Chunk the deletions to prevent URL length limits from silently failing the request
+    const chunkSize = 50;
+    for (let i = 0; i < allSchoolStudentIds.length; i += chunkSize) {
+      const chunk = allSchoolStudentIds.slice(i, i + chunkSize);
+      const { error: deleteError } = await supabase
+        .from("event_enrollments")
+        .delete()
+        .eq("event_slug", eventSlug)
+        .in("student_id", chunk);
+        
+      if (deleteError) {
+        return { error: "System Error: Failed to clear old enrollments. " + deleteError.message };
+      }
+    }
   }
 
   // 2. Iterate through each team
