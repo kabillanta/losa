@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import fs from "fs";
 import path from "path";
+import EditableStudentCard from "./EditableStudentCard";
 import Link from "next/link";
 import { ChevronRight, ArrowLeft } from "lucide-react";
 
@@ -146,13 +147,7 @@ export default async function RegistrationsDashboard() {
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                 {team.students.map((student: any) => (
-                                  <div key={student.id} className="bg-gray-50 p-3 rounded-lg border border-gray-100 flex flex-col gap-1">
-                                    <span className="font-semibold text-sm text-onyx">{student.name}</span>
-                                    <div className="flex items-center justify-between text-xs text-taupe mt-1">
-                                      <span>{student.class_details}</span>
-                                      <span className="font-mono bg-white px-1.5 py-0.5 rounded border border-gray-200">{student.admission_number}</span>
-                                    </div>
-                                  </div>
+                                  <EditableStudentCard key={student.id} student={student} />
                                 ))}
                               </div>
                             </div>
