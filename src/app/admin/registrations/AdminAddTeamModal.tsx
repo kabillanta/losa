@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Plus, X, Loader2, AlertCircle } from "lucide-react";
 import { adminAddTeam, StudentInfo } from "./adminActions";
 
+interface EventConfig {
+  name: string;
+  slug: string;
+  category: string;
+  min_size: number;
+  max_size: number;
+}
+
 interface AdminAddTeamModalProps {
   schoolId: string;
-  eventSlug: string;
-  eventName: string;
-  minSize: number;
-  maxSize: number;
-  isTeacherEvent: boolean;
-  eventCategory: string;
+  schoolName: string;
+  eventsConfig: EventConfig[];
 }
 
 const emptyStudent: StudentInfo = { name: "", className: "", section: "", admissionNumber: "" };
@@ -27,23 +31,44 @@ const getAllowedClasses = (category: string) => {
 
 export default function AdminAddTeamModal({
   schoolId,
-  eventSlug,
-  eventName,
-  minSize,
-  maxSize,
-  isTeacherEvent,
-  eventCategory
+  schoolName,
+  eventsConfig
 }: AdminAddTeamModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   
-  const allowedClasses = getAllowedClasses(eventCategory || "");
-  
-  const [students, setStudents] = useState<StudentInfo[]>(
-    Array(maxSize).fill(null).map(() => ({ ...emptyStudent, className: allowedClasses[0] }))
-  );
+  // Selections
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedEventSlug, setSelectedEventSlug] = useState<string>("");
+
+  const categories = useMemo(() => {
+    const cats = new Set(eventsConfig.map(e => e.category));
+    return Array.from(cats);
+  }, [eventsConfig]);
+
+  const availableEvents = useMemo(() => {
+    return eventsConfig.filter(e => e.category === selectedCategory);
+  }, [selectedCategory, eventsConfig]);
+
+  const selectedEvent = useMemo(() => {
+    return availableEvents.find(e => e.slug === selectedEventSlug) || null;
+  }, [selectedEventSlug, availableEvents]);
+
+  const isTeacherEvent = selectedCategory.includes("Teacher");
+  const minSize = selectedEvent?.min_size || 1;
+  const maxSize = selectedEvent?.max_size || 1;
+  const allowedClasses = getAllowedClasses(selectedCategory);
+
+  const [students, setStudents] = useState<StudentInfo[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Reset students when event changes
+  useMemo(() => {
+    if (selectedEvent) {
+      setStudents(Array(selectedEvent.max_size).fill(null).map(() => ({ ...emptyStudent, className: allowedClasses[0] })));
+    }
+  }, [selectedEvent, selectedCategory]);
 
   const handleFieldChange = (index: number, field: keyof StudentInfo, value: string) => {
     const newStudents = [...students];
@@ -58,6 +83,8 @@ export default function AdminAddTeamModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedEvent) return;
+
     setLoading(true);
     setError(null);
 
@@ -73,13 +100,14 @@ export default function AdminAddTeamModal({
       return;
     }
 
-    const res = await adminAddTeam(schoolId, eventSlug, students, isTeacherEvent);
+    const res = await adminAddTeam(schoolId, selectedEvent.slug, students, isTeacherEvent);
 
     if (res?.error) {
       setError(res.error);
     } else {
       setIsOpen(false);
-      setStudents(Array(maxSize).fill(null).map(() => ({ ...emptyStudent, className: allowedClasses[0] })));
+      setSelectedCategory("");
+      setSelectedEventSlug("");
     }
     setLoading(false);
   };
@@ -88,9 +116,9 @@ export default function AdminAddTeamModal({
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="mt-2 text-sm text-primary-600 font-medium flex items-center gap-1 hover:text-primary-800 transition-colors p-2 bg-primary-50 hover:bg-primary-100 rounded-lg w-fit"
+        className="text-sm text-primary-600 font-medium flex items-center gap-1 hover:text-primary-800 transition-colors p-2 bg-primary-50 hover:bg-primary-100 rounded-lg w-fit"
       >
-        <Plus size={16} /> Add Team to {eventName}
+        <Plus size={16} /> Register for New Event
       </button>
     );
   }
@@ -100,8 +128,8 @@ export default function AdminAddTeamModal({
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
           <div>
-            <h2 className="text-xl font-bold text-onyx">Add Team</h2>
-            <p className="text-sm text-taupe">{eventName}</p>
+            <h2 className="text-xl font-bold text-onyx">Register New Event</h2>
+            <p className="text-sm text-taupe">{schoolName}</p>
           </div>
           <button 
             onClick={() => setIsOpen(false)}
@@ -112,70 +140,110 @@ export default function AdminAddTeamModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-6">
-          <div className="space-y-4">
-            {students.map((student, index) => {
-              const isRequired = index < minSize;
-              return (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 items-center">
-                  <div className="col-span-1 flex items-center gap-2 font-bold text-gray-500">
-                    <span className="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs">
-                      {index + 1}
-                    </span>
-                    {isRequired && <span className="text-red-500 text-xs">*</span>}
-                  </div>
-                  
-                  <div className={`flex flex-col gap-1 ${isTeacherEvent ? 'col-span-11' : 'col-span-4'}`}>
-                    <label className="text-xs font-bold text-gray-500 uppercase">{isTeacherEvent ? "Teacher Name" : "Name"}</label>
-                    <input
-                      type="text"
-                      value={student.name}
-                      onChange={(e) => handleFieldChange(index, "name", e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                      placeholder="Name"
-                    />
-                  </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-blue-800 uppercase">1. Select Category</label>
+              <select 
+                value={selectedCategory} 
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setSelectedEventSlug("");
+                }}
+                className="px-3 py-2.5 border border-blue-200 rounded-lg text-sm bg-white"
+                required
+              >
+                <option value="" disabled>-- Choose Category --</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
 
-                  {!isTeacherEvent && (
-                    <>
-                      <div className="col-span-2 flex flex-col gap-1">
-                        <label className="text-xs font-bold text-gray-500 uppercase">Class</label>
-                        <select
-                          value={student.className}
-                          onChange={(e) => handleFieldChange(index, "className", e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-                        >
-                          {allowedClasses.map(cls => (
-                            <option key={cls} value={cls}>{cls}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="col-span-2 flex flex-col gap-1">
-                        <label className="text-xs font-bold text-gray-500 uppercase">Section</label>
-                        <input
-                          type="text"
-                          value={student.section}
-                          onChange={(e) => handleFieldChange(index, "section", e.target.value.toUpperCase())}
-                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                          placeholder="A"
-                          maxLength={5}
-                        />
-                      </div>
-                      <div className="col-span-3 flex flex-col gap-1">
-                        <label className="text-xs font-bold text-gray-500 uppercase">Admission No</label>
-                        <input
-                          type="text"
-                          value={student.admissionNumber}
-                          onChange={(e) => handleFieldChange(index, "admissionNumber", e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                          placeholder="ID"
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-blue-800 uppercase">2. Select Event</label>
+              <select 
+                value={selectedEventSlug} 
+                onChange={(e) => setSelectedEventSlug(e.target.value)}
+                className="px-3 py-2.5 border border-blue-200 rounded-lg text-sm bg-white disabled:bg-gray-50 disabled:text-gray-400"
+                required
+                disabled={!selectedCategory}
+              >
+                <option value="" disabled>-- Choose Event --</option>
+                {availableEvents.map(evt => (
+                  <option key={evt.slug} value={evt.slug}>{evt.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
+
+          {selectedEvent && (
+            <div className="space-y-4">
+              <h3 className="font-bold text-onyx border-b border-gray-100 pb-2">Participant Details</h3>
+              {students.map((student, index) => {
+                const isRequired = index < minSize;
+                return (
+                  <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 items-center">
+                    <div className="col-span-1 flex items-center gap-2 font-bold text-gray-500">
+                      <span className="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs">
+                        {index + 1}
+                      </span>
+                      {isRequired && <span className="text-red-500 text-xs">*</span>}
+                    </div>
+                    
+                    <div className={`flex flex-col gap-1 ${isTeacherEvent ? 'col-span-11' : 'col-span-4'}`}>
+                      <label className="text-xs font-bold text-gray-500 uppercase">{isTeacherEvent ? "Teacher Name" : "Name"}</label>
+                      <input
+                        type="text"
+                        value={student.name}
+                        onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        placeholder="Name"
+                      />
+                    </div>
+
+                    {!isTeacherEvent && (
+                      <>
+                        <div className="col-span-2 flex flex-col gap-1">
+                          <label className="text-xs font-bold text-gray-500 uppercase">Class</label>
+                          <select
+                            value={student.className}
+                            onChange={(e) => handleFieldChange(index, "className", e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                          >
+                            {allowedClasses.map(cls => (
+                              <option key={cls} value={cls}>{cls}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="col-span-2 flex flex-col gap-1">
+                          <label className="text-xs font-bold text-gray-500 uppercase">Section</label>
+                          <input
+                            type="text"
+                            value={student.section}
+                            onChange={(e) => handleFieldChange(index, "section", e.target.value.toUpperCase())}
+                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            placeholder="A"
+                            maxLength={5}
+                          />
+                        </div>
+                        <div className="col-span-3 flex flex-col gap-1">
+                          <label className="text-xs font-bold text-gray-500 uppercase">Admission No</label>
+                          <input
+                            type="text"
+                            value={student.admissionNumber}
+                            onChange={(e) => handleFieldChange(index, "admissionNumber", e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            placeholder="ID"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {error && (
             <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-100 flex gap-2 items-start text-sm">
@@ -194,7 +262,7 @@ export default function AdminAddTeamModal({
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !selectedEvent}
               className="px-6 py-2.5 bg-onyx text-white font-medium hover:bg-black rounded-xl transition-colors flex items-center gap-2 text-sm disabled:opacity-50"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : "Save Team"}

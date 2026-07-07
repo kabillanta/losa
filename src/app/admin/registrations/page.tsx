@@ -133,6 +133,13 @@ export default async function RegistrationsDashboard() {
             </summary>
             
             <div className="p-5 border-t border-gray-200 space-y-4 bg-white">
+              <div className="flex justify-start border-b border-gray-100 pb-4">
+                <AdminAddTeamModal 
+                  schoolId={school.id} 
+                  schoolName={school.name} 
+                  eventsConfig={eventsInfo} 
+                />
+              </div>
               {school.categories.map(category => (
                 <details key={category.name} className="group/cat bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
                   <summary className="flex items-center gap-2 p-4 cursor-pointer hover:bg-gray-100 transition-colors list-none [&::-webkit-details-marker]:hidden font-medium text-onyx">
@@ -161,17 +168,6 @@ export default async function RegistrationsDashboard() {
                               </div>
                             </div>
                           ))}
-                          <div className="p-4 bg-gray-50/30 border-t border-gray-100">
-                            <AdminAddTeamModal
-                              schoolId={school.id}
-                              eventSlug={event.slug}
-                              eventName={event.name}
-                              minSize={event.minSize}
-                              maxSize={event.maxSize}
-                              isTeacherEvent={event.isTeacherEvent}
-                              eventCategory={event.category}
-                            />
-                          </div>
                         </div>
                       </details>
                     ))}
