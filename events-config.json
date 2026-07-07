@@ -12,18 +12,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Expressions",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Actions",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Audibility",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Flow of Story",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Pronounciation and Clarity",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -42,18 +52,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Costume",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Effort",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Creativity",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Confidence",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Delivery of Chosen Activity (Dance,Recital,Intro)",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -72,18 +92,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Originality",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Thematic Relevance",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Neatness",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Composition",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -102,18 +132,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Originality",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Thematic Relevance",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Neatness",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Composition",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -132,18 +172,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Thematic Relevance",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Elocution and Dialogue",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Charecter Potrayal",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Innovation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Usage of Sustainable Materials",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -162,18 +212,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Teamwork",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Accuracy of Answer",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -192,18 +252,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Concept Delivery",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Pronounciation and Clarity",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Grammatical Purity",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Thematic Relevance",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Stage Presence",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -222,18 +292,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Ingeuity of the idea",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Scientific Concept",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Clarity of Presentation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Working Model / Prototype",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -252,18 +332,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Spelling Accuracy",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Pronounciation and Clarity",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Phonetic Isolation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Presentation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Punctuation (Proper usage of hyphens)",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -282,18 +372,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Teamwork",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Accuracy",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -312,18 +412,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Creativity and Originality",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Integeration of Theme",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Vocabulary and Grammar",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Structure and Flow",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -342,18 +452,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Thematic Relevance",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity and Originality",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Pallette Harmony",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Presentation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Neatness",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -372,18 +492,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Symbolic Efficiency",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Expressiveness",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Teamwork",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Creativity",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Speed",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -402,18 +532,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Teamwork",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Accuracy",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -432,18 +572,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Synchronization",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Choreography",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Costume",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Move Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Stage Presence",
+          "max_points": 10
         }
       ],
       "min_size": 6,
@@ -462,18 +612,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Vocabulary",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Team Sync",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Critical Thinking",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Flow",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -492,18 +652,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Thematic Relevance",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Color Usage and Combination",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Creativity and Originality",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Space Usage",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Presentation",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -522,18 +692,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Flawless Reading",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Vocabulary and Grammar",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Context",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Accent and Pronounciation",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Listening Efficiency",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -552,18 +732,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Choice of Ingredients",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Texture and Contrast",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Palate Balance",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Structural Proportioning",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Presentation",
+          "max_points": 10
         }
       ],
       "min_size": 3,
@@ -582,18 +772,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Ideation",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Logo Design",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Marketing Ideas",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Unique Selling Proposition",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Presentation",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -612,18 +812,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Synchronization",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Choreography",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Costume",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Move Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Stage Presence",
+          "max_points": 10
         }
       ],
       "min_size": 6,
@@ -642,18 +852,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Accuracy",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Teamwork",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -672,18 +892,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Coherence and Rhythm",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity and Innovation",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Performance Impact",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "TBD",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 6,
@@ -702,18 +932,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Musicality and Sync",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity and Flair",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Technique",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Expression and Popularity",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 4,
@@ -732,18 +972,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Accuracy",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "TBD",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -762,18 +1012,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Output",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "TBD",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "TBD",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "TBD",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 1,
@@ -792,18 +1052,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Story Telling and Narrative",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Creativity and Originality",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Technical Execution",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Audio Sound and Design",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Acting and Performance",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -822,18 +1092,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Synchronization",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Choreography",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Costume",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Move Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Stage Presence",
+          "max_points": 10
         }
       ],
       "min_size": 6,
@@ -852,18 +1132,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Speed",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Accuracy",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Teamwork",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Factual Precision",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "TBD",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -882,18 +1172,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Concept",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Delivery",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Stage Presence",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Creativity and Originality",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Narrative and Storytelling",
+          "max_points": 10
         }
       ],
       "min_size": 2,
@@ -912,18 +1212,28 @@
       "rubric": [
         {
           "id": "criteria1",
-          "name": "Criteria 1",
-          "max_points": 50
+          "name": "Symbolic Efficiency",
+          "max_points": 10
         },
         {
           "id": "criteria2",
-          "name": "Criteria 2",
-          "max_points": 30
+          "name": "Expressiveness",
+          "max_points": 10
         },
         {
-          "id": "overall",
-          "name": "Overall Impact",
-          "max_points": 20
+          "id": "criteria3",
+          "name": "Teamwork",
+          "max_points": 10
+        },
+        {
+          "id": "criteria4",
+          "name": "Creativity",
+          "max_points": 10
+        },
+        {
+          "id": "criteria5",
+          "name": "Speed",
+          "max_points": 10
         }
       ],
       "min_size": 3,

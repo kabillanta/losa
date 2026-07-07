@@ -43,19 +43,36 @@ export async function saveEventEnrollments(
     .substring(0, 3)
     .toUpperCase();
 
-  // 1. First, delete all existing enrollments for this event for this school's students
+  // Use the admin client to bypass RLS for the delete operation
+  const { createClient: createSupabaseClient } = await import("@supabase/supabase-js");
+  const supabaseAdmin = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  // 1. Delete all existing enrollments for this event for this school
   const { data: schoolStudents } = await supabase
     .from("students")
     .select("id")
     .eq("school_id", school.id);
 
-  const allSchoolStudentIds = schoolStudents?.map((s) => s.id) || [];
+  const allSchoolStudentIds = schoolStudents?.map(s => s.id) || [];
   if (allSchoolStudentIds.length > 0) {
-    await supabase
-      .from("event_enrollments")
-      .delete()
-      .eq("event_slug", eventSlug)
-      .in("student_id", allSchoolStudentIds);
+    // Chunk the deletions to prevent URL length limits from silently failing the request
+    const chunkSize = 50;
+    for (let i = 0; i < allSchoolStudentIds.length; i += chunkSize) {
+      const chunk = allSchoolStudentIds.slice(i, i + chunkSize);
+      const { error: deleteError } = await supabaseAdmin
+        .from("event_enrollments")
+        .delete()
+        .eq("event_slug", eventSlug)
+        .in("student_id", chunk);
+
+      if (deleteError) {
+        console.error("Delete chunk error:", deleteError);
+        return { error: `Failed to delete old enrollments: ${deleteError.message}` };
+      }
+    }
   }
 
   // 2. Iterate through each team
