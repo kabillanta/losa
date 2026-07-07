@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import fs from "fs";
 import path from "path";
 import EditableStudentCard from "./EditableStudentCard";
+import AdminAddTeamModal from "./AdminAddTeamModal";
 import Link from "next/link";
 import { ChevronRight, ArrowLeft } from "lucide-react";
 
@@ -78,13 +79,21 @@ export default async function RegistrationsDashboard() {
       teacher: school.teacher_name,
       categories: Array.from(categoriesMap.entries() as IterableIterator<[string, any]>).map(([catName, eventMap]) => ({
         name: catName,
-        events: Array.from(eventMap.entries() as IterableIterator<[string, any]>).map(([evName, teamMap]) => ({
-          name: evName,
-          teams: Array.from(teamMap.entries() as IterableIterator<[string, any]>).map(([tId, studentsList]) => ({
-            id: tId,
-            students: studentsList
-          }))
-        }))
+        events: Array.from(eventMap.entries() as IterableIterator<[string, any]>).map(([evName, teamMap]) => {
+          const eDef = eventsInfo.find((e: any) => e.name === evName);
+          return {
+            name: evName,
+            slug: eDef?.slug || "",
+            minSize: eDef?.minSize || 1,
+            maxSize: eDef?.maxSize || 1,
+            isTeacherEvent: eDef?.isTeacherEvent || false,
+            category: catName,
+            teams: Array.from(teamMap.entries() as IterableIterator<[string, any]>).map(([tId, studentsList]) => ({
+              id: tId,
+              students: studentsList
+            }))
+          };
+        })
       }))
     };
   }).filter(school => school.categories.length > 0) || [];
@@ -152,6 +161,17 @@ export default async function RegistrationsDashboard() {
                               </div>
                             </div>
                           ))}
+                          <div className="p-4 bg-gray-50/30 border-t border-gray-100">
+                            <AdminAddTeamModal
+                              schoolId={school.id}
+                              eventSlug={event.slug}
+                              eventName={event.name}
+                              minSize={event.minSize}
+                              maxSize={event.maxSize}
+                              isTeacherEvent={event.isTeacherEvent}
+                              eventCategory={event.category}
+                            />
+                          </div>
                         </div>
                       </details>
                     ))}
