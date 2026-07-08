@@ -35,54 +35,66 @@ export async function GET() {
       fetchAll("students"),
     ]);
 
-    const schoolMap = new Map(schools.map((s) => [s.id, s]));
-    
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Admin';
     workbook.created = new Date();
 
-    const worksheet = workbook.addWorksheet("Schools");
-
-    worksheet.columns = [
-      { header: 'School Name', key: 'schoolName', width: 30 },
-      { header: 'Teacher Name', key: 'teacherName', width: 25 },
-      { header: 'Phone Number', key: 'phoneNumber', width: 20 },
-      { header: 'Email', key: 'email', width: 30 },
-      { header: 'Student Name', key: 'studentName', width: 25 },
-      { header: 'Class/Section', key: 'classDetails', width: 15 },
-      { header: 'Admission No', key: 'admissionNo', width: 20 },
-      { header: 'Present Status', key: 'present', width: 15 },
-    ];
-
-    worksheet.getRow(1).font = { bold: true };
-    
-    // Sort students by school name, then student name
-    students.sort((a, b) => {
-      const schoolA = schoolMap.get(a.school_id)?.name || "Unknown School";
-      const schoolB = schoolMap.get(b.school_id)?.name || "Unknown School";
-      if (schoolA === schoolB) {
-        return (a.name || "").localeCompare(b.name || "");
+    // Group students by school
+    const studentsBySchool = new Map<string, any[]>();
+    students.forEach((student) => {
+      const schoolId = student.school_id;
+      if (!studentsBySchool.has(schoolId)) {
+        studentsBySchool.set(schoolId, []);
       }
-      return schoolA.localeCompare(schoolB);
+      studentsBySchool.get(schoolId)!.push(student);
     });
 
-    for (const student of students) {
-      const school = schoolMap.get(student.school_id);
+    for (const school of schools) {
+      // Clean sheet name for Excel rules (max 31 chars, no brackets/slashes)
+      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\]/g, "").substring(0, 31);
       
-      worksheet.addRow({
-        schoolName: school?.name || "Unknown School",
-        teacherName: school?.teacher_name || "N/A",
-        phoneNumber: school?.phone_number || "N/A",
-        email: school?.email || "N/A",
-        studentName: student.name,
-        classDetails: student.class_details,
-        admissionNo: student.admission_number,
-        present: student.is_present ? "Present" : "Absent",
-      });
+      let sheetName = safeSheetName;
+      let counter = 1;
+      while (workbook.worksheets.some(ws => ws.name === sheetName)) {
+        const suffix = ` (${counter})`;
+        sheetName = safeSheetName.substring(0, 31 - suffix.length) + suffix;
+        counter++;
+      }
+
+      const worksheet = workbook.addWorksheet(sheetName);
+
+      worksheet.columns = [
+        { header: 'School Name', key: 'schoolName', width: 30 },
+        { header: 'Teacher Name', key: 'teacherName', width: 25 },
+        { header: 'Phone Number', key: 'phoneNumber', width: 20 },
+        { header: 'Email', key: 'email', width: 30 },
+        { header: 'Student Name', key: 'studentName', width: 25 },
+        { header: 'Class/Section', key: 'classDetails', width: 15 },
+        { header: 'Admission No', key: 'admissionNo', width: 20 },
+        { header: 'Present Status', key: 'present', width: 15 },
+      ];
+
+      worksheet.getRow(1).font = { bold: true };
+      
+      const schoolStudents = studentsBySchool.get(school.id) || [];
+      schoolStudents.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+      for (const student of schoolStudents) {
+        worksheet.addRow({
+          schoolName: school.name || "Unknown School",
+          teacherName: school.teacher_name || "N/A",
+          phoneNumber: school.phone_number || "N/A",
+          email: school.email || "N/A",
+          studentName: student.name,
+          classDetails: student.class_details,
+          admissionNo: student.admission_number,
+          present: student.is_present ? "Present" : "Absent",
+        });
+      }
     }
 
-    if (students.length === 0) {
-      worksheet.addRow({ schoolName: "No data available" });
+    if (schools.length === 0) {
+      workbook.addWorksheet("Empty");
     }
 
     const buffer = await workbook.xlsx.writeBuffer();
