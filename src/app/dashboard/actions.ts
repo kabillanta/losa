@@ -87,7 +87,6 @@ export async function saveEventEnrollments(
   isTeacherEvent: boolean = false,
   adminSchoolId?: string
 ) {
-  try {
   const cookieStore = await cookies();
   const supabase = await createClient();
   const { createClient: createSupabaseClient } = await import("@supabase/supabase-js");
@@ -374,8 +373,4 @@ export async function saveEventEnrollments(
   revalidatePath(`/events/${eventSlug}/score/${school.id}`);
 
   return { success: true };
-  } catch (err: any) {
-    console.error("CRITICAL ERROR IN saveEventEnrollments:", err);
-    return { error: databaseError("save participants due to a server crash", err.stack || err.message) };
-  }
 }
