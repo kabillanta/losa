@@ -1,19 +1,16 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import ExcelJS from "exceljs";
-import config from "../../../../../events-config.json";
+const { createClient } = require("@supabase/supabase-js");
+const ExcelJS = require("exceljs");
+require("dotenv").config({ path: ".env.local" });
+const config = require("./events-config.json");
 
-export const revalidate = 0;
-
-export async function GET() {
+async function test() {
   try {
     const supabaseAdmin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    // Utility to fetch all rows bypassing the 1000 row limit
-    async function fetchAll(table: string, select = "*"): Promise<any[]> {
+    async function fetchAll(table, select = "*") {
       const allData = [];
       let page = 0;
       const pageSize = 1000;
@@ -31,11 +28,14 @@ export async function GET() {
       return allData;
     }
 
+    console.log("Fetching data...");
     const [schools, students, enrollments] = await Promise.all([
       fetchAll("schools", "id, name"),
       fetchAll("students", "id, name, school_id"),
       fetchAll("event_enrollments"),
     ]);
+
+    console.log(`Fetched ${schools.length} schools, ${students.length} students, ${enrollments.length} enrollments`);
 
     const schoolMap = new Map(schools.map((s) => [s.id, s.name]));
     const studentMap = new Map(students.map((s) => [s.id, s]));
@@ -45,17 +45,15 @@ export async function GET() {
     workbook.creator = 'Admin';
     workbook.created = new Date();
 
-    // Group enrollments by Event
-    const enrollmentsByEvent = new Map<string, any[]>();
+    const enrollmentsByEvent = new Map();
     enrollments.forEach((enroll) => {
       const slug = enroll.event_slug;
       if (!enrollmentsByEvent.has(slug)) {
         enrollmentsByEvent.set(slug, []);
       }
-      enrollmentsByEvent.get(slug)!.push(enroll);
+      enrollmentsByEvent.get(slug).push(enroll);
     });
 
-    // Create a sheet for each event
     const eventSlugs = Array.from(enrollmentsByEvent.keys());
     
     for (const slug of eventSlugs) {
@@ -86,7 +84,6 @@ export async function GET() {
       
       const eventEnrollments = enrollmentsByEvent.get(slug) || [];
       
-      // Sort enrollments by school then team
       eventEnrollments.sort((a, b) => {
         const studentA = studentMap.get(a.student_id);
         const studentB = studentMap.get(b.student_id);
@@ -104,7 +101,7 @@ export async function GET() {
         
         worksheet.addRow({
           eventName: eventName,
-          category: (eventConf as any)?.category || "Other",
+          category: eventConf?.category || "Other",
           schoolName: schoolName || "Unknown School",
           teamId: enroll.team_id || "Team 1",
           studentName: student?.name || "Unknown Student",
@@ -116,18 +113,12 @@ export async function GET() {
       workbook.addWorksheet("Empty");
     }
 
-    const buffer = await workbook.xlsx.writeBuffer();
-
-    return new NextResponse(buffer, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": 'attachment; filename="events_export.xlsx"',
-      },
-    });
+    await workbook.xlsx.writeBuffer();
+    console.log("Success");
 
   } catch (error) {
     console.error("Export Error:", error);
-    return new NextResponse("Failed to generate export", { status: 500 });
   }
 }
+
+test();
