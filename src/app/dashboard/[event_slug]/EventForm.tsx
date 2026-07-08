@@ -94,8 +94,48 @@ export default function EventForm({
   const showFormError = (
     message: string,
     title = "Check the registration details",
+    fixSteps?: string[],
   ) => {
-    setError({ title, message });
+    setError({ title, message, code: "VALIDATION_ERROR", fixSteps });
+  };
+
+  const normalizeEnrollmentError = (
+    value: EnrollmentActionError | string | null | undefined,
+  ): EnrollmentActionError => {
+    if (!value) {
+      return {
+        title: "Could not save participants",
+        message: "Something went wrong while saving this event.",
+        code: "UNKNOWN_ERROR",
+        fixSteps: [
+          "Refresh this page and try again.",
+          "If it fails again, share a screenshot with the admin.",
+        ],
+      };
+    }
+
+    if (typeof value === "string") {
+      return {
+        title: "Could not save participants",
+        message: value,
+        code: "UNKNOWN_ERROR",
+        fixSteps: [
+          "Check the participant details and try again.",
+          "If it fails again, share this message with the admin.",
+        ],
+      };
+    }
+
+    return {
+      ...value,
+      fixSteps:
+        value.fixSteps && value.fixSteps.length > 0
+          ? value.fixSteps
+          : [
+              "Check the participant details and try again.",
+              "Refresh this page and retry.",
+            ],
+    };
   };
 
   const handleFieldChange = (
@@ -191,6 +231,11 @@ export default function EventForm({
 
         showFormError(
           `Team ${i + 1}, Participant ${idx + 1} is missing: ${missing.join(", ")}.`,
+          "Incomplete participant details",
+          [
+            "Fill all required fields for that participant.",
+            "Use Delete Team if this team is no longer needed.",
+          ],
         );
         setLoading(false);
         return;
@@ -203,6 +248,11 @@ export default function EventForm({
       if (validStudents.length < minSize) {
         showFormError(
           `Team ${i + 1} must have at least ${minSize} fully registered participant(s).`,
+          "Minimum team size not met",
+          [
+            `Add at least ${minSize} participant(s) to this team.`,
+            "Or delete this team if you don't want to register it.",
+          ],
         );
         setLoading(false);
         return;
@@ -221,6 +271,12 @@ export default function EventForm({
       if (invalidStudents.length > 0) {
         showFormError(
           `Team ${i + 1} contains invalid characters. Names must contain at least one letter and no numbers. Sections must be 1-5 letters/numbers. IDs can only contain letters, numbers, hyphens, and slashes.`,
+          "Invalid participant format",
+          [
+            "Use letters/spaces for names only.",
+            "Use 1-5 letters or numbers for section.",
+            "Use only letters, numbers, hyphens, or slashes for Admission No.",
+          ],
         );
         setLoading(false);
         return;
@@ -263,7 +319,7 @@ export default function EventForm({
     const result = await saveEventEnrollments(eventSlug, teams, isTeacherEvent, adminSchoolId);
 
     if (result.error) {
-      setError(result.error);
+      setError(normalizeEnrollmentError(result.error));
     } else {
       setSuccess(true);
     }

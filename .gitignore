@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Unnecessary root files and scripts
+scratch/
+scratch.js
+scripts/
+certificate.html
+test-db.ts
+test-page-logic.ts
+logicTasks.md
+AGENTS.md
+CLAUDE.md
+emilSKILL.md
+SKILL.md
+pallete.md
+skills-lock.json
+.agents/

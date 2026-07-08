@@ -103,7 +103,14 @@ export async function saveEventEnrollments(
       return {
         error: createEnrollmentError(
           "Unauthorized",
-          "You must be an admin to perform this action on behalf of a school."
+          "You must be an admin to perform this action on behalf of a school.",
+          {
+            code: "NOT_ADMIN",
+            fixSteps: [
+              "Log in from the admin login page.",
+              "Open this school from Admin > Registrations and try again.",
+            ],
+          },
         ),
       };
     }
@@ -233,6 +240,22 @@ export async function saveEventEnrollments(
       if (findError) {
         console.error("Find student error:", findError);
         return { error: databaseError("find the participant profile", findError.message) };
+      }
+
+      if ((matchingStudents?.length || 0) > 1) {
+        return {
+          error: createEnrollmentError(
+            "Duplicate student profiles found",
+            `${inputLabel} "${displayValue}" exists more than once in this school profile.`,
+            {
+              code: "DUPLICATE_STUDENT_PROFILE",
+              fixSteps: [
+                "Ask an admin to merge or remove the duplicate student profile.",
+                "Refresh this page and save again after the duplicate is fixed.",
+              ],
+            },
+          ),
+        };
       }
 
       let existingStudent = matchingStudents?.[0] || null;
