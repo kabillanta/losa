@@ -251,10 +251,10 @@ export async function saveEventEnrollments(
           // the user is likely swapping out a participant entirely, not just fixing a typo.
           // If we update the DB here, we'd overwrite the old student globally across all events!
           // So if it's a swap, we drop the ID binding and treat them as a new participant search.
-          const oldName = byIdStudent.name.trim().toLowerCase();
-          const newName = student.name.trim().toLowerCase();
-          const oldAdmNo = byIdStudent.admission_number.trim().toLowerCase();
-          const newAdmNo = admNo.trim().toLowerCase();
+          const oldName = (byIdStudent.name || "").trim().toLowerCase();
+          const newName = (student.name || "").trim().toLowerCase();
+          const oldAdmNo = (byIdStudent.admission_number || "").trim().toLowerCase();
+          const newAdmNo = (admNo || "").trim().toLowerCase();
           
           const isNameChanged = oldName !== newName;
           const isAdmNoChanged = oldAdmNo !== newAdmNo;
