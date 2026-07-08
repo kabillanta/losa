@@ -50,8 +50,8 @@ export async function GET() {
     });
 
     for (const school of schools) {
-      // Clean sheet name for Excel rules (max 31 chars, no brackets/slashes)
-      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\]/g, "").substring(0, 31);
+      // Clean sheet name for Excel rules (max 31 chars, no brackets/slashes/colons)
+      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\:']/g, "").substring(0, 31);
       
       let sheetName = safeSheetName;
       let counter = 1;
