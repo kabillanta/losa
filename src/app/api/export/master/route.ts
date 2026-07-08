@@ -38,6 +38,7 @@ export async function GET() {
     ]);
 
     const eventConfigMap = new Map(config.events.map((e) => [e.slug, e]));
+    const schoolMap = new Map(schools.map((s) => [s.id, s]));
     
     // Group enrollments by student
     const studentEnrollmentsMap = new Map<string, any[]>();
@@ -52,7 +53,22 @@ export async function GET() {
     workbook.creator = 'Admin';
     workbook.created = new Date();
 
-    // Group students by school
+    // ==========================================
+    // SHEET 1: Summary Dashboard
+    // ==========================================
+    const summarySheet = workbook.addWorksheet("Summary Dashboard");
+    summarySheet.columns = [
+      { header: 'School Name', key: 'schoolName', width: 35 },
+      { header: 'Teacher Name', key: 'teacherName', width: 25 },
+      { header: 'Phone Number', key: 'phoneNumber', width: 20 },
+      { header: 'Total Students', key: 'total', width: 15 },
+      { header: 'Present', key: 'present', width: 15 },
+      { header: 'Absent', key: 'absent', width: 15 },
+      { header: 'Attendance %', key: 'percentage', width: 15 },
+    ];
+    summarySheet.getRow(1).font = { bold: true };
+
+    // Group students by school for the summary
     const studentsBySchool = new Map<string, any[]>();
     students.forEach((student) => {
       const schoolId = student.school_id;
@@ -62,65 +78,99 @@ export async function GET() {
       studentsBySchool.get(schoolId)!.push(student);
     });
 
-    // Create a sheet for each school
+    // Sort schools alphabetically for the summary
+    schools.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+    let totalAllStudents = 0;
+    let totalAllPresent = 0;
+
     for (const school of schools) {
-      // Excel sheet names max 31 chars and no specific chars like [ ] * ? / \
-      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\]/g, "").substring(0, 31);
-      
-      // Ensure unique sheet names
-      let sheetName = safeSheetName;
-      let counter = 1;
-      while (workbook.worksheets.some(ws => ws.name === sheetName)) {
-        const suffix = ` (${counter})`;
-        sheetName = safeSheetName.substring(0, 31 - suffix.length) + suffix;
-        counter++;
-      }
-
-      const worksheet = workbook.addWorksheet(sheetName);
-
-      worksheet.columns = [
-        { header: 'Student Name', key: 'studentName', width: 25 },
-        { header: 'Admission No', key: 'admissionNo', width: 20 },
-        { header: 'Class/Section', key: 'classDetails', width: 15 },
-        { header: 'School Name', key: 'schoolName', width: 30 },
-        { header: 'Teacher Name', key: 'teacherName', width: 25 },
-        { header: 'Phone Number', key: 'phoneNumber', width: 20 },
-        { header: 'Email', key: 'email', width: 30 },
-        { header: 'Enrolled Events', key: 'enrolledEvents', width: 50 },
-        { header: 'Present Status', key: 'present', width: 15 },
-      ];
-
-      // Style headers
-      worksheet.getRow(1).font = { bold: true };
-      
       const schoolStudents = studentsBySchool.get(school.id) || [];
-      schoolStudents.sort((a, b) => a.name.localeCompare(b.name));
+      const presentCount = schoolStudents.filter(s => s.is_present).length;
+      const totalCount = schoolStudents.length;
+      const absentCount = totalCount - presentCount;
+      const percentage = totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0;
 
-      for (const student of schoolStudents) {
-        const studentEnrollments = studentEnrollmentsMap.get(student.id) || [];
-        const enrolledEventsStr = studentEnrollments.map(e => {
-          const ev = eventConfigMap.get(e.event_slug);
-          return ev ? ev.name : e.event_slug;
-        }).join("; ");
+      totalAllStudents += totalCount;
+      totalAllPresent += presentCount;
 
-        // exceljs will inherently treat strings as text cells, preventing auto-formatting issues
-        worksheet.addRow({
-          studentName: student.name,
-          admissionNo: student.admission_number, 
-          classDetails: student.class_details,
-          schoolName: school.name || "Unknown School",
-          teacherName: school.teacher_name || "N/A",
-          phoneNumber: school.phone_number || "N/A",
-          email: school.email || "N/A",
-          enrolledEvents: enrolledEventsStr || "None",
-          present: student.is_present ? "Present" : "Absent",
-        });
-      }
+      summarySheet.addRow({
+        schoolName: school.name || "Unknown School",
+        teacherName: school.teacher_name || "N/A",
+        phoneNumber: school.phone_number || "N/A",
+        total: totalCount,
+        present: presentCount,
+        absent: absentCount,
+        percentage: `${percentage}%`,
+      });
     }
 
-    // Add a fallback sheet if there are no schools exist to prevent workbook corruption
-    if (schools.length === 0) {
-      workbook.addWorksheet("Empty");
+    // Add a blank row then a grand total row
+    summarySheet.addRow({});
+    const grandTotalPercentage = totalAllStudents > 0 ? Math.round((totalAllPresent / totalAllStudents) * 100) : 0;
+    const grandTotalRow = summarySheet.addRow({
+      schoolName: "GRAND TOTAL",
+      total: totalAllStudents,
+      present: totalAllPresent,
+      absent: totalAllStudents - totalAllPresent,
+      percentage: `${grandTotalPercentage}%`,
+    });
+    grandTotalRow.font = { bold: true };
+
+    // ==========================================
+    // SHEET 2: Master Database (All Students Flat List)
+    // ==========================================
+    const masterSheet = workbook.addWorksheet("Master Database");
+    
+    // Enable auto-filtering on the headers so admins can easily filter by school/status
+    masterSheet.autoFilter = 'A1:I1';
+
+    masterSheet.columns = [
+      { header: 'Student Name', key: 'studentName', width: 25 },
+      { header: 'Admission No', key: 'admissionNo', width: 20 },
+      { header: 'Class/Section', key: 'classDetails', width: 15 },
+      { header: 'School Name', key: 'schoolName', width: 35 },
+      { header: 'Teacher Name', key: 'teacherName', width: 25 },
+      { header: 'Phone Number', key: 'phoneNumber', width: 20 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Enrolled Events', key: 'enrolledEvents', width: 60 },
+      { header: 'Present Status', key: 'present', width: 15 },
+    ];
+    masterSheet.getRow(1).font = { bold: true };
+
+    // Sort students by school name, then student name
+    students.sort((a, b) => {
+      const schoolA = schoolMap.get(a.school_id)?.name || "Unknown School";
+      const schoolB = schoolMap.get(b.school_id)?.name || "Unknown School";
+      if (schoolA === schoolB) {
+        return (a.name || "").localeCompare(b.name || "");
+      }
+      return schoolA.localeCompare(schoolB);
+    });
+
+    for (const student of students) {
+      const school = schoolMap.get(student.school_id);
+      const studentEnrollments = studentEnrollmentsMap.get(student.id) || [];
+      const enrolledEventsStr = studentEnrollments.map(e => {
+        const ev = eventConfigMap.get(e.event_slug);
+        return ev ? ev.name : e.event_slug;
+      }).join("; ");
+
+      masterSheet.addRow({
+        studentName: student.name,
+        admissionNo: student.admission_number, 
+        classDetails: student.class_details,
+        schoolName: school?.name || "Unknown School",
+        teacherName: school?.teacher_name || "N/A",
+        phoneNumber: school?.phone_number || "N/A",
+        email: school?.email || "N/A",
+        enrolledEvents: enrolledEventsStr || "None",
+        present: student.is_present ? "Present" : "Absent",
+      });
+    }
+
+    if (students.length === 0) {
+      masterSheet.addRow({ studentName: "No data available" });
     }
 
     const buffer = await workbook.xlsx.writeBuffer();
@@ -129,7 +179,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": 'attachment; filename="master_list_export.xlsx"',
+        "Content-Disposition": 'attachment; filename="master_database.xlsx"',
       },
     });
 
