@@ -67,7 +67,10 @@ const duplicateEnrollmentError = (): EnrollmentActionError =>
     },
   );
 
-const databaseError = (action: string, message?: string): EnrollmentActionError =>
+const databaseError = (
+  action: string,
+  message?: string,
+): EnrollmentActionError =>
   createEnrollmentError(
     `Could not ${action}`,
     "The registration could not be saved because the database rejected part of the request.",
@@ -76,7 +79,9 @@ const databaseError = (action: string, message?: string): EnrollmentActionError 
       fixSteps: [
         "Check the participant details for repeated admission numbers.",
         "Refresh the page and try saving once more.",
-        message ? `Share this technical detail with the admin: ${message}` : "If it still fails, share a screenshot with the admin.",
+        message
+          ? `Share this technical detail with the admin: ${message}`
+          : "If it still fails, share a screenshot with the admin.",
       ],
     },
   );
@@ -85,14 +90,15 @@ export async function saveEventEnrollments(
   eventSlug: string,
   teams: StudentInfo[][],
   isTeacherEvent: boolean = false,
-  adminSchoolId?: string
+  adminSchoolId?: string,
 ) {
   const cookieStore = await cookies();
   const supabase = await createClient();
-  const { createClient: createSupabaseClient } = await import("@supabase/supabase-js");
+  const { createClient: createSupabaseClient } =
+    await import("@supabase/supabase-js");
   const supabaseAdmin = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
 
   let school;
@@ -130,7 +136,12 @@ export async function saveEventEnrollments(
         error: createEnrollmentError(
           "Session expired",
           "Please log in again before saving participants.",
-          { code: "NOT_AUTHENTICATED", fixSteps: ["Log in again, then reopen this event and save participants."] },
+          {
+            code: "NOT_AUTHENTICATED",
+            fixSteps: [
+              "Log in again, then reopen this event and save participants.",
+            ],
+          },
         ),
       };
     }
@@ -149,7 +160,9 @@ export async function saveEventEnrollments(
         "Your login is not linked to a school profile.",
         {
           code: "SCHOOL_NOT_FOUND",
-          fixSteps: ["Ask the organizer to verify that this login is linked to the correct school."],
+          fixSteps: [
+            "Ask the organizer to verify that this login is linked to the correct school.",
+          ],
         },
       ),
     };
@@ -164,17 +177,23 @@ export async function saveEventEnrollments(
     .toUpperCase();
 
   // 1. Delete all existing enrollments for this event for this school
-  const { data: schoolStudents, error: studentsFetchError } = await supabaseAdmin
-    .from("students")
-    .select("id")
-    .eq("school_id", school.id);
+  const { data: schoolStudents, error: studentsFetchError } =
+    await supabaseAdmin
+      .from("students")
+      .select("id")
+      .eq("school_id", school.id);
 
   if (studentsFetchError) {
     console.error("Student fetch error:", studentsFetchError);
-    return { error: databaseError("prepare existing participants", studentsFetchError.message) };
+    return {
+      error: databaseError(
+        "prepare existing participants",
+        studentsFetchError.message,
+      ),
+    };
   }
 
-  const allSchoolStudentIds = schoolStudents?.map(s => s.id) || [];
+  const allSchoolStudentIds = schoolStudents?.map((s) => s.id) || [];
   if (allSchoolStudentIds.length > 0) {
     // Chunk the deletions to prevent URL length limits from silently failing the request
     const chunkSize = 50;
@@ -188,7 +207,9 @@ export async function saveEventEnrollments(
 
       if (deleteError) {
         console.error("Delete chunk error:", deleteError);
-        return { error: databaseError("replace old enrollments", deleteError.message) };
+        return {
+          error: databaseError("replace old enrollments", deleteError.message),
+        };
       }
     }
   }
@@ -219,7 +240,9 @@ export async function saveEventEnrollments(
         ? `TCH-${normalizeIdentifier(student.name)}`
         : normalizeIdentifier(student.admissionNumber);
       const inputLabel = isTeacherEvent ? "Teacher name" : "Admission number";
-      const displayValue = isTeacherEvent ? student.name.trim() : student.admissionNumber.trim();
+      const displayValue = isTeacherEvent
+        ? student.name.trim()
+        : student.admissionNumber.trim();
 
       if (seenInputIdentifiers.has(admNo)) {
         return { error: duplicateParticipantError(inputLabel, displayValue) };
@@ -243,29 +266,36 @@ export async function saveEventEnrollments(
 
         if (byIdError) {
           console.error("Find student by id error:", byIdError);
-          return { error: databaseError("find the participant profile", byIdError.message) };
+          return {
+            error: databaseError(
+              "find the participant profile",
+              byIdError.message,
+            ),
+          };
         }
 
         if (byIdStudent) {
-          // HEURISTIC: If BOTH the name and admission number are completely different, 
+          // HEURISTIC: If BOTH the name and admission number are completely different,
           // the user is likely swapping out a participant entirely, not just fixing a typo.
           // If we update the DB here, we'd overwrite the old student globally across all events!
           // So if it's a swap, we drop the ID binding and treat them as a new participant search.
           const oldName = (byIdStudent.name || "").trim().toLowerCase();
           const newName = (student.name || "").trim().toLowerCase();
-          const oldAdmNo = (byIdStudent.admission_number || "").trim().toLowerCase();
+          const oldAdmNo = (byIdStudent.admission_number || "")
+            .trim()
+            .toLowerCase();
           const newAdmNo = (admNo || "").trim().toLowerCase();
-          
+
           const isNameChanged = oldName !== newName;
           const isAdmNoChanged = oldAdmNo !== newAdmNo;
 
-          // If it's a teacher event, we only have names, so any name change is a swap? 
+          // If it's a teacher event, we only have names, so any name change is a swap?
           // Actually, teachers might just correct spelling. Let's rely on standard swap logic for students.
           if (!isTeacherEvent && isNameChanged && isAdmNoChanged) {
-             // It's a full swap. Drop the ID so it falls through to the admission_number fallback search.
-             existingStudent = null; 
+            // It's a full swap. Drop the ID so it falls through to the admission_number fallback search.
+            existingStudent = null;
           } else {
-             existingStudent = byIdStudent;
+            existingStudent = byIdStudent;
           }
         } else {
           // If not found by ID, maybe it was deleted. We will fallback.
@@ -284,7 +314,12 @@ export async function saveEventEnrollments(
 
         if (findError) {
           console.error("Find student error:", findError);
-          return { error: databaseError("find the participant profile", findError.message) };
+          return {
+            error: databaseError(
+              "find the participant profile",
+              findError.message,
+            ),
+          };
         }
 
         if ((matchingStudents?.length || 0) > 1) {
@@ -320,7 +355,12 @@ export async function saveEventEnrollments(
           .single();
 
         if (createError)
-          return { error: databaseError("create the participant profile", createError.message) };
+          return {
+            error: databaseError(
+              "create the participant profile",
+              createError.message,
+            ),
+          };
         existingStudent = newStudent;
       } else {
         // Update name and class details just in case they were corrected
@@ -335,7 +375,12 @@ export async function saveEventEnrollments(
 
         if (updateError) {
           console.error("Update student error:", updateError);
-          return { error: databaseError("update the participant profile", updateError.message) };
+          return {
+            error: databaseError(
+              "update the participant profile",
+              updateError.message,
+            ),
+          };
         }
       }
 
@@ -367,10 +412,41 @@ export async function saveEventEnrollments(
     }
   }
 
+  // 3. Clean up orphaned students for this school
+  // Find all students for this school that no longer have any enrollments across ALL events
+  if (allSchoolStudentIds.length > 0) {
+    const { data: activeEnrollments } = await supabaseAdmin
+      .from("event_enrollments")
+      .select("student_id")
+      .in("student_id", allSchoolStudentIds);
+
+    if (activeEnrollments) {
+      const activeStudentIds = new Set(
+        activeEnrollments.map((e) => e.student_id),
+      );
+      const orphanedStudentIds = allSchoolStudentIds.filter(
+        (id) => !activeStudentIds.has(id),
+      );
+
+      if (orphanedStudentIds.length > 0) {
+        const chunkedOrphans = [];
+        for (let i = 0; i < orphanedStudentIds.length; i += 50) {
+          chunkedOrphans.push(orphanedStudentIds.slice(i, i + 50));
+        }
+
+        for (const chunk of chunkedOrphans) {
+          await supabaseAdmin.from("students").delete().in("id", chunk);
+        }
+      }
+    }
+  }
+
   // Clear Next.js cache so the scoring page and leaderboard update instantly
   revalidatePath(`/events/${eventSlug}`);
   revalidatePath("/admin/leaderboard");
   revalidatePath(`/events/${eventSlug}/score/${school.id}`);
+  revalidatePath("/admin");
+  revalidatePath("/admin/registrations");
 
   return { success: true };
 }
