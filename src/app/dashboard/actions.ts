@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { normalizeIdentifier } from "@/lib/utils";
 
 export type StudentInfo = {
+  id?: string;
   name: string;
   className: string;
   section: string;
@@ -229,36 +230,81 @@ export async function saveEventEnrollments(
         ? "Teacher"
         : `${student.className.trim()} - ${student.section.trim()}`;
 
-      // Find the student by admission number
-      const { data: matchingStudents, error: findError } = await supabaseAdmin
-        .from("students")
-        .select("id")
-        .eq("school_id", school.id)
-        .ilike("admission_number", admNo)
-        .limit(2);
+      let existingStudent: { id: string } | null = null;
 
-      if (findError) {
-        console.error("Find student error:", findError);
-        return { error: databaseError("find the participant profile", findError.message) };
+      // Prefer stable student id from form to avoid creating split profiles
+      if (student.id) {
+        const { data: byIdStudent, error: byIdError } = await supabaseAdmin
+          .from("students")
+          .select("id, name, admission_number")
+          .eq("id", student.id)
+          .eq("school_id", school.id)
+          .maybeSingle();
+
+        if (byIdError) {
+          console.error("Find student by id error:", byIdError);
+          return { error: databaseError("find the participant profile", byIdError.message) };
+        }
+
+        if (byIdStudent) {
+          // HEURISTIC: If BOTH the name and admission number are completely different, 
+          // the user is likely swapping out a participant entirely, not just fixing a typo.
+          // If we update the DB here, we'd overwrite the old student globally across all events!
+          // So if it's a swap, we drop the ID binding and treat them as a new participant search.
+          const oldName = byIdStudent.name.trim().toLowerCase();
+          const newName = student.name.trim().toLowerCase();
+          const oldAdmNo = byIdStudent.admission_number.trim().toLowerCase();
+          const newAdmNo = admNo.trim().toLowerCase();
+          
+          const isNameChanged = oldName !== newName;
+          const isAdmNoChanged = oldAdmNo !== newAdmNo;
+
+          // If it's a teacher event, we only have names, so any name change is a swap? 
+          // Actually, teachers might just correct spelling. Let's rely on standard swap logic for students.
+          if (!isTeacherEvent && isNameChanged && isAdmNoChanged) {
+             // It's a full swap. Drop the ID so it falls through to the admission_number fallback search.
+             existingStudent = null; 
+          } else {
+             existingStudent = byIdStudent;
+          }
+        } else {
+          // If not found by ID, maybe it was deleted. We will fallback.
+          existingStudent = null;
+        }
       }
 
-      if ((matchingStudents?.length || 0) > 1) {
-        return {
-          error: createEnrollmentError(
-            "Duplicate student profiles found",
-            `${inputLabel} "${displayValue}" exists more than once in this school profile.`,
-            {
-              code: "DUPLICATE_STUDENT_PROFILE",
-              fixSteps: [
-                "Ask an admin to merge or remove the duplicate student profile.",
-                "Refresh this page and save again after the duplicate is fixed.",
-              ],
-            },
-          ),
-        };
-      }
+      if (!existingStudent) {
+        // Fallback for brand-new rows or swapped rows: match by admission number / teacher key
+        const { data: matchingStudents, error: findError } = await supabaseAdmin
+          .from("students")
+          .select("id")
+          .eq("school_id", school.id)
+          .ilike("admission_number", admNo)
+          .limit(2);
 
-      let existingStudent = matchingStudents?.[0] || null;
+        if (findError) {
+          console.error("Find student error:", findError);
+          return { error: databaseError("find the participant profile", findError.message) };
+        }
+
+        if ((matchingStudents?.length || 0) > 1) {
+          return {
+            error: createEnrollmentError(
+              "Duplicate student profiles found",
+              `${inputLabel} "${displayValue}" exists more than once in this school profile.`,
+              {
+                code: "DUPLICATE_STUDENT_PROFILE",
+                fixSteps: [
+                  "Ask an admin to merge or remove the duplicate student profile.",
+                  "Refresh this page and save again after the duplicate is fixed.",
+                ],
+              },
+            ),
+          };
+        }
+
+        existingStudent = matchingStudents?.[0] || null;
+      }
 
       if (!existingStudent) {
         const { data: newStudent, error: createError } = await supabaseAdmin

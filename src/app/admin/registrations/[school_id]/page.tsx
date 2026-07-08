@@ -83,6 +83,7 @@ export default async function AdminSchoolRegistrations({
           }
 
           const studentObj = {
+            id: e.students.id,
             name: e.students.name || "",
             className: parsedClassName,
             section: parsedSection,

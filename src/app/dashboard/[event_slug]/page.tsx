@@ -21,6 +21,7 @@ export default async function EventPage({
   const firebaseUid = cookieStore.get("firebase_uid")?.value;
 
   let currentTeams: {
+    id?: string;
     name: string;
     className: string;
     section: string;
@@ -53,9 +54,10 @@ export default async function EventPage({
         // Group by team_id
         const teamsMap: Record<
           string,
-          { name: string; className: string; section: string; admissionNumber: string }[]
+          { id?: string; name: string; className: string; section: string; admissionNumber: string }[]
         > = {};
         const unassignedTeam: {
+          id?: string;
           name: string;
           className: string;
           section: string;
@@ -74,6 +76,7 @@ export default async function EventPage({
           }
 
           const studentObj = {
+            id: e.students.id,
             name: e.students.name || "",
             className: parsedClassName,
             section: parsedSection,
@@ -126,6 +129,7 @@ export default async function EventPage({
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
         <EventForm
+          key={event.slug}
           eventSlug={event.slug}
           minSize={event.min_size}
           maxSize={event.max_size}
