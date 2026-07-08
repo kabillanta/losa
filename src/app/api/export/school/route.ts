@@ -1,37 +1,75 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
-
-function escapeCSV(val: string | number | boolean | null | undefined): string {
-  if (val === null || val === undefined) return "";
-  const str = String(val);
-  if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
+import { createClient } from "@supabase/supabase-js";
+import ExcelJS from "exceljs";
 
 export const revalidate = 0;
 
 export async function GET() {
   try {
-    const [schoolsRes, studentsRes] = await Promise.all([
-      supabase.from("schools").select("*").order("name"),
-      supabase.from("students").select("*"),
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Utility to fetch all rows bypassing the 1000 row limit
+    async function fetchAll(table: string): Promise<any[]> {
+      const allData = [];
+      let page = 0;
+      const pageSize = 1000;
+      while (true) {
+        const { data, error } = await supabaseAdmin
+          .from(table)
+          .select("*")
+          .range(page * pageSize, (page + 1) * pageSize - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        allData.push(...data);
+        if (data.length < pageSize) break;
+        page++;
+      }
+      return allData;
+    }
+
+    const [schools, students] = await Promise.all([
+      fetchAll("schools"),
+      fetchAll("students"),
     ]);
 
-    const schools = schoolsRes.data || [];
-    const students = studentsRes.data || [];
-
-    // Map school id to school name and teacher
     const schoolMap = new Map(schools.map((s) => [s.id, s]));
+    
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Admin';
+    workbook.created = new Date();
 
-    // Columns: School Name, Teacher Name, Phone Number, Email, Student Name, Class/Section, Admission No, Present Status
-    const headers = ["School Name", "Teacher Name", "Phone Number", "Email", "Student Name", "Class/Section", "Admission No", "Present Status"];
+    const worksheet = workbook.addWorksheet("Schools");
+
+    worksheet.columns = [
+      { header: 'School Name', key: 'schoolName', width: 30 },
+      { header: 'Teacher Name', key: 'teacherName', width: 25 },
+      { header: 'Phone Number', key: 'phoneNumber', width: 20 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Student Name', key: 'studentName', width: 25 },
+      { header: 'Class/Section', key: 'classDetails', width: 15 },
+      { header: 'Admission No', key: 'admissionNo', width: 20 },
+      { header: 'Present Status', key: 'present', width: 15 },
+    ];
+
+    worksheet.getRow(1).font = { bold: true };
     
     // Sort students by school name, then student name
-    const rowsData = students.map((student) => {
+    students.sort((a, b) => {
+      const schoolA = schoolMap.get(a.school_id)?.name || "Unknown School";
+      const schoolB = schoolMap.get(b.school_id)?.name || "Unknown School";
+      if (schoolA === schoolB) {
+        return (a.name || "").localeCompare(b.name || "");
+      }
+      return schoolA.localeCompare(schoolB);
+    });
+
+    for (const student of students) {
       const school = schoolMap.get(student.school_id);
-      return {
+      
+      worksheet.addRow({
         schoolName: school?.name || "Unknown School",
         teacherName: school?.teacher_name || "N/A",
         phoneNumber: school?.phone_number || "N/A",
@@ -40,21 +78,20 @@ export async function GET() {
         classDetails: student.class_details,
         admissionNo: student.admission_number,
         present: student.is_present ? "Present" : "Absent",
-      };
-    }).sort((a, b) => a.schoolName.localeCompare(b.schoolName) || a.studentName.localeCompare(b.studentName));
+      });
+    }
 
-    const csvRows = [
-      headers.map(escapeCSV).join(","),
-      ...rowsData.map(r => [r.schoolName, r.teacherName, r.phoneNumber, r.email, r.studentName, r.classDetails, r.admissionNo, r.present].map(escapeCSV).join(","))
-    ];
+    if (students.length === 0) {
+      worksheet.addRow({ schoolName: "No data available" });
+    }
 
-    const csvContent = "\uFEFF" + csvRows.join("\n"); // Adding BOM for Excel UTF-8 support
+    const buffer = await workbook.xlsx.writeBuffer();
 
-    return new NextResponse(csvContent, {
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="schools_export.csv"',
+        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": 'attachment; filename="schools_export.xlsx"',
       },
     });
 

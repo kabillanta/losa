@@ -1,32 +1,42 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+import ExcelJS from "exceljs";
 import config from "../../../../../events-config.json";
-
-function escapeCSV(val: string | number | boolean | null | undefined): string {
-  if (val === null || val === undefined) return "";
-  const str = String(val);
-  if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
 
 export const revalidate = 0;
 
 export async function GET() {
   try {
-    const [schoolsRes, studentsRes, enrollmentsRes] = await Promise.all([
-      supabase.from("schools").select("*"),
-      supabase.from("students").select("*"),
-      supabase.from("event_enrollments").select("*"),
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Utility to fetch all rows bypassing the 1000 row limit
+    async function fetchAll(table: string): Promise<any[]> {
+      const allData = [];
+      let page = 0;
+      const pageSize = 1000;
+      while (true) {
+        const { data, error } = await supabaseAdmin
+          .from(table)
+          .select("*")
+          .range(page * pageSize, (page + 1) * pageSize - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        allData.push(...data);
+        if (data.length < pageSize) break;
+        page++;
+      }
+      return allData;
+    }
+
+    const [schools, students, enrollments] = await Promise.all([
+      fetchAll("schools"),
+      fetchAll("students"),
+      fetchAll("event_enrollments"),
     ]);
 
-    const schools = schoolsRes.data || [];
-    const students = studentsRes.data || [];
-    const enrollments = enrollmentsRes.data || [];
-
-    // Maps
-    const schoolMap = new Map(schools.map((s) => [s.id, s]));
     const eventConfigMap = new Map(config.events.map((e) => [e.slug, e]));
     
     // Group enrollments by student
@@ -38,43 +48,88 @@ export async function GET() {
       studentEnrollmentsMap.get(e.student_id)!.push(e);
     });
 
-    // Columns: Student Name, Admission No, Class/Section, School Name, Teacher Name, Phone Number, Email, Enrolled Events, Present Status
-    const headers = ["Student Name", "Admission No", "Class/Section", "School Name", "Teacher Name", "Phone Number", "Email", "Enrolled Events", "Present Status"];
-    
-    const rowsData = students.map((student) => {
-      const school = schoolMap.get(student.school_id);
-      const studentEnrollments = studentEnrollmentsMap.get(student.id) || [];
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Admin';
+    workbook.created = new Date();
+
+    // Group students by school
+    const studentsBySchool = new Map<string, any[]>();
+    students.forEach((student) => {
+      const schoolId = student.school_id;
+      if (!studentsBySchool.has(schoolId)) {
+        studentsBySchool.set(schoolId, []);
+      }
+      studentsBySchool.get(schoolId)!.push(student);
+    });
+
+    // Create a sheet for each school
+    for (const school of schools) {
+      // Excel sheet names max 31 chars and no specific chars like [ ] * ? / \
+      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\]/g, "").substring(0, 31);
       
-      const enrolledEventsStr = studentEnrollments.map(e => {
-        const ev = eventConfigMap.get(e.event_slug);
-        return ev ? ev.name : e.event_slug;
-      }).join("; ");
+      // Ensure unique sheet names
+      let sheetName = safeSheetName;
+      let counter = 1;
+      while (workbook.worksheets.some(ws => ws.name === sheetName)) {
+        const suffix = ` (${counter})`;
+        sheetName = safeSheetName.substring(0, 31 - suffix.length) + suffix;
+        counter++;
+      }
+
+      const worksheet = workbook.addWorksheet(sheetName);
+
+      worksheet.columns = [
+        { header: 'Student Name', key: 'studentName', width: 25 },
+        { header: 'Admission No', key: 'admissionNo', width: 20 },
+        { header: 'Class/Section', key: 'classDetails', width: 15 },
+        { header: 'School Name', key: 'schoolName', width: 30 },
+        { header: 'Teacher Name', key: 'teacherName', width: 25 },
+        { header: 'Phone Number', key: 'phoneNumber', width: 20 },
+        { header: 'Email', key: 'email', width: 30 },
+        { header: 'Enrolled Events', key: 'enrolledEvents', width: 50 },
+        { header: 'Present Status', key: 'present', width: 15 },
+      ];
+
+      // Style headers
+      worksheet.getRow(1).font = { bold: true };
       
-      return {
-        studentName: student.name,
-        admissionNo: student.admission_number,
-        classDetails: student.class_details,
-        schoolName: school?.name || "Unknown School",
-        teacherName: school?.teacher_name || "N/A",
-        phoneNumber: school?.phone_number || "N/A",
-        email: school?.email || "N/A",
-        enrolledEvents: enrolledEventsStr || "None",
-        present: student.is_present ? "Present" : "Absent",
-      };
-    }).sort((a, b) => a.schoolName.localeCompare(b.schoolName) || a.studentName.localeCompare(b.studentName));
+      const schoolStudents = studentsBySchool.get(school.id) || [];
+      schoolStudents.sort((a, b) => a.name.localeCompare(b.name));
 
-    const csvRows = [
-      headers.map(escapeCSV).join(","),
-      ...rowsData.map(r => [r.studentName, r.admissionNo, r.classDetails, r.schoolName, r.teacherName, r.phoneNumber, r.email, r.enrolledEvents, r.present].map(escapeCSV).join(","))
-    ];
+      for (const student of schoolStudents) {
+        const studentEnrollments = studentEnrollmentsMap.get(student.id) || [];
+        const enrolledEventsStr = studentEnrollments.map(e => {
+          const ev = eventConfigMap.get(e.event_slug);
+          return ev ? ev.name : e.event_slug;
+        }).join("; ");
 
-    const csvContent = "\uFEFF" + csvRows.join("\n"); // Adding BOM for Excel UTF-8 support
+        // exceljs will inherently treat strings as text cells, preventing auto-formatting issues
+        worksheet.addRow({
+          studentName: student.name,
+          admissionNo: student.admission_number, 
+          classDetails: student.class_details,
+          schoolName: school.name || "Unknown School",
+          teacherName: school.teacher_name || "N/A",
+          phoneNumber: school.phone_number || "N/A",
+          email: school.email || "N/A",
+          enrolledEvents: enrolledEventsStr || "None",
+          present: student.is_present ? "Present" : "Absent",
+        });
+      }
+    }
 
-    return new NextResponse(csvContent, {
+    // Add a fallback sheet if there are no schools exist to prevent workbook corruption
+    if (schools.length === 0) {
+      workbook.addWorksheet("Empty");
+    }
+
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="master_list_export.csv"',
+        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": 'attachment; filename="master_list_export.xlsx"',
       },
     });
 
