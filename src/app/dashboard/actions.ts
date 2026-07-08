@@ -367,10 +367,40 @@ export async function saveEventEnrollments(
     }
   }
 
+  // 3. Clean up orphaned students for this school
+  // Find all students for this school that no longer have any enrollments across ALL events
+  if (allSchoolStudentIds.length > 0) {
+    const { data: activeEnrollments } = await supabaseAdmin
+      .from("event_enrollments")
+      .select("student_id")
+      .in("student_id", allSchoolStudentIds);
+
+    if (activeEnrollments) {
+      const activeStudentIds = new Set(activeEnrollments.map((e) => e.student_id));
+      const orphanedStudentIds = allSchoolStudentIds.filter(id => !activeStudentIds.has(id));
+
+      if (orphanedStudentIds.length > 0) {
+        const chunkedOrphans = [];
+        for (let i = 0; i < orphanedStudentIds.length; i += 50) {
+          chunkedOrphans.push(orphanedStudentIds.slice(i, i + 50));
+        }
+        
+        for (const chunk of chunkedOrphans) {
+          await supabaseAdmin
+            .from("students")
+            .delete()
+            .in("id", chunk);
+        }
+      }
+    }
+  }
+
   // Clear Next.js cache so the scoring page and leaderboard update instantly
   revalidatePath(`/events/${eventSlug}`);
   revalidatePath("/admin/leaderboard");
   revalidatePath(`/events/${eventSlug}/score/${school.id}`);
+  revalidatePath("/admin");
+  revalidatePath("/admin/registrations");
 
   return { success: true };
 }
