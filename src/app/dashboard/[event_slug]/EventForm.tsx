@@ -208,9 +208,10 @@ export default function EventForm({
         .map((s, idx) => ({ s, idx }))
         .filter(({ s }) => {
           if (isTeacherEvent) return false;
+          // We ignore className in hasSome because it has a default selected value.
+          // A row is only "partially filled" if the user started typing in name, section, or admission number.
           const hasSome =
             s.name.trim().length > 0 ||
-            s.className.trim().length > 0 ||
             s.section.trim().length > 0 ||
             s.admissionNumber.trim().length > 0;
           const hasAll =
