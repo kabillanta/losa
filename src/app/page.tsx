@@ -54,7 +54,7 @@ export default function HomePage() {
                     Deadline
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
-                  <span>July 13th</span>
+                  <span>July 18th</span>
                 </span>
               </div>
 

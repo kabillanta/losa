@@ -17,10 +17,10 @@ export function CountdownTimer() {
     // July 13th of the current year (or next year if passed)
     const now = new Date();
     let year = now.getFullYear();
-    let deadline = new Date(year, 6, 13, 23, 59, 59); // Month is 0-indexed (6 = July)
+    let deadline = new Date(year, 6, 18, 23, 59, 59); // Month is 0-indexed (6 = July)
 
     if (now > deadline) {
-      deadline = new Date(year + 1, 6, 13, 23, 59, 59);
+      deadline = new Date(year + 1, 6, 18, 23, 59, 59);
     }
 
     const calculateTimeLeft = () => {
