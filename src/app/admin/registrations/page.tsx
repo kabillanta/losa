@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, Building2, ChevronRight, Search } from "lucide-react";
+import AdminAddSchoolModal from "./AdminAddSchoolModal";
 
 export const revalidate = 0; // Always fetch fresh data
 
@@ -17,9 +18,12 @@ export default async function RegistrationsSchoolPicker() {
         <Link href="/admin" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft size={20} className="text-gray-500" />
         </Link>
-        <div>
+        <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-semibold text-onyx tracking-tight">Select a School</h1>
           <p className="text-taupe mt-1">Choose a school to view and edit their event registrations.</p>
+        </div>
+        <div className="shrink-0">
+          <AdminAddSchoolModal />
         </div>
       </div>
 
