@@ -1,23 +1,18 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowLeft, Trophy, Medal, Award } from "lucide-react";
+import { fetchAllRows } from "@/lib/utils";
 
 export const revalidate = 0; // Live dashboard
 
 export default async function LeaderboardPage() {
-  const [eventsRes, schoolsRes, scoresRes, studentsRes, enrollmentsRes] = await Promise.all([
-    supabase.from("events").select("*"),
-    supabase.from("schools").select("*"),
-    supabase.from("scores").select("*"),
-    supabase.from("students").select("*"),
-    supabase.from("event_enrollments").select("*"),
+  const [events, schools, scores, students, enrollments] = await Promise.all([
+    fetchAllRows(supabase, "events"),
+    fetchAllRows(supabase, "schools"),
+    fetchAllRows(supabase, "scores"),
+    fetchAllRows(supabase, "students"),
+    fetchAllRows(supabase, "event_enrollments"),
   ]);
-
-  const events = eventsRes.data || [];
-  const schools = schoolsRes.data || [];
-  const scores = scoresRes.data || [];
-  const students = studentsRes.data || [];
-  const enrollments = enrollmentsRes.data || [];
 
   // Group students by school for easy lookup
   const studentsBySchool: Record<string, typeof students> = {};

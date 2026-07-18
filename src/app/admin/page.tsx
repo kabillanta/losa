@@ -1,15 +1,16 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Users, Building2, UserCheck, Printer, Trophy, List } from "lucide-react";
+import { fetchAllRows } from "@/lib/utils";
 
 export const revalidate = 0; // Always fetch fresh stats
 
 export default async function AdminDashboard() {
   // Fetch all schools
-  const { data: schools } = await supabase.from("schools").select("*");
+  const schools = await fetchAllRows(supabase, "schools");
   
   // Fetch all students
-  const { data: students } = await supabase.from("students").select("*");
+  const students = await fetchAllRows(supabase, "students");
 
   const totalSchools = schools?.length || 0;
   const totalStudents = students?.length || 0;

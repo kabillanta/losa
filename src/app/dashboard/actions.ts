@@ -462,6 +462,8 @@ export async function saveEventEnrollments(
   revalidatePath(`/events/${eventSlug}/score/${school.id}`);
   revalidatePath("/admin");
   revalidatePath("/admin/registrations");
+  revalidatePath(`/admin/registrations/${school.id}`);
+  revalidatePath("/dashboard", "layout");
 
   return { success: true };
 }
