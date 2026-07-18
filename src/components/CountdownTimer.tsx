@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar } from "lucide-react";
+import { getRegistrationDeadline } from "@/lib/utils";
 
 interface TimeLeft {
   days: number;
@@ -14,14 +14,7 @@ export function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    // July 13th of the current year (or next year if passed)
-    const now = new Date();
-    let year = now.getFullYear();
-    let deadline = new Date(year, 6, 18, 23, 59, 59); // Month is 0-indexed (6 = July)
-
-    if (now > deadline) {
-      deadline = new Date(year + 1, 6, 18, 23, 59, 59);
-    }
+    const deadline = getRegistrationDeadline();
 
     const calculateTimeLeft = () => {
       const difference = deadline.getTime() - new Date().getTime();

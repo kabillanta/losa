@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { normalizeIdentifier } from "@/lib/utils";
+import { normalizeIdentifier, isRegistrationClosed } from "@/lib/utils";
 
 export type StudentInfo = {
   id?: string;
@@ -92,6 +92,21 @@ export async function saveEventEnrollments(
   isTeacherEvent: boolean = false,
   adminSchoolId?: string,
 ) {
+  if (!adminSchoolId && isRegistrationClosed()) {
+    return {
+      error: createEnrollmentError(
+        "Registration Closed",
+        "The registration deadline has passed. You can no longer save or edit participants for this event.",
+        {
+          code: "REGISTRATION_CLOSED",
+          fixSteps: [
+            "If you need to make urgent changes, please contact the organizing committee.",
+          ],
+        },
+      ),
+    };
+  }
+
   const cookieStore = await cookies();
   const supabase = await createClient();
   const { createClient: createSupabaseClient } =

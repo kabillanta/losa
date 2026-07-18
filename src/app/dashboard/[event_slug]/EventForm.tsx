@@ -7,6 +7,7 @@ import {
   EnrollmentActionError,
 } from "../actions";
 import { Loader2, CheckCircle2, AlertCircle, Plus, Trash2 } from "lucide-react";
+import { isRegistrationClosed } from "@/lib/utils";
 
 interface EventFormProps {
   eventSlug: string;
@@ -574,30 +575,37 @@ export default function EventForm({
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-center sm:text-left">
-            <p className="text-red-600 font-bold mb-1 flex items-center gap-1.5 justify-center sm:justify-start">
-              <AlertCircle size={14} />
-              Please make sure to click "Save Participants" below to confirm
-              your registration.
-            </p>
-            <p className="text-taupe">
-              You can return and edit these details at any time until the
-              registration deadline.
-            </p>
+        {(!adminSchoolId && isRegistrationClosed()) ? (
+          <div className="p-4 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl flex items-center justify-center gap-3 text-sm font-bold">
+            <AlertCircle size={18} />
+            Registration is now closed. No further changes can be made.
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full sm:w-auto bg-onyx text-white px-8 py-3 rounded-xl font-medium hover:bg-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
-          >
-            {loading ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              "Save Participants"
-            )}
-          </button>
-        </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="text-sm text-center sm:text-left">
+              <p className="text-red-600 font-bold mb-1 flex items-center gap-1.5 justify-center sm:justify-start">
+                <AlertCircle size={14} />
+                Please make sure to click "Save Participants" below to confirm
+                your registration.
+              </p>
+              <p className="text-taupe">
+                You can return and edit these details at any time until the
+                registration deadline.
+              </p>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full sm:w-auto bg-onyx text-white px-8 py-3 rounded-xl font-medium hover:bg-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
+            >
+              {loading ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                "Save Participants"
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </form>
   );
