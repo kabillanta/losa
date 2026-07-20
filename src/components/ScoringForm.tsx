@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { submitScore } from "@/app/events/[slug]/score/[school_id]/actions";
+import { submitScore } from "@/app/events/[slug]/score/[school_id]/[team_id]/actions";
 import { Loader2, Save } from "lucide-react";
 import config from "../../events-config.json";
 
@@ -14,13 +14,17 @@ type RubricItem = {
 export function ScoringForm({ 
   eventId, 
   schoolId, 
+  teamId,
   eventSlug, 
-  rubric 
+  rubric,
+  existingScores = []
 }: { 
   eventId: string; 
   schoolId: string; 
+  teamId: string;
   eventSlug: string; 
-  rubric: RubricItem[] 
+  rubric: RubricItem[];
+  existingScores?: any[];
 }) {
   const [scores, setScores] = useState<Record<string, number>>({});
   const [judgeName, setJudgeName] = useState("");
@@ -30,15 +34,29 @@ export function ScoringForm({
   // Load judge name from local storage on mount
   useEffect(() => {
     const savedName = localStorage.getItem("losa_judge_name");
-    if (savedName) setJudgeName(savedName);
-  }, []);
+    if (savedName) {
+      setJudgeName(savedName);
+      const existing = existingScores.find(s => s.judge_name === savedName);
+      if (existing && existing.rubric_scores) {
+        setScores(existing.rubric_scores);
+      }
+    }
+  }, [existingScores]);
 
   const totalScore = Object.values(scores).reduce((a, b) => a + (b || 0), 0);
   const maxTotal = rubric.reduce((a, b) => a + b.max_points, 0);
 
-  const handleJudgeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setJudgeName(e.target.value);
-    localStorage.setItem("losa_judge_name", e.target.value);
+  const handleJudgeNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newJudge = e.target.value;
+    setJudgeName(newJudge);
+    localStorage.setItem("losa_judge_name", newJudge);
+
+    const existing = existingScores.find(s => s.judge_name === newJudge);
+    if (existing && existing.rubric_scores) {
+      setScores(existing.rubric_scores);
+    } else {
+      setScores({});
+    }
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -59,6 +77,7 @@ export function ScoringForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       <input type="hidden" name="eventId" value={eventId} />
       <input type="hidden" name="schoolId" value={schoolId} />
+      <input type="hidden" name="teamId" value={teamId} />
       <input type="hidden" name="eventSlug" value={eventSlug} />
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">

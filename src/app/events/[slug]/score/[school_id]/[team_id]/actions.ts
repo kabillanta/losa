@@ -7,6 +7,7 @@ export async function submitScore(formData: FormData) {
   const eventId = formData.get("eventId") as string;
   const schoolId = formData.get("schoolId") as string;
   const eventSlug = formData.get("eventSlug") as string;
+  const teamId = formData.get("teamId") as string;
   const judgeName = formData.get("judgeName") as string;
   
   if (!judgeName || judgeName.trim() === "") {
@@ -28,19 +29,18 @@ export async function submitScore(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from("scores").insert({
+  const { error } = await supabase.from("scores").upsert({
     event_id: eventId,
     school_id: schoolId,
+    team_id: teamId,
     judge_name: judgeName,
     rubric_scores: rubricScores,
     total_score: totalScore
+  }, {
+    onConflict: 'event_id, school_id, team_id, judge_name'
   });
 
   if (error) {
-    // Check if it's a unique constraint violation (judge already scored)
-    if (error.code === '23505') {
-      return { error: "You have already submitted scores for this school." };
-    }
     return { error: error.message };
   }
 

@@ -9,9 +9,9 @@ export const revalidate = 0;
 export default async function ScoreSchoolPage({ 
   params 
 }: { 
-  params: Promise<{ slug: string; school_id: string }> 
+  params: Promise<{ slug: string; school_id: string; team_id: string }> 
 }) {
-  const { slug, school_id } = await params;
+  const { slug, school_id, team_id } = await params;
 
   // Fetch Event
   const { data: event } = await supabase
@@ -31,6 +31,13 @@ export default async function ScoreSchoolPage({
 
   if (!school) notFound();
 
+  // Fetch existing scores for this team
+  const { data: existingScores } = await supabase
+    .from("scores")
+    .select("*")
+    .eq("event_id", event.id)
+    .eq("team_id", team_id);
+
   return (
     <div className="w-full max-w-3xl mx-auto py-10 px-6 animate-slide-up">
       <Link href={`/events/${slug}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors mb-8">
@@ -42,15 +49,17 @@ export default async function ScoreSchoolPage({
           Score: {school.name}
         </h1>
         <p className="text-taupe mt-2">
-          Evaluating for <span className="font-semibold text-onyx">{event.name}</span>
+          Evaluating <span className="font-semibold text-onyx">Team</span> for <span className="font-semibold text-onyx">{event.name}</span>
         </p>
       </div>
 
       <ScoringForm 
         eventId={event.id}
         schoolId={school.id}
+        teamId={team_id}
         eventSlug={event.slug}
         rubric={event.rubric}
+        existingScores={existingScores || []}
       />
     </div>
   );
