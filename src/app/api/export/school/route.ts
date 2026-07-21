@@ -51,11 +51,12 @@ export async function GET() {
 
     for (const school of schools) {
       // Clean sheet name for Excel rules (max 31 chars, no brackets/slashes/colons)
-      const safeSheetName = (school.name || "Unknown").replace(/[\[\]\*\/\?\\:']/g, "").substring(0, 31);
+      const rawName = (school.name || "Unknown").trim() || "Unknown";
+      const safeSheetName = rawName.replace(/[\[\]\*\/\?\\:']/g, "").substring(0, 31);
       
       let sheetName = safeSheetName;
       let counter = 1;
-      while (workbook.worksheets.some(ws => ws.name === sheetName)) {
+      while (workbook.worksheets.some(ws => ws.name.toLowerCase() === sheetName.toLowerCase())) {
         const suffix = ` (${counter})`;
         sheetName = safeSheetName.substring(0, 31 - suffix.length) + suffix;
         counter++;

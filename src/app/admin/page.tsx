@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Users, Building2, UserCheck, Printer, Trophy, List } from "lucide-react";
+import { Users, Building2, UserCheck, Printer, Trophy, List, CalendarDays, ClipboardCheck } from "lucide-react";
 import { fetchAllRows } from "@/lib/utils";
 
 export const revalidate = 0; // Always fetch fresh stats
@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
           <h1 className="text-3xl md:text-4xl font-semibold text-onyx tracking-tight">Admin Dashboard</h1>
           <p className="text-taupe mt-2">Live event statistics and management.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="relative group">
             <button className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
@@ -42,11 +42,18 @@ export default async function AdminDashboard() {
             </div>
           </div>
           <Link 
-            href="/admin/print"
+            href="/attendance"
             className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:border-gold hover:text-gold transition-colors shadow-sm"
           >
-            <Printer size={18} />
-            Print QRs
+            <ClipboardCheck size={18} />
+            Attendance
+          </Link>
+          <Link 
+            href="/events"
+            className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:border-gold hover:text-gold transition-colors shadow-sm"
+          >
+            <CalendarDays size={18} />
+            Scoring
           </Link>
           <Link 
             href="/admin/registrations"
@@ -54,6 +61,13 @@ export default async function AdminDashboard() {
           >
             <List size={18} />
             Registrations
+          </Link>
+          <Link 
+            href="/admin/print"
+            className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:border-gold hover:text-gold transition-colors shadow-sm"
+          >
+            <Printer size={18} />
+            Print QRs
           </Link>
           <Link 
             href="/admin/leaderboard"

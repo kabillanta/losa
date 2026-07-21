@@ -61,12 +61,12 @@ export async function GET() {
     for (const slug of eventSlugs) {
       const eventConf = eventConfigMap.get(slug);
       const eventName = eventConf?.name || slug;
-      
-      const safeSheetName = eventName.replace(/[\[\]\*\/\?\\:']/g, "").substring(0, 31);
+      const rawName = (eventName || slug || "Unknown").trim() || "Unknown";
+      const safeSheetName = rawName.replace(/[\[\]\*\/\?\\:']/g, "").substring(0, 31);
       
       let sheetName = safeSheetName;
       let counter = 1;
-      while (workbook.worksheets.some(ws => ws.name === sheetName)) {
+      while (workbook.worksheets.some(ws => ws.name.toLowerCase() === sheetName.toLowerCase())) {
         const suffix = ` (${counter})`;
         sheetName = safeSheetName.substring(0, 31 - suffix.length) + suffix;
         counter++;

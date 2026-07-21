@@ -1,9 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Edit3 } from "lucide-react";
+import { ArrowLeft, Edit3, ShieldAlert } from "lucide-react";
 import { fetchAllRows } from "@/lib/utils";
 import config from "../../../../events-config.json";
+import { BulkScoringTable } from "@/components/BulkScoringTable";
 
 export const revalidate = 0;
 
@@ -57,10 +58,10 @@ export default async function EventSchoolSelection({ params }: { params: Promise
 
   const teams = Array.from(participatingTeams.values()).sort((a, b) => a.schoolName.localeCompare(b.schoolName));
 
-  // Fetch existing scores to see who has been judged
+  // Fetch existing scores to see who has been judged (and to prefill bulk table)
   const { data: scores } = await supabase
     .from("scores")
-    .select("team_id")
+    .select("*")
     .eq("event_id", event.id);
 
   const scoreCounts = new Map<string, number>();
@@ -74,8 +75,8 @@ export default async function EventSchoolSelection({ params }: { params: Promise
   const totalJudges = configEvent?.judges?.length || 1;
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-10 px-6 animate-slide-up">
-      <Link href="/events" className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors mb-8">
+    <div className="w-full max-w-[95%] xl:max-w-7xl mx-auto py-6 md:py-10 px-4 md:px-6 animate-slide-up">
+      <Link href="/events" className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors mb-6 md:mb-8">
         <ArrowLeft size={14} /> Back to Events
       </Link>
 
@@ -86,7 +87,23 @@ export default async function EventSchoolSelection({ params }: { params: Promise
         <p className="text-taupe mt-3">{event.description}</p>
       </div>
 
-      <h2 className="text-lg font-semibold text-onyx mb-6">Select a Team to Score</h2>
+      <BulkScoringTable 
+        eventId={event.id}
+        eventSlug={event.slug}
+        rubric={configEvent?.rubric || []}
+        teams={teams}
+        judges={configEvent?.judges || []}
+        existingScores={scores || []}
+      />
+
+      <div className="mt-20 pt-10 border-t border-gray-200">
+        <h2 className="text-lg font-semibold text-onyx mb-2 flex items-center gap-2">
+          <ShieldAlert className="text-amber-500" size={20} />
+          Fallback: Individual Team Scoring
+        </h2>
+        <p className="text-taupe text-sm mb-6">
+          If you need to score a single team manually or fix a specific issue, you can still use the individual team pages below.
+        </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {teams.map((team, index) => {
@@ -143,6 +160,7 @@ export default async function EventSchoolSelection({ params }: { params: Promise
             </Link>
           );
         })}
+      </div>
       </div>
     </div>
   );
