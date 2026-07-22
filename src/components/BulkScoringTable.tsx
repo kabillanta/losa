@@ -93,7 +93,7 @@ export function BulkScoringTable({
 
   const calculateTotal = (teamId: string) => {
     if (!scores[teamId]) return 0;
-    return Object.values(scores[teamId]).reduce((sum, val) => sum + ((val as number) || 0), 0);
+    return Object.values(scores[teamId]).reduce((sum: number, val) => sum + (Number(val) || 0), 0);
   };
 
   const handleSaveAll = async () => {
