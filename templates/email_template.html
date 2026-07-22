@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Event Registration Details</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      color: #18181b;
+      /* text-onyx for better contrast */
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .header {
+      background-color: #ffffff;
+      /* text-onyx */
+      color: #000000;
+      padding: 30px;
+      text-align: center;
+      border-bottom: 4px solid #d4af37;
+      /* gold */
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .greeting {
+      font-size: 20px;
+      font-weight: 600;
+      color: #18181b;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: #3f3f46;
+    }
+
+    .qr-section {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .qr-section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #18181b;
+      margin-bottom: 15px;
+    }
+
+    .qr-image {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .footer {
+      background-color: #f9fafb;
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 13px;
+      color: #71717a;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .highlight {
+      color: #d4af37;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://tvslosa.vercel.app/logo.png" alt="TVS LOSA Logo"
+        style="height: 60px; margin-bottom: 10px; border-radius: 4px;" />
+      <h1>Event Registration Confirmed</h1>
+    </div>
+
+    <div class="content">
+      <div class="greeting">
+        Dear {{teacher_name}},
+      </div>
+
+      <div class="message">
+        The countdown is over! We are absolutely <strong>THRILLED</strong> to welcome the incredible talents of <strong
+          style="color: #d4af37; font-size: 16px;">{{school_name}}</strong> to the grand stage tomorrow! Get ready to
+        unleash the power of your students and make this event truly unforgettable.
+        <br><br>
+        Below is your exclusive check-in QR code. We have also attached a personalized PDF roster containing the final
+        list of your registered champions.
+      </div>
+
+      <div class="qr-section">
+        <h2>Your School Check-in QR</h2>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{qr_code_id}}" alt="School QR Code"
+          class="qr-image" />
+        <p style="font-size: 13px; color: #71717a; margin-top: 15px; margin-bottom: 0;">
+          Please present this QR code at the registration desk for a smooth check-in process.
+        </p>
+      </div>
+
+      <div class="message" style="margin-bottom: 0;">
+        Please do a quick review of your attached PDF roster. If you spot any adjustments needed, reach out to the
+        organizing committee immediately so we can perfect it.
+        <br><br>
+        We kindly ask you and your powerhouse team to arrive on time and be ready to conquer the events!
+        <br><br>
+        <strong>Let's make history tomorrow. We are incredibly excited to see you and your students shine! 🌟</strong>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2026 LOSA. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+
+</html>
