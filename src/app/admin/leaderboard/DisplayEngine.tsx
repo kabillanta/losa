@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trophy, Medal, Award, Maximize, Minimize } from "lucide-react";
+import { Trophy, Medal, Award, Maximize, Minimize, ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "motion/react";
 
 type OverallEntry = {
   school: any;
@@ -160,33 +160,39 @@ export default function DisplayEngine({
                 </p>
               </div>
             ) : (
-              overallLeaderboard.map((entry, index) => (
-                <div
-                  key={entry.school.id}
-                  className={`flex items-center p-4 rounded-xl border ${index === 0 ? "bg-gold/10 border-gold/30 shadow-sm" : "bg-white border-gray-100 shadow-sm"}`}
-                >
-                  <div className="w-12 flex justify-center shrink-0">
-                    {getRankIcon(index)}
-                  </div>
-                  <div className="flex-1 ml-4">
-                    <h3
-                      className={`font-bold text-xl ${index === 0 ? "text-onyx" : "text-gray-800"}`}
-                    >
-                      {entry.school.name}
-                    </h3>
-                  </div>
-                  <div className="text-right">
-                    {/* <div
-                      className={`text-3xl font-black ${index === 0 ? "text-gold" : "text-onyx"}`}
-                    >
-                      {entry.total}
-                    </div> */}
-                    <div className="text-[10px] font-bold text-taupe uppercase tracking-wider">
-                      Points
+              <AnimatePresence>
+                {overallLeaderboard.map((entry, index) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
+                    key={entry.school.id}
+                    className={`flex items-center p-4 rounded-xl border ${index === 0 ? "bg-gold/10 border-gold/30 shadow-sm" : "bg-white border-gray-100 shadow-sm"}`}
+                  >
+                    <div className="w-12 flex justify-center shrink-0">
+                      {getRankIcon(index)}
                     </div>
-                  </div>
-                </div>
-              ))
+                    <div className="flex-1 ml-4">
+                      <h3
+                        className={`font-bold text-xl ${index === 0 ? "text-onyx" : "text-gray-800"}`}
+                      >
+                        {entry.school.name}
+                      </h3>
+                    </div>
+                    <div className="text-right">
+                      <div
+                        className={`text-3xl font-black ${index === 0 ? "text-gold" : "text-onyx"}`}
+                      >
+                        {entry.total}
+                      </div>
+                      <div className="text-[10px] font-bold text-taupe uppercase tracking-wider">
+                        Points
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </div>
@@ -253,11 +259,6 @@ export default function DisplayEngine({
                               {entry.studentNames.join(", ")}
                             </div>
                           )}
-                        </div>
-                        <div className="text-right ml-4">
-                          <div className="text-4xl font-black text-onyx">
-                            {entry.total}
-                          </div>
                         </div>
                       </div>
                     ))
