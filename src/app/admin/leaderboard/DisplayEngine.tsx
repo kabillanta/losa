@@ -176,11 +176,11 @@ export default function DisplayEngine({
                     </h3>
                   </div>
                   <div className="text-right">
-                    <div
+                    {/* <div
                       className={`text-3xl font-black ${index === 0 ? "text-gold" : "text-onyx"}`}
                     >
                       {entry.total}
-                    </div>
+                    </div> */}
                     <div className="text-[10px] font-bold text-taupe uppercase tracking-wider">
                       Points
                     </div>

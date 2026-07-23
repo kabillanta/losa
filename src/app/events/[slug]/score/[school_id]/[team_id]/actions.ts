@@ -1,7 +1,12 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function submitScore(formData: FormData) {
   const eventId = formData.get("eventId") as string;
@@ -29,7 +34,7 @@ export async function submitScore(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from("scores").upsert({
+  const { error } = await supabaseAdmin.from("scores").upsert({
     event_id: eventId,
     school_id: schoolId,
     team_id: teamId,

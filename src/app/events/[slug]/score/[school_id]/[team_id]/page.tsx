@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ScoringForm } from "@/components/ScoringForm";
+import config from "../../../../../../../events-config.json";
 
 export const revalidate = 0;
 
@@ -38,6 +39,9 @@ export default async function ScoreSchoolPage({
     .eq("event_id", event.id)
     .eq("team_id", team_id);
 
+  const configEvent = config.events.find(e => e.slug === event.slug);
+  const rubric = configEvent?.rubric || event.rubric || [];
+
   return (
     <div className="w-full max-w-3xl mx-auto py-10 px-6 animate-slide-up">
       <Link href={`/events/${slug}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors mb-8">
@@ -58,7 +62,7 @@ export default async function ScoreSchoolPage({
         schoolId={school.id}
         teamId={team_id}
         eventSlug={event.slug}
-        rubric={event.rubric}
+        rubric={rubric}
         existingScores={existingScores || []}
       />
     </div>

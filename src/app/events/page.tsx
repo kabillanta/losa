@@ -6,26 +6,29 @@ import config from "../../../events-config.json";
 export const revalidate = 0;
 
 export default async function EventsPage() {
-  const { data: events } = await supabase.from("events").select("*").order("name");
+  const { data: events } = await supabase
+    .from("events")
+    .select("*")
+    .order("name");
 
   // Group by category from config
   const categoriesMap = new Map<string, any[]>();
-  events?.forEach(event => {
-    const configEvent = config.events.find(e => e.slug === event.slug);
+  events?.forEach((event) => {
+    const configEvent = config.events.find((e) => e.slug === event.slug);
     const cat = configEvent?.category || "Uncategorized";
     if (!categoriesMap.has(cat)) categoriesMap.set(cat, []);
     categoriesMap.get(cat)!.push(event);
   });
-  
+
   const categoryOrder = [
     "Tiny Tots (Pre-KG, LKG, UKG)",
     "Energetic Kids (Classes I-III)",
     "Young Visionaries (Classes IV-VI)",
     "Emerging Stars (Classes VII-IX)",
     "Teen Trailblazers (Classes X-XII)",
-    "Uncategorized"
+    "Uncategorized",
   ];
-  
+
   const categories = Array.from(categoriesMap.entries()).sort((a, b) => {
     let idxA = categoryOrder.indexOf(a[0]);
     let idxB = categoryOrder.indexOf(b[0]);
@@ -49,29 +52,39 @@ export default async function EventsPage() {
         <div className="space-y-12">
           {categories.map(([category, catEvents]) => (
             <div key={category} className="animate-slide-up">
-              <h2 className="text-xl lg:text-2xl font-bold text-onyx mb-6 pb-2 border-b border-gray-200">{category}</h2>
+              <h2 className="text-xl lg:text-2xl font-bold text-onyx mb-6 pb-2 border-b border-gray-200">
+                {category}
+              </h2>
               <div className="flex flex-col gap-4">
                 {catEvents.map((event) => (
-                  <Link 
-                    key={event.id} 
+                  <Link
+                    key={event.id}
                     href={`/events/${event.slug}`}
                     className="group bg-white border border-gray-200 rounded-xl p-5 hover:border-gold hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between text-left gap-4"
                   >
                     <div className="flex items-start sm:items-center gap-5">
                       <div className="w-12 h-12 flex-shrink-0 bg-gray-50 border border-gray-100 rounded-full flex items-center justify-center group-hover:bg-gold-50 group-hover:border-gold/20 transition-colors">
-                        <Trophy size={20} className="text-taupe group-hover:text-gold transition-colors" />
+                        <Trophy
+                          size={20}
+                          className="text-taupe group-hover:text-gold transition-colors"
+                        />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-onyx mb-1">{event.name}</h3>
+                        <h3 className="text-lg font-bold text-onyx mb-1">
+                          {event.name}
+                        </h3>
                         <p className="text-taupe text-sm leading-relaxed max-w-xl">
                           {event.description}
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="inline-flex items-center gap-2 text-sm font-medium text-onyx sm:whitespace-nowrap mt-2 sm:mt-0 ml-16 sm:ml-0">
                       Judge this event
-                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight
+                        size={16}
+                        className="group-hover:translate-x-1 transition-transform"
+                      />
                     </div>
                   </Link>
                 ))}
