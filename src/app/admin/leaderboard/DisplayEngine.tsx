@@ -27,10 +27,13 @@ type EventLeaderboard = {
 const CATEGORY_COLORS: Record<string, string> = {
   "Tiny Tots (Pre-KG, LKG, UKG)": "bg-pink-100 text-pink-800 border-pink-200",
   "Energetic Kids (Classes I-III)": "bg-blue-100 text-blue-800 border-blue-200",
-  "Young Visionaries (Classes IV-VI)": "bg-green-100 text-green-800 border-green-200",
-  "Emerging Stars (Classes VII-IX)": "bg-purple-100 text-purple-800 border-purple-200",
-  "Teen Trailblazers (Classes X-XII)": "bg-orange-100 text-orange-800 border-orange-200",
-  "Uncategorized": "bg-gray-100 text-gray-800 border-gray-200",
+  "Young Visionaries (Classes IV-VI)":
+    "bg-green-100 text-green-800 border-green-200",
+  "Emerging Stars (Classes VII-IX)":
+    "bg-purple-100 text-purple-800 border-purple-200",
+  "Teen Trailblazers (Classes X-XII)":
+    "bg-orange-100 text-orange-800 border-orange-200",
+  Uncategorized: "bg-gray-100 text-gray-800 border-gray-200",
 };
 
 export default function DisplayEngine({
@@ -44,7 +47,7 @@ export default function DisplayEngine({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const router = useRouter();
-  
+
   const INTERVAL_MS = 10000; // 10 seconds per event
   const UPDATE_RATE = 100; // Update progress bar every 100ms
 
@@ -90,31 +93,42 @@ export default function DisplayEngine({
     if (index === 0) return <Trophy className="text-yellow-500" size={32} />;
     if (index === 1) return <Medal className="text-gray-400" size={32} />;
     if (index === 2) return <Award className="text-amber-600" size={32} />;
-    return <span className="text-2xl font-bold text-gray-400 w-8 text-center">{index + 1}</span>;
+    return (
+      <span className="text-2xl font-bold text-gray-400 w-8 text-center">
+        {index + 1}
+      </span>
+    );
   };
 
   const currentEvent = eventLeaderboards[currentEventIndex];
 
   return (
-    <div className={`h-screen overflow-hidden bg-gray-50 flex flex-col ${isFullscreen ? 'p-6' : 'p-4 md:p-8'}`}>
+    <div
+      className={`h-screen overflow-hidden bg-gray-50 flex flex-col ${isFullscreen ? "p-6" : "p-4 md:p-8"}`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex flex-col gap-3">
           {!isFullscreen && (
-            <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors">
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-taupe hover:text-onyx transition-colors"
+            >
               <ArrowLeft size={14} /> Back to Dashboard
             </Link>
           )}
-          <h1 className="text-4xl md:text-5xl font-bold text-onyx tracking-tight">Live Leaderboard</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-onyx tracking-tight">
+            LOSA 2K26 - Live Leaderboard
+          </h1>
         </div>
-        
+
         <div className="flex items-center gap-6">
           <img
             src="/logo.png"
             alt="LOSA Logo"
             className="h-12 w-auto object-contain"
           />
-          <button 
+          <button
             onClick={toggleFullscreen}
             className="p-3 bg-white border border-gray-200 rounded-full hover:bg-gray-50 text-taupe hover:text-onyx transition-all shadow-sm"
           >
@@ -132,30 +146,39 @@ export default function DisplayEngine({
             </div>
             <h2 className="text-2xl font-bold">Overall Championship</h2>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
             {overallLeaderboard.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-taupe p-10 text-center">
                 <Trophy className="text-gray-300 mb-4" size={48} />
-                <p className="text-lg font-medium text-onyx">The battle for the championship has begun!</p>
-                <p className="text-sm mt-2">Overall standings will appear here once the first scores are tallied.</p>
+                <p className="text-lg font-medium text-onyx">
+                  The battle for the championship has begun!
+                </p>
+                <p className="text-sm mt-2">
+                  Overall standings will appear here once the first scores are
+                  tallied.
+                </p>
               </div>
             ) : (
               overallLeaderboard.map((entry, index) => (
-                <div 
+                <div
                   key={entry.school.id}
-                  className={`flex items-center p-4 rounded-xl border ${index === 0 ? 'bg-gold/10 border-gold/30 shadow-sm' : 'bg-white border-gray-100 shadow-sm'}`}
+                  className={`flex items-center p-4 rounded-xl border ${index === 0 ? "bg-gold/10 border-gold/30 shadow-sm" : "bg-white border-gray-100 shadow-sm"}`}
                 >
                   <div className="w-12 flex justify-center shrink-0">
                     {getRankIcon(index)}
                   </div>
                   <div className="flex-1 ml-4">
-                    <h3 className={`font-bold text-xl ${index === 0 ? 'text-onyx' : 'text-gray-800'}`}>
+                    <h3
+                      className={`font-bold text-xl ${index === 0 ? "text-onyx" : "text-gray-800"}`}
+                    >
                       {entry.school.name}
                     </h3>
                   </div>
                   <div className="text-right">
-                    <div className={`text-3xl font-black ${index === 0 ? 'text-gold' : 'text-onyx'}`}>
+                    <div
+                      className={`text-3xl font-black ${index === 0 ? "text-gold" : "text-onyx"}`}
+                    >
                       {entry.total}
                     </div>
                     <div className="text-[10px] font-bold text-taupe uppercase tracking-wider">
@@ -173,9 +196,16 @@ export default function DisplayEngine({
           {eventLeaderboards.length === 0 ? (
             <div className="flex-1 bg-white border border-gray-200 rounded-2xl flex flex-col items-center justify-center text-taupe text-center p-12">
               <Award className="text-gray-300 mb-6" size={64} />
-              <h2 className="text-3xl font-bold text-onyx mb-3">Awaiting Event Results</h2>
-              <p className="text-lg">Our judges are currently evaluating the incredible performances.</p>
-              <p className="text-lg mt-1">Get ready to cheer for your team as results will be revealed shortly!</p>
+              <h2 className="text-3xl font-bold text-onyx mb-3">
+                Awaiting Event Results
+              </h2>
+              <p className="text-lg">
+                Our judges are currently evaluating the incredible performances.
+              </p>
+              <p className="text-lg mt-1">
+                Get ready to cheer for your team as results will be revealed
+                shortly!
+              </p>
             </div>
           ) : (
             currentEvent && (
@@ -185,7 +215,9 @@ export default function DisplayEngine({
                   <div className="absolute top-0 right-0 p-8 opacity-5">
                     <Trophy size={120} />
                   </div>
-                  <span className={`inline-flex px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border mb-4 shadow-sm ${CATEGORY_COLORS[currentEvent.category] || CATEGORY_COLORS["Uncategorized"]}`}>
+                  <span
+                    className={`inline-flex px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border mb-4 shadow-sm ${CATEGORY_COLORS[currentEvent.category] || CATEGORY_COLORS["Uncategorized"]}`}
+                  >
                     {currentEvent.category}
                   </span>
                   <h2 className="text-4xl md:text-5xl font-black text-onyx tracking-tight">
@@ -197,12 +229,15 @@ export default function DisplayEngine({
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   {currentEvent.leaderboard.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-taupe text-center p-10">
-                      <p className="text-xl font-medium text-onyx">The judges are still finalizing the scores for this event.</p>
+                      <p className="text-xl font-medium text-onyx">
+                        The judges are still finalizing the scores for this
+                        event.
+                      </p>
                       <p className="text-md mt-2">Stay tuned!</p>
                     </div>
                   ) : (
                     currentEvent.leaderboard.map((entry, index) => (
-                      <div 
+                      <div
                         key={`${entry.school.id}-${entry.teamId}`}
                         className="flex items-center p-5 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                       >
@@ -231,7 +266,7 @@ export default function DisplayEngine({
 
                 {/* Progress Bar for Rotation */}
                 <div className="h-1.5 w-full bg-gray-100 absolute bottom-0 left-0">
-                  <div 
+                  <div
                     className="h-full bg-onyx transition-all duration-100 ease-linear"
                     style={{ width: `${progress}%` }}
                   />
