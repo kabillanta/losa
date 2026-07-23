@@ -184,16 +184,6 @@ export default function DisplayEngine({
                         {entry.school.name}
                       </h3>
                     </div>
-                    <div className="text-right">
-                      <div
-                        className={`text-3xl font-black ${index === 0 ? "text-gold" : "text-onyx"}`}
-                      >
-                        {entry.total}
-                      </div>
-                      <div className="text-[10px] font-bold text-taupe uppercase tracking-wider">
-                        Points
-                      </div>
-                    </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
