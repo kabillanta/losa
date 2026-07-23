@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Users, Building2, UserCheck, Printer, Trophy, List, CalendarDays, ClipboardCheck } from "lucide-react";
+import { Users, Building2, UserCheck, Printer, Trophy, List, CalendarDays, ClipboardCheck, Hash } from "lucide-react";
 import { fetchAllRows } from "@/lib/utils";
 
 export const revalidate = 0; // Always fetch fresh stats
@@ -68,6 +68,13 @@ export default async function AdminDashboard() {
           >
             <Printer size={18} />
             Print QRs
+          </Link>
+          <Link 
+            href="/admin/lots"
+            className="inline-flex items-center gap-2 bg-white border border-gray-200 text-onyx font-medium px-5 py-2.5 rounded-lg hover:border-gold hover:text-gold transition-colors shadow-sm"
+          >
+            <Hash size={18} />
+            Lot Numbers
           </Link>
           <Link 
             href="/admin/leaderboard"

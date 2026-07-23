@@ -37,7 +37,7 @@ export default async function EventSchoolSelection({ params }: { params: Promise
   const studentToName = new Map(students.map((s: any) => [s.id, s.name]));
 
   // Build a list of unique teams
-  const participatingTeams = new Map<string, { schoolId: string, teamId: string, schoolName: string, teacherName: string, studentNames: string[] }>();
+  const participatingTeams = new Map<string, { schoolId: string, teamId: string, schoolName: string, teacherName: string, studentNames: string[], lotNumber: number | null }>();
 
   enrollments.forEach((e: any) => {
     const schoolId = studentToSchool.get(e.student_id);
@@ -46,7 +46,14 @@ export default async function EventSchoolSelection({ params }: { params: Promise
       const school = allSchools.find(s => s.id === schoolId);
       if (school) {
         if (!participatingTeams.has(teamId)) {
-          participatingTeams.set(teamId, { schoolId, teamId, schoolName: school.name, teacherName: school.teacher_name, studentNames: [] });
+          participatingTeams.set(teamId, { 
+            schoolId, 
+            teamId, 
+            schoolName: school.name, 
+            teacherName: school.teacher_name, 
+            studentNames: [],
+            lotNumber: school.lot_number
+          });
         }
         const sName = studentToName.get(e.student_id);
         if (sName) {
@@ -56,7 +63,42 @@ export default async function EventSchoolSelection({ params }: { params: Promise
     }
   });
 
-  const teams = Array.from(participatingTeams.values()).sort((a, b) => a.schoolName.localeCompare(b.schoolName));
+  // Group by school to determine if we need suffixes
+  const schoolTeamCount = new Map<string, number>();
+  const teamsRaw = Array.from(participatingTeams.values()).sort((a, b) => a.teamId.localeCompare(b.teamId));
+  
+  teamsRaw.forEach(t => {
+    schoolTeamCount.set(t.schoolId, (schoolTeamCount.get(t.schoolId) || 0) + 1);
+  });
+
+  const schoolTeamIndex = new Map<string, number>();
+
+  const teams = teamsRaw.map(t => {
+    let displayName = t.schoolName;
+    if (t.lotNumber) {
+       displayName = `Lot ${t.lotNumber}`;
+       const totalTeamsForSchool = schoolTeamCount.get(t.schoolId) || 1;
+       if (totalTeamsForSchool > 1) {
+          const currentIndex = schoolTeamIndex.get(t.schoolId) || 0;
+          const suffix = String.fromCharCode(65 + currentIndex); // A, B, C
+          displayName = `Lot ${t.lotNumber}_${suffix}`;
+          schoolTeamIndex.set(t.schoolId, currentIndex + 1);
+       }
+    }
+    
+    return {
+      ...t,
+      schoolName: displayName
+    };
+  }).sort((a, b) => {
+    // Sort by Lot Number numerically if possible
+    const aMatch = a.schoolName.match(/Lot (\d+)/);
+    const bMatch = b.schoolName.match(/Lot (\d+)/);
+    if (aMatch && bMatch) {
+      return parseInt(aMatch[1]) - parseInt(bMatch[1]) || a.schoolName.localeCompare(b.schoolName);
+    }
+    return a.schoolName.localeCompare(b.schoolName);
+  });
 
   // Fetch existing scores to see who has been judged (and to prefill bulk table)
   const { data: scores } = await supabase

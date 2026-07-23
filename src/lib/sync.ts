@@ -6,6 +6,7 @@ export type PendingSubmission = {
   schoolName: string;
   timestamp: number;
   updates: any[]; // The student updates payload
+  lotNumber?: number | null; // The assigned lot number (optional)
 };
 
 const QUEUE_KEY = "losa_pending_attendance";
@@ -16,7 +17,7 @@ export function getQueue(): PendingSubmission[] {
   return raw ? JSON.parse(raw) : [];
 }
 
-export function saveToQueue(schoolId: string, schoolName: string, updates: any[]) {
+export function saveToQueue(schoolId: string, schoolName: string, updates: any[], lotNumber?: number | null) {
   if (typeof window === "undefined") return;
   const queue = getQueue();
   // Generate a short unique ID
@@ -27,7 +28,8 @@ export function saveToQueue(schoolId: string, schoolName: string, updates: any[]
     schoolId,
     schoolName,
     timestamp: Date.now(),
-    updates
+    updates,
+    lotNumber
   });
   
   localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
@@ -51,6 +53,11 @@ export async function processQueue(): Promise<{ success: number; failed: number 
     try {
       const { error } = await supabase.from("students").upsert(item.updates);
       if (error) throw error;
+      
+      if (item.lotNumber) {
+        const { error: schoolError } = await supabase.from("schools").update({ lot_number: item.lotNumber }).eq("id", item.schoolId);
+        if (schoolError) throw schoolError;
+      }
       
       // If successful, remove from queue
       clearFromQueue(item.id);

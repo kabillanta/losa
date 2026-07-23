@@ -39,6 +39,29 @@ export default async function ScoreSchoolPage({
     .eq("event_id", event.id)
     .eq("team_id", team_id);
 
+  // Fetch enrollments to compute Lot Number anonymization if needed
+  const { data: students } = await supabase.from("students").select("id").eq("school_id", school_id);
+  const studentIds = students?.map(s => s.id) || [];
+  
+  const { data: enrollments } = await supabase
+    .from("event_enrollments")
+    .select("team_id")
+    .eq("event_slug", slug)
+    .in("student_id", studentIds);
+
+  const uniqueTeams = Array.from(new Set(enrollments?.map(e => e.team_id || "default"))).sort((a, b) => a.localeCompare(b));
+  
+  let displayName = school.name;
+  if (school.lot_number) {
+    displayName = `Lot ${school.lot_number}`;
+    if (uniqueTeams.length > 1) {
+      const index = uniqueTeams.indexOf(team_id);
+      if (index !== -1) {
+        displayName += `_${String.fromCharCode(65 + index)}`;
+      }
+    }
+  }
+
   const configEvent = config.events.find(e => e.slug === event.slug);
   const rubric = configEvent?.rubric || event.rubric || [];
 
@@ -50,7 +73,7 @@ export default async function ScoreSchoolPage({
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-onyx tracking-tight">
-          Score: {school.name}
+          Score: {displayName}
         </h1>
         <p className="text-taupe mt-2">
           Evaluating <span className="font-semibold text-onyx">Team</span> for <span className="font-semibold text-onyx">{event.name}</span>

@@ -11,10 +11,12 @@ type Student = {
   is_present: boolean;
 };
 
-export function Checklist({ schoolId, schoolName, initialStudents }: { schoolId: string; schoolName: string; initialStudents: Student[] }) {
+export function Checklist({ schoolId, schoolName, initialStudents, initialLotNumber }: { schoolId: string; schoolName: string; initialStudents: Student[], initialLotNumber?: number | null }) {
   const router = useRouter();
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lotNumber, setLotNumber] = useState<string>("");
+  const [lotError, setLotError] = useState<string>("");
 
   const toggleStudent = (id: string) => {
     setStudents(students.map((s) => (s.id === id ? { ...s, is_present: !s.is_present } : s)));
@@ -40,6 +42,22 @@ export function Checklist({ schoolId, schoolName, initialStudents }: { schoolId:
         is_present: student.is_present,
       }));
 
+      if (!initialLotNumber && lotNumber) {
+        const { error: schoolError } = await supabase
+          .from("schools")
+          .update({ lot_number: parseInt(lotNumber, 10) })
+          .eq("id", schoolId);
+          
+        if (schoolError) {
+          if (schoolError.code === "23505") { // Unique violation
+            setLotError("This Lot Number is already assigned to another school!");
+            setIsSubmitting(false);
+            return;
+          }
+          throw schoolError;
+        }
+      }
+
       const { error } = await supabase.from("students").upsert(updates);
       if (error) throw error;
 
@@ -56,7 +74,7 @@ export function Checklist({ schoolId, schoolName, initialStudents }: { schoolId:
         is_present: student.is_present,
       }));
       
-      saveToQueue(schoolId, schoolName, updates);
+      saveToQueue(schoolId, schoolName, updates, lotNumber ? parseInt(lotNumber, 10) : null);
       
       // Dispatch an event so the header component knows immediately
       window.dispatchEvent(new Event("attendance_queued"));
@@ -71,6 +89,37 @@ export function Checklist({ schoolId, schoolName, initialStudents }: { schoolId:
     <div className="flex flex-col gap-6 h-full">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-3 sticky top-20 bg-gray-50 py-3 -mt-3 z-10">
+        
+        {/* Lot Number UI */}
+        {!initialLotNumber && (
+          <div className="flex items-center gap-2 mr-2 relative">
+             <label className="text-sm font-semibold text-onyx whitespace-nowrap">Lot Number:</label>
+             <input 
+               type="number" 
+               value={lotNumber} 
+               onChange={(e) => { setLotNumber(e.target.value); setLotError(""); }}
+               className={`w-20 px-3 py-2 bg-white border ${lotError ? "border-red-500" : "border-gray-300"} rounded-lg text-sm outline-none focus:border-gold`}
+               placeholder="e.g. 1"
+               min="1"
+               max="34"
+               onBlur={(e) => {
+                 const val = parseInt(e.target.value, 10);
+                 if (val > 34) {
+                   setLotNumber("34");
+                   setLotError("Max lot number is 34");
+                 }
+               }}
+             />
+             {lotError && <span className="absolute -bottom-5 left-0 text-[10px] text-red-500 whitespace-nowrap font-medium">{lotError}</span>}
+          </div>
+        )}
+        {initialLotNumber && (
+          <div className="flex items-center gap-2 mr-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
+             <label className="text-sm font-semibold text-taupe whitespace-nowrap">Lot:</label>
+             <span className="font-bold text-onyx">{initialLotNumber}</span>
+          </div>
+        )}
+
         <button
           onClick={markAllPresent}
           className="inline-flex items-center gap-2 text-sm font-medium text-onyx bg-white border border-gray-200 px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"

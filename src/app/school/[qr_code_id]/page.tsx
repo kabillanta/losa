@@ -57,7 +57,7 @@ export default async function SchoolPage({ params }: { params: Promise<{ qr_code
 
       {/* Right content — checklist */}
       <div className="flex-1 px-6 lg:px-10 xl:px-14 py-6 lg:py-10">
-        <Checklist schoolId={school.id} schoolName={school.name} initialStudents={students || []} />
+        <Checklist schoolId={school.id} schoolName={school.name} initialStudents={students || []} initialLotNumber={school.lot_number} />
       </div>
     </div>
   );
