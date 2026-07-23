@@ -64,14 +64,18 @@ export default function DisplayEngine({
   useEffect(() => {
     if (eventLeaderboards.length === 0) return;
 
+    let startTime = Date.now();
+
     const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length);
-          return 0;
-        }
-        return prev + (UPDATE_RATE / INTERVAL_MS) * 100;
-      });
+      const elapsed = Date.now() - startTime;
+      
+      if (elapsed >= INTERVAL_MS) {
+        setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length);
+        startTime = Date.now();
+        setProgress(0);
+      } else {
+        setProgress((elapsed / INTERVAL_MS) * 100);
+      }
     }, UPDATE_RATE);
 
     return () => clearInterval(timer);
@@ -100,7 +104,7 @@ export default function DisplayEngine({
     );
   };
 
-  const currentEvent = eventLeaderboards[currentEventIndex];
+  const currentEvent = eventLeaderboards[currentEventIndex] || eventLeaderboards[0];
 
   return (
     <div
