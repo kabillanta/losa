@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trophy, Medal, Award, Maximize, Minimize, ArrowLeft, Star } from "lucide-react";
+import {
+  Trophy,
+  Medal,
+  Award,
+  Maximize,
+  Minimize,
+  ArrowLeft,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -68,7 +76,7 @@ export default function DisplayEngine({
 
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      
+
       if (elapsed >= INTERVAL_MS) {
         setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length);
         startTime = Date.now();
@@ -104,7 +112,8 @@ export default function DisplayEngine({
     );
   };
 
-  const currentEvent = eventLeaderboards[currentEventIndex] || eventLeaderboards[0];
+  const currentEvent =
+    eventLeaderboards[currentEventIndex] || eventLeaderboards[0];
 
   return (
     <div
@@ -250,9 +259,7 @@ export default function DisplayEngine({
                           </h3>
                           {entry.studentNames.length > 0 && (
                             <div className="text-sm font-medium text-taupe mt-1.5 leading-relaxed">
-                              {entry.studentNames.length > 4
-                                ? `${entry.studentNames.slice(0, 4).join(", ")} and ${entry.studentNames.length - 4} more...`
-                                : entry.studentNames.join(", ")}
+                              {entry.studentNames.join(", ")}
                             </div>
                           )}
                         </div>
