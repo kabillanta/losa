@@ -151,13 +151,17 @@ export default function DisplayEngine({
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
-        {/* LEFT PANEL: OVERALL CHAMPIONSHIP */}
         <div className="lg:col-span-5 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
           <div className="bg-onyx text-white p-6 flex items-center gap-4 shadow-inner">
             <div className="bg-gold/20 p-2 rounded-full">
               <Trophy className="text-gold" size={28} />
             </div>
-            <h2 className="text-2xl font-bold">Overall Championship</h2>
+            <div>
+              <h2 className="text-2xl font-bold">Overall Standings</h2>
+              <p className="text-xs text-gray-300 mt-1 font-medium tracking-wide">
+                {eventLeaderboards.filter(e => e.leaderboard && e.leaderboard.length > 0).length} / {eventLeaderboards.length} Events Announced
+              </p>
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
