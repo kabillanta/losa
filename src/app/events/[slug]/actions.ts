@@ -1,7 +1,12 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export type BulkScoreInput = {
   eventId: string;
@@ -28,7 +33,7 @@ export async function submitBulkScores(scores: BulkScoreInput[], eventSlug: stri
   }));
 
   // Upsert all scores in one query
-  const { error } = await supabase.from("scores").upsert(upsertData, {
+  const { error } = await supabaseAdmin.from("scores").upsert(upsertData, {
     onConflict: 'event_id, school_id, team_id, judge_name'
   });
 
