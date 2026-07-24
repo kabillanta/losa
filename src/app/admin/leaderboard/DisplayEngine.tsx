@@ -47,9 +47,11 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function DisplayEngine({
   overallLeaderboard,
   eventLeaderboards,
+  totalEventsCount,
 }: {
   overallLeaderboard: OverallEntry[];
   eventLeaderboards: EventLeaderboard[];
+  totalEventsCount: number;
 }) {
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -159,7 +161,7 @@ export default function DisplayEngine({
             <div>
               <h2 className="text-2xl font-bold">Overall Standings</h2>
               <p className="text-xs text-gray-300 mt-1 font-medium tracking-wide">
-                {eventLeaderboards.filter(e => e.leaderboard && e.leaderboard.length > 0).length} / {eventLeaderboards.length} Events Announced
+                {eventLeaderboards.length} / {totalEventsCount || eventLeaderboards.length} Events Announced
               </p>
             </div>
           </div>

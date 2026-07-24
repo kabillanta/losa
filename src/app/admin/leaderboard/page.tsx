@@ -103,6 +103,7 @@ export default async function LeaderboardPage() {
     <DisplayEngine 
       overallLeaderboard={overallLeaderboard} 
       eventLeaderboards={activeEventLeaderboards} 
+      totalEventsCount={events.length}
     />
   );
 }
