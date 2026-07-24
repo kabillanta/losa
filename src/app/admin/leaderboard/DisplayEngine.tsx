@@ -250,7 +250,9 @@ export default function DisplayEngine({
                           </h3>
                           {entry.studentNames.length > 0 && (
                             <div className="text-sm font-medium text-taupe mt-1.5 leading-relaxed">
-                              {entry.studentNames.join(", ")}
+                              {entry.studentNames.length > 4
+                                ? `${entry.studentNames.slice(0, 4).join(", ")} and ${entry.studentNames.length - 4} more...`
+                                : entry.studentNames.join(", ")}
                             </div>
                           )}
                         </div>
