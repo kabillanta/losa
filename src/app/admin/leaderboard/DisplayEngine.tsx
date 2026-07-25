@@ -78,12 +78,12 @@ export default function DisplayEngine({
       }
 
       scrollPos += 0.5; // Scroll speed
-      
+
       // Reset if we reach the bottom
       if (scrollPos >= el.scrollHeight - el.clientHeight) {
         scrollPos = 0;
       }
-      
+
       el.scrollTop = scrollPos;
       animationFrameId = requestAnimationFrame(scroll);
     };
@@ -136,9 +136,12 @@ export default function DisplayEngine({
   };
 
   const getRankIcon = (index: number) => {
-    if (index === 0) return <Trophy className="text-yellow-500 drop-shadow-md" size={40} />;
-    if (index === 1) return <Medal className="text-gray-400 drop-shadow-md" size={40} />;
-    if (index === 2) return <Award className="text-amber-600 drop-shadow-md" size={40} />;
+    if (index === 0)
+      return <Trophy className="text-yellow-500 drop-shadow-md" size={40} />;
+    if (index === 1)
+      return <Medal className="text-gray-400 drop-shadow-md" size={40} />;
+    if (index === 2)
+      return <Award className="text-amber-600 drop-shadow-md" size={40} />;
     return (
       <span className="text-2xl font-bold text-gray-400 w-10 text-center">
         {index + 1}
@@ -147,9 +150,12 @@ export default function DisplayEngine({
   };
 
   const getRankBg = (index: number) => {
-    if (index === 0) return "bg-gradient-to-r from-yellow-50 to-white border-yellow-200 shadow-md transform scale-[1.02] z-10";
-    if (index === 1) return "bg-gradient-to-r from-slate-50 to-white border-slate-200 shadow-sm";
-    if (index === 2) return "bg-gradient-to-r from-orange-50 to-white border-orange-200 shadow-sm";
+    if (index === 0)
+      return "bg-gradient-to-r from-yellow-50 to-white border-yellow-200 shadow-md transform scale-[1.02] z-10";
+    if (index === 1)
+      return "bg-gradient-to-r from-slate-50 to-white border-slate-200 shadow-sm";
+    if (index === 2)
+      return "bg-gradient-to-r from-orange-50 to-white border-orange-200 shadow-sm";
     return "bg-white border-gray-100 shadow-sm";
   };
 
@@ -202,7 +208,10 @@ export default function DisplayEngine({
             </div>
             <div className="text-right bg-black/20 px-4 py-2 rounded-lg border border-white/10">
               <div className="text-xl font-black text-gold tracking-wide">
-                {eventLeaderboards.length} <span className="text-gray-400 text-base font-bold">/ {totalEventsCount || eventLeaderboards.length}</span>
+                {eventLeaderboards.length}{" "}
+                <span className="text-gray-400 text-base font-bold">
+                  / {totalEventsCount || eventLeaderboards.length}
+                </span>
               </div>
               <div className="text-[10px] text-gray-300 uppercase font-bold tracking-wider mt-0.5">
                 Events Announced
@@ -231,7 +240,11 @@ export default function DisplayEngine({
                         layout
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
+                        transition={{
+                          duration: 0.5,
+                          type: "spring",
+                          bounce: 0.2,
+                        }}
                         key={entry.school.id}
                         className={`flex items-center p-4 rounded-xl border transition-all ${getRankBg(index)}`}
                       >
@@ -249,10 +262,13 @@ export default function DisplayEngine({
                     ))}
                   </AnimatePresence>
                 </div>
-                
+
                 {overallLeaderboard.length > 3 && (
                   <div className="flex-1 overflow-hidden relative mt-3">
-                    <div className="absolute inset-0 overflow-y-auto custom-scrollbar pb-10 space-y-3" ref={scrollRef}>
+                    <div
+                      className="absolute inset-0 overflow-y-auto custom-scrollbar pb-10 space-y-3"
+                      ref={scrollRef}
+                    >
                       {overallLeaderboard.slice(3).map((entry, idx) => {
                         const actualIndex = idx + 3;
                         return (
@@ -279,7 +295,8 @@ export default function DisplayEngine({
           </div>
           <div className="bg-onyx p-3.5 text-center shrink-0 shadow-inner">
             <p className="text-xs md:text-sm text-gold font-bold uppercase tracking-widest">
-              * Note: Live standings are for reference. Organizers' decisions are final.
+              * Note: Live standings are for reference. Organizer's decisions
+              are final.
             </p>
           </div>
         </div>
@@ -329,26 +346,32 @@ export default function DisplayEngine({
                       <p className="text-lg mt-3 text-gray-500">Stay tuned!</p>
                     </div>
                   ) : (
-                    currentEvent.leaderboard.map((entry, index) => (
-                      <div
-                        key={`${entry.school.id}-${entry.teamId}`}
-                        className={`flex items-center p-5 rounded-2xl border transition-all hover:shadow-md ${getRankBg(index)}`}
-                      >
-                        <div className="w-16 flex justify-center shrink-0">
-                          {getRankIcon(index)}
+                    currentEvent.leaderboard.map((entry, index) => {
+                      // Treat 4th place (index 3) and beyond as 3rd place (index 2) for ties
+                      const rankIndex = Math.min(index, 2);
+                      return (
+                        <div
+                          key={`${entry.school.id}-${entry.teamId}`}
+                          className={`flex items-center p-5 rounded-2xl border transition-all hover:shadow-md ${getRankBg(rankIndex)}`}
+                        >
+                          <div className="w-16 flex justify-center shrink-0">
+                            {getRankIcon(rankIndex)}
+                          </div>
+                          <div className="flex-1 ml-5">
+                            <h3
+                              className={`text-2xl md:text-3xl ${rankIndex === 0 ? "font-bold text-onyx" : "font-semibold text-gray-800"}`}
+                            >
+                              {entry.school.name}
+                            </h3>
+                            {entry.studentNames.length > 0 && (
+                              <div className="text-lg text-taupe mt-1.5 leading-relaxed">
+                                {entry.studentNames.join(", ")}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex-1 ml-5">
-                          <h3 className={`text-2xl md:text-3xl ${index === 0 ? "font-bold text-onyx" : "font-semibold text-gray-800"}`}>
-                            {entry.school.name}
-                          </h3>
-                          {entry.studentNames.length > 0 && (
-                            <div className="text-lg text-taupe mt-1.5 leading-relaxed">
-                              {entry.studentNames.join(", ")}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
 
