@@ -277,9 +277,9 @@ export default function DisplayEngine({
               </>
             )}
           </div>
-          <div className="bg-amber-100 border-t-2 border-amber-300 p-4 text-center shrink-0 shadow-inner">
-            <p className="text-sm md:text-base text-amber-900 font-black uppercase tracking-wider flex items-center justify-center gap-2">
-              <span>⚠️</span> Note: Live standings are for reference. All final decisions rest with the organizers.
+          <div className="bg-onyx p-3.5 text-center shrink-0 shadow-inner">
+            <p className="text-xs md:text-sm text-gold font-bold uppercase tracking-widest">
+              * Note: Live standings are for reference. Organizers' decisions are final.
             </p>
           </div>
         </div>
