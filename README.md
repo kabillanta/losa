@@ -1,51 +1,54 @@
-# LOSA Attendance and Event Scoring System
+# LOSA Attendance and Scoring System
 
-This project is a Next.js application built to manage school attendance, event enrollments, and live scoring for the LOSA inter-school competition.
+## The Use Case
 
-## Project Structure and Data Flow
+Managing a large inter-school competition traditionally involves chaotic paper trails: manual student registrations, scattered attendance sheets, and judges passing around clipboards to calculate scores by hand. This often leads to calculation errors, massive delays in announcing winners, and huge administrative overhead.
 
-The application relies on a central configuration file for event definitions, but it uses Supabase (a PostgreSQL database) for live data storage such as student registrations and judging scores.
+## The Solution
 
-### 1. The Configuration File (events-config.json)
-The `events-config.json` file located in the root directory is the absolute source of truth for all events. 
+This application completely digitizes and streamlines the entire event lifecycle to make it fast, efficient, and error-free:
 
-To add a new event or modify an existing one, you must edit this file. The required structure for an event is:
-- name: The display name of the event.
-- slug: A unique identifier (lowercase, no spaces, e.g., "science-expo").
-- category: The grouping or grade level.
-- description: A short description of the event rules.
-- judges: An array of judge names.
-- min_size: Minimum students required per team.
-- max_size: Maximum students allowed per team.
-- max_teams: Maximum number of teams a school can register.
-- rubric: An array of criteria, each containing an id, name, and max_points.
+- **Instant Registrations & Attendance:** Schools register their students digitally. On the day of the event, organizers can pull up a centralized dashboard to track school attendance and team participation in real-time.
+- **Live Digital Scoring:** Judges use their mobile devices or tablets to input scores directly into the system using predefined rubrics. No more mental math or lost paper clipboards!
+- **Real-time Leaderboards:** As judges submit scores, a live central dashboard automatically calculates team averages, handles ties, and projects the overall school championship rankings to the audience instantly.
 
-### 2. Synchronizing with the Database
-Because the application saves live scores and links them to events, the Supabase database must be kept in sync with the configuration file. 
+By eliminating paper and automating all score calculations, this tool transforms hours of manual event administration into a seamless, professional digital experience.
 
-Whenever you make changes to `events-config.json`, you must run the following command in your terminal to update the database:
+---
+
+## How to Use This Project
+
+### 1. Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start the local development server
+npm run dev
+```
+
+*Open [http://localhost:3000](http://localhost:3000) in your browser. (Note: Ensure `.env.local` is configured correctly for Firebase Auth and Supabase).*
+
+### 2. Managing and Adding Events
+
+Events are defined locally in `events-config.json` but must be synced to the live database for scoring.
+
+**Step A: Update Configuration**
+Edit the `events-config.json` file in the root directory to add or modify events. Each event requires:
+
+- `name`, `slug` (unique id), `category`, `description`
+- `judges` (array of names)
+- `min_size`, `max_size`, `max_teams`
+- `rubric` (scoring criteria and max points)
+
+**Step B: Sync to Database**
+Whenever you modify the configuration file, you **must** sync it to Supabase so judges can interact with the new events:
 
 ```bash
 npx tsx scripts/seed-events.ts
 ```
 
-If you do not run this script after adding an event, the new event will not appear on the live website and judges will not be able to score it.
+---
 
-## Running the Application Locally
-
-First, ensure all dependencies are installed:
-
-```bash
-npm install
-```
-
-Then, start the development server:
-
-```bash
-npm run dev
-```
-
-Open http://localhost:3000 in your browser to view the application.
-
-## Authentication
-The application uses Firebase Authentication for secure Google Sign-In. The configuration is handled through environment variables stored in the `.env.local` file. Ensure this file is present before starting the application.
+*Built for **LOSA** (Lakshmi Old Students Association) by **THE TVS School Alumni**.*
