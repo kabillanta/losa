@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Trophy,
   Medal,
@@ -60,6 +60,38 @@ export default function DisplayEngine({
 
   const INTERVAL_MS = 10000; // 10 seconds per event
   const UPDATE_RATE = 100; // Update progress bar every 100ms
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll the rest of the leaderboard
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || overallLeaderboard.length <= 3) return;
+
+    let animationFrameId: number;
+    let scrollPos = 0;
+
+    const scroll = () => {
+      // If we can't scroll, just return
+      if (el.scrollHeight <= el.clientHeight) {
+        animationFrameId = requestAnimationFrame(scroll);
+        return;
+      }
+
+      scrollPos += 0.5; // Scroll speed
+      
+      // Reset if we reach the bottom
+      if (scrollPos >= el.scrollHeight - el.clientHeight) {
+        scrollPos = 0;
+      }
+      
+      el.scrollTop = scrollPos;
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [overallLeaderboard]);
 
   // Auto-refresh data every 5 minutes
   useEffect(() => {
@@ -171,7 +203,7 @@ export default function DisplayEngine({
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+          <div className="flex-1 overflow-hidden p-4 flex flex-col space-y-3">
             {overallLeaderboard.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-taupe p-10 text-center">
                 <Trophy className="text-gray-300 mb-4" size={48} />
@@ -184,29 +216,58 @@ export default function DisplayEngine({
                 </p>
               </div>
             ) : (
-              <AnimatePresence>
-                {overallLeaderboard.map((entry, index) => (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
-                    key={entry.school.id}
-                    className={`flex items-center p-4 rounded-xl border ${index === 0 ? "bg-gold/10 border-gold/30 shadow-sm" : "bg-white border-gray-100 shadow-sm"}`}
-                  >
-                    <div className="w-12 flex justify-center shrink-0">
-                      {getRankIcon(index)}
-                    </div>
-                    <div className="flex-1 ml-4">
-                      <h3
-                        className={`font-bold text-xl ${index === 0 ? "text-onyx" : "text-gray-800"}`}
+              <>
+                <div className="space-y-3 shrink-0">
+                  <AnimatePresence>
+                    {overallLeaderboard.slice(0, 3).map((entry, index) => (
+                      <motion.div
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, type: "spring", bounce: 0.2 }}
+                        key={entry.school.id}
+                        className={`flex items-center p-4 rounded-xl border ${index === 0 ? "bg-gold/10 border-gold/30 shadow-sm" : "bg-white border-gray-100 shadow-sm"}`}
                       >
-                        {entry.school.name}
-                      </h3>
+                        <div className="w-12 flex justify-center shrink-0">
+                          {getRankIcon(index)}
+                        </div>
+                        <div className="flex-1 ml-4">
+                          <h3
+                            className={`font-bold text-xl ${index === 0 ? "text-onyx" : "text-gray-800"}`}
+                          >
+                            {entry.school.name}
+                          </h3>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+                
+                {overallLeaderboard.length > 3 && (
+                  <div className="flex-1 overflow-hidden relative mt-4">
+                    <div className="absolute inset-0 overflow-y-auto custom-scrollbar pb-10 space-y-3" ref={scrollRef}>
+                      {overallLeaderboard.slice(3).map((entry, idx) => {
+                        const actualIndex = idx + 3;
+                        return (
+                          <div
+                            key={entry.school.id}
+                            className="flex items-center p-3 rounded-xl border bg-white border-gray-100 shadow-sm"
+                          >
+                            <div className="w-12 flex justify-center shrink-0">
+                              {getRankIcon(actualIndex)}
+                            </div>
+                            <div className="flex-1 ml-4">
+                              <h3 className="font-bold text-lg text-gray-700">
+                                {entry.school.name}
+                              </h3>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
