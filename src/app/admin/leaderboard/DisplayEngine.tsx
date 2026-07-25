@@ -277,6 +277,11 @@ export default function DisplayEngine({
               </>
             )}
           </div>
+          <div className="bg-gray-50 border-t border-gray-100 p-3 text-center shrink-0">
+            <p className="text-[11px] text-gray-500 font-medium uppercase tracking-wider">
+              * Note: Live standings are for reference. All final decisions rest with the organizers.
+            </p>
+          </div>
         </div>
 
         {/* RIGHT PANEL: EVENT SPOTLIGHT */}
