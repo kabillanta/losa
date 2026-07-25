@@ -8,7 +8,8 @@ import {
   Maximize,
   Minimize,
   ArrowLeft,
-  Star,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -107,21 +108,20 @@ export default function DisplayEngine({
     if (eventLeaderboards.length === 0) return;
 
     let startTime = Date.now();
+    setProgress(0); // Reset progress when event changes
 
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
 
       if (elapsed >= INTERVAL_MS) {
         setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length);
-        startTime = Date.now();
-        setProgress(0);
       } else {
         setProgress((elapsed / INTERVAL_MS) * 100);
       }
     }, UPDATE_RATE);
 
     return () => clearInterval(timer);
-  }, [eventLeaderboards.length]);
+  }, [eventLeaderboards.length, currentEventIndex]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -321,18 +321,40 @@ export default function DisplayEngine({
             currentEvent && (
               <div className="flex-1 flex flex-col bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden relative">
                 {/* Event Header with Dynamic Color */}
-                <div className="p-8 pb-6 border-b border-gray-100 relative overflow-hidden bg-gray-50/50">
-                  <div className="absolute top-0 right-0 p-8 opacity-5">
+                <div className="p-8 pb-6 border-b border-gray-100 relative overflow-hidden bg-gray-50/50 flex justify-between items-start">
+                  <div className="z-10">
+                    <span
+                      className={`inline-flex px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border mb-4 shadow-sm ${CATEGORY_COLORS[currentEvent.category] || CATEGORY_COLORS["Uncategorized"]}`}
+                    >
+                      {currentEvent.category}
+                    </span>
+                    <h2 className="text-4xl md:text-5xl font-black text-onyx tracking-tight">
+                      {currentEvent.event.name}
+                    </h2>
+                  </div>
+                  
+                  {/* Background Icon */}
+                  <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                     <Trophy size={120} />
                   </div>
-                  <span
-                    className={`inline-flex px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border mb-4 shadow-sm ${CATEGORY_COLORS[currentEvent.category] || CATEGORY_COLORS["Uncategorized"]}`}
-                  >
-                    {currentEvent.category}
-                  </span>
-                  <h2 className="text-4xl md:text-5xl font-black text-onyx tracking-tight">
-                    {currentEvent.event.name}
-                  </h2>
+
+                  {/* Navigation Arrows */}
+                  {eventLeaderboards.length > 1 && (
+                    <div className="flex items-center gap-2 z-10 relative">
+                      <button
+                        onClick={() => setCurrentEventIndex((idx) => (idx - 1 + eventLeaderboards.length) % eventLeaderboards.length)}
+                        className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition-colors shadow-sm text-gray-500 hover:text-onyx"
+                      >
+                        <ChevronLeft size={24} />
+                      </button>
+                      <button
+                        onClick={() => setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length)}
+                        className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition-colors shadow-sm text-gray-500 hover:text-onyx"
+                      >
+                        <ChevronRight size={24} />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Event Leaderboard List */}
