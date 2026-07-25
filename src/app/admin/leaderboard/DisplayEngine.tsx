@@ -337,28 +337,10 @@ export default function DisplayEngine({
                   <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                     <Trophy size={120} />
                   </div>
-
-                  {/* Navigation Arrows */}
-                  {eventLeaderboards.length > 1 && (
-                    <div className="flex items-center gap-2 z-10 relative">
-                      <button
-                        onClick={() => setCurrentEventIndex((idx) => (idx - 1 + eventLeaderboards.length) % eventLeaderboards.length)}
-                        className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition-colors shadow-sm text-gray-500 hover:text-onyx"
-                      >
-                        <ChevronLeft size={24} />
-                      </button>
-                      <button
-                        onClick={() => setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length)}
-                        className="p-2 bg-white border border-gray-200 rounded-full hover:bg-gray-100 transition-colors shadow-sm text-gray-500 hover:text-onyx"
-                      >
-                        <ChevronRight size={24} />
-                      </button>
-                    </div>
-                  )}
                 </div>
 
                 {/* Event Leaderboard List */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 pb-24 space-y-4">
                   {currentEvent.leaderboard.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-taupe text-center p-10">
                       <p className="text-2xl font-semibold text-onyx">
@@ -397,8 +379,26 @@ export default function DisplayEngine({
                   )}
                 </div>
 
+                {/* Floating Navigation Arrows (Bottom Right) */}
+                {eventLeaderboards.length > 1 && (
+                  <div className="absolute bottom-6 right-6 flex items-center gap-3 z-10 bg-white/90 backdrop-blur-md p-2 rounded-full shadow-lg border border-gray-200">
+                    <button
+                      onClick={() => setCurrentEventIndex((idx) => (idx - 1 + eventLeaderboards.length) % eventLeaderboards.length)}
+                      className="p-3 bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors shadow-sm text-gray-600 hover:text-onyx"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+                    <button
+                      onClick={() => setCurrentEventIndex((idx) => (idx + 1) % eventLeaderboards.length)}
+                      className="p-3 bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors shadow-sm text-gray-600 hover:text-onyx"
+                    >
+                      <ChevronRight size={24} />
+                    </button>
+                  </div>
+                )}
+
                 {/* Progress Bar for Rotation */}
-                <div className="h-1.5 w-full bg-gray-100 absolute bottom-0 left-0">
+                <div className="h-1.5 w-full bg-gray-100 absolute bottom-0 left-0 z-20">
                   <div
                     className="h-full bg-onyx transition-all duration-100 ease-linear"
                     style={{ width: `${progress}%` }}
